@@ -22,7 +22,7 @@ def refreah():
     dirname = osp.dirname(__file__)
     filepath = osp.join(dirname, "README.md")
 
-    with open(filepath, 'r+') as f:
+    with open(filepath, 'r+', encoding='utf-8') as f:
         content = f.read()
         row_list = content.split('\n')
         # found the un-packed row
@@ -79,7 +79,7 @@ def refreah():
         row_list_b[0] = row_list_b[0][1:]
         row_list = row_list_a + row_list_b + row_list_c
     
-    with open(filepath, 'w') as f:
+    with open(filepath, 'w', encoding='utf-8') as f:
         for row in row_list:
             f.write(row + '\n')
     
@@ -93,7 +93,7 @@ def cata_index():
     dirname = osp.dirname(__file__)
     filepath = osp.join(dirname, "README.md")
 
-    with open(filepath, 'r+') as f:
+    with open(filepath, 'r+', encoding='utf-8') as f:
         content = f.read()
         row_list = content.split('\n')
         cata_list = []
@@ -118,7 +118,7 @@ def cata_index():
         row_list_a = row_list[:dict_row_num]
         row_list_c = row_list[cata_row_num:]
         row_list = row_list_a + cata_list + row_list_c
-        with open(filepath, 'w') as f:
+        with open(filepath, 'w', encoding='utf-8') as f:
             for row in row_list:
                 f.write(row + '\n')
 
