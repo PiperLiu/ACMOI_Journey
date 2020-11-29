@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "*.m": "matlab",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "vector": "cpp"
     }
 }
