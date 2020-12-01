@@ -2,6 +2,9 @@
     "files.associations": {
         "*.m": "matlab",
         "typeinfo": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "cmath": "cpp",
+        "*.tcc": "cpp",
+        "cstdlib": "cpp"
     }
 }
