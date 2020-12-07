@@ -74,12 +74,6 @@ unordered_map<char, char> pairs = {
 if (pairs.count(')')) return true;
 ```
 
-作者：LeetCode-Solution
-链接：https://leetcode-cn.com/problems/valid-parentheses/solution/you-xiao-de-gua-hao-by-leetcode-solution/
-来源：力扣（LeetCode）
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
-```
-
 #### Python哈希映射
 dict `str2int = {'a': 1, 'b': 2}`
 - 不需要定义键与值的泛型

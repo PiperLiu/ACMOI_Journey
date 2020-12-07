@@ -72,6 +72,7 @@ def refreah():
         row_list_c = row_list[date_row_num-2:]
         ## row_list_b
         row_list_b = []
+        dict_cata = _order_dict_cata(dict_cata)
         for key in dict_cata:
             row_list_b.append("\n### " + key)
             for row in dict_cata[key]:
@@ -79,6 +80,7 @@ def refreah():
         row_list_b[0] = row_list_b[0][1:]
         row_list = row_list_a + row_list_b + row_list_c
     
+    row_list = _del_last_vacant(row_list)
     with open(filepath, 'w', encoding='utf-8') as f:
         for row in row_list:
             f.write(row + '\n')
@@ -88,6 +90,32 @@ def refreah():
     print("star"
         + "\033[1;36m the above repo \033[0m"
         + "and practise together!")
+
+def _order_dict_cata(dict_cata):
+
+    def _date_to_num(date_str: str):
+        date_str = date_str.split('.')
+        date_str = [int(x) for x in date_str]
+        date_str[0] = "{0:04d}".format(date_str[0])
+        date_str[1] = "{0:02d}".format(date_str[1])
+        date_str[2] = "{0:02d}".format(date_str[2])
+        return(date_str)
+
+    def _order_one_cata(cata_list: str) -> list:
+        _date_list = [x.split(' ')[-1] for x in cata_list]
+        _date_list = list(map(_date_to_num, _date_list))
+        cata_date_list = list(zip(cata_list, _date_list))
+        cata_date_list = list(sorted(cata_date_list, key=lambda x: x[-1]))
+        """ [2:-3] for turn '(*,)' into * """
+        cata_date_list = [str(x[:-1])[2:-3] for x in cata_date_list]
+        return cata_date_list
+
+    for key in dict_cata:
+        _cata_list = dict_cata[key]
+        _cata_list = _order_one_cata(_cata_list)
+        dict_cata[key] = _cata_list
+
+    return dict_cata
 
 def cata_index():
     dirname = osp.dirname(__file__)
@@ -118,9 +146,20 @@ def cata_index():
         row_list_a = row_list[:dict_row_num]
         row_list_c = row_list[cata_row_num:]
         row_list = row_list_a + cata_list + row_list_c
+        row_list = _del_last_vacant(row_list)
         with open(filepath, 'w', encoding='utf-8') as f:
             for row in row_list:
                 f.write(row + '\n')
+
+def _del_last_vacant(row_list: list):
+    last_vacant_idx = len(row_list)
+    for _, row in enumerate(row_list[::-1]):
+        if row == '':
+            last_vacant_idx -= 1
+        else:
+            break
+    row_list = row_list[:last_vacant_idx]
+    return row_list
 
 def main(args=get_args()):
     if args.refresh:
