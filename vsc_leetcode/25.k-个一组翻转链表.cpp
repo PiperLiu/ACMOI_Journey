@@ -41,20 +41,57 @@
  */
 
 // @lc code=start
+#include <utility>
+using namespace std;
 
 // Definition for singly-linked list.
-struct ListNode {
-    int val;
-    ListNode *next;
-    ListNode() : val(0), next(nullptr) {}
-    ListNode(int x) : val(x), next(nullptr) {}
-    ListNode(int x, ListNode *next) : val(x), next(next) {}
-};
+// struct ListNode {
+//     int val;
+//     ListNode *next;
+//     ListNode() : val(0), next(nullptr) {}
+//     ListNode(int x) : val(x), next(nullptr) {}
+//     ListNode(int x, ListNode *next) : val(x), next(next) {}
+// };
 
 class Solution {
 public:
+    pair <ListNode*, ListNode*> reverse1Group(ListNode* head, ListNode* tail)
+    {
+        ListNode* prev = tail->next;
+        ListNode* p = head;  // 定义 p 只是为了临时存储一下头节点
+        while (prev != tail)
+        {
+            ListNode* nex = head->next;
+            head->next = prev;
+            prev = head;
+            head = nex;
+        }
+        return {tail, p};
+    }
+
     ListNode* reverseKGroup(ListNode* head, int k) {
-        
+        ListNode* hair = new ListNode(0);  // 定义 hair 只是为了存储头节点，返回时用
+        hair->next = head;  // hair 与链表连接起来
+        ListNode* pre = hair;  // 每次翻转，都反转 pre 后面的链表
+
+        while (head)
+        {
+            ListNode* tail = pre;
+            for (int i = 0; i < k; i++)
+            {
+                tail = tail->next;
+                if (!tail)
+                    return hair->next;
+            }
+            ListNode* nex = tail->next;
+            pair<ListNode*, ListNode*> result = reverse1Group(head, tail);
+            tail = result.second;
+            pre->next = result.first;
+            tail->next = nex;
+            pre = tail;
+            head = tail->next;
+        }
+        return hair->next;
     }
 };
 // @lc code=end
