@@ -29,6 +29,7 @@ python refresh.py -r
 - 罗马数字转整数『总结其中规律：从左开始搜索，如果左边字符小于右，则减去左字符，否则加；对于最右侧字符，一定是用来加的』 [cpp](./vsc_leetcode/13.罗马数字转整数.cpp) 2020.11.28
 - 最长公共前缀『是所有字符串前缀的交集，因此0与1取交集，其结果与2取交集...』 [cpp](./vsc_leetcode/14.最长公共前缀.cpp) 2020.11.29
 - 有效的括号『先出现的左括号后匹配，因此，可以根据该特点使用栈，匹配了，就出栈，最后所有左括号成功出栈，则匹配成功』 [cpp](./vsc_leetcode/20.有效的括号.cpp) 2020.12.6
+- 实现-str-str『返回首个合规子串索引：尝试了自己逐一搜索，有些乱，逻辑易出错；还可以尝试KMP与Rabin-Karp』 [遍历cpp](./vsc_leetcode/28.实现-str-str.cpp) [Rabin_Karp_cpp](./vsc_leetcode/28.实现-str-str_Rabin_Karp.cpp) [KMP_cpp](./vsc_leetcode/28.实现-str-str_kmp.cpp) 2020.12.20
 
 ### 字符串
 - 整数转罗马数字『生活中从大的位数开始描述数字，因此从大的数与字符开始匹配』 [cpp](./vsc_leetcode/12.整数转罗马数字.cpp) 2020.11.27
@@ -37,6 +38,7 @@ python refresh.py -r
 - 电话号码的字母组合『使用很简单的、直观的递归实现深度优先搜索多层次的遍历，每搜索到最后一层，将该字符串推入结果数组』 [cpp](./vsc_leetcode/17.电话号码的字母组合.cpp) 2020.12.3
 - 有效的括号『先出现的左括号后匹配，因此，可以根据该特点使用栈，匹配了，就出栈，最后所有左括号成功出栈，则匹配成功』 [cpp](./vsc_leetcode/20.有效的括号.cpp) 2020.12.6
 - 括号生成『典型递归回溯，根据左右括号数量平衡这个特点进行剪枝，cpp中定义回溯函数为backtrack；此外，注意函数参数的定义如string&和全局的返回值设置方式』 [cpp](./vsc_leetcode/22.括号生成.cpp) 2020.12.8
+- 实现-str-str『返回首个合规子串索引：尝试了自己逐一搜索，有些乱，逻辑易出错；还可以尝试KMP与Rabin-Karp』 [遍历cpp](./vsc_leetcode/28.实现-str-str.cpp) [Rabin_Karp_cpp](./vsc_leetcode/28.实现-str-str_Rabin_Karp.cpp) [KMP_cpp](./vsc_leetcode/28.实现-str-str_kmp.cpp) 2020.12.20
 
 ### 双指针法
 - 盛最多水的容器『因为两个边共同决定了上限，因此将较短边向内移动，抛弃搜索次优解』 [py](./vsc_leetcode/11.盛最多水的容器.py) [cpp](./vsc_leetcode/11.盛最多水的容器.cpp) 2020.11.26
@@ -102,3 +104,4 @@ python refresh.py -r
 - 2020.12.17 k-个一组翻转链表『把逻辑拆开，用于翻转的链表头尾分别为head与tail，head前的是pre、tail后是nex，此外，保存一个hair，hair是哑节点，最后返回时返回hair的next』 链表 [cpp](./vsc_leetcode/25.k-个一组翻转链表.cpp)
 - 2020.12.18 删除排序数组中的重复项『一个指针用于计数，另一个去遍历』 双指针法 [cpp](./vsc_leetcode/26.删除排序数组中的重复项.cpp)
 - 2020.12.19 移除元素『一个指针在前，保存不重复元素，另一个指针去向后遍历；移除并不是指用容器pop，而是改变之前数组，并返回长度』 双指针法 [cpp](./vsc_leetcode/27.移除元素.cpp)
+- 2020.12.20 实现-str-str『返回首个合规子串索引：尝试了自己逐一搜索，有些乱，逻辑易出错；还可以尝试KMP与Rabin-Karp』 字符串 匹配 [遍历cpp](./vsc_leetcode/28.实现-str-str.cpp) [Rabin_Karp_cpp](./vsc_leetcode/28.实现-str-str_Rabin_Karp.cpp) [KMP_cpp](./vsc_leetcode/28.实现-str-str_kmp.cpp)
