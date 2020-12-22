@@ -51,6 +51,7 @@ python refresh.py -r
 
 ### 搜索
 - 盛最多水的容器『因为两个边共同决定了上限，因此将较短边向内移动，抛弃搜索次优解』 [py](./vsc_leetcode/11.盛最多水的容器.py) [cpp](./vsc_leetcode/11.盛最多水的容器.cpp) 2020.11.26
+- 搜索插入位置『遍历比较大小，当然，也可以二分法（首先应该想到二分法）』 [cpp](./vsc_leetcode/35.搜索插入位置.cpp) [二分法cpp](./vsc_leetcode/35.搜索插入位置_binarySearch.cpp) 2020.12.22
 
 ### 深度优先搜索
 - 电话号码的字母组合『使用很简单的、直观的递归实现深度优先搜索多层次的遍历，每搜索到最后一层，将该字符串推入结果数组』 [cpp](./vsc_leetcode/17.电话号码的字母组合.cpp) 2020.12.3
@@ -82,6 +83,7 @@ python refresh.py -r
 ### 分治法
 - 合并k个升序链表『总体上，对链表们分治合并，见函数merge，使用递归实现，包括l、r、情况处理（递归的出口）、mid由位运算求、尾递归调用等经典操作，值得记忆』 [cpp](./vsc_leetcode/23.合并k个升序链表.cpp) 2020.12.9
 - 二分查找『对于已经排好序的数组，使用经典的二分查找，需要注意：为了防止溢出pivot=left+（right-left）/2、left=pivot+1等技巧』 [cpp](./vsc_leetcode/704.二分查找.cpp) 2020.12.10
+- 搜索插入位置『遍历比较大小，当然，也可以二分法（首先应该想到二分法）』 [cpp](./vsc_leetcode/35.搜索插入位置.cpp) [二分法cpp](./vsc_leetcode/35.搜索插入位置_binarySearch.cpp) 2020.12.22
 
 ## 日期归档
 - 2020.11.26 盛最多水的容器『因为两个边共同决定了上限，因此将较短边向内移动，抛弃搜索次优解』 双指针法 搜索 [py](./vsc_leetcode/11.盛最多水的容器.py) [cpp](./vsc_leetcode/11.盛最多水的容器.cpp)
@@ -105,3 +107,4 @@ python refresh.py -r
 - 2020.12.18 删除排序数组中的重复项『一个指针用于计数，另一个去遍历』 双指针法 [cpp](./vsc_leetcode/26.删除排序数组中的重复项.cpp)
 - 2020.12.19 移除元素『一个指针在前，保存不重复元素，另一个指针去向后遍历；移除并不是指用容器pop，而是改变之前数组，并返回长度』 双指针法 [cpp](./vsc_leetcode/27.移除元素.cpp)
 - 2020.12.20 实现-str-str『返回首个合规子串索引：尝试了自己逐一搜索，有些乱，逻辑易出错；还可以尝试KMP与Rabin-Karp』 字符串 匹配 [遍历cpp](./vsc_leetcode/28.实现-str-str.cpp) [Rabin_Karp_cpp](./vsc_leetcode/28.实现-str-str_Rabin_Karp.cpp) [KMP_cpp](./vsc_leetcode/28.实现-str-str_kmp.cpp)
+- 2020.12.22 搜索插入位置『遍历比较大小，当然，也可以二分法（首先应该想到二分法）』 搜索 分治法 [cpp](./vsc_leetcode/35.搜索插入位置.cpp) [二分法cpp](./vsc_leetcode/35.搜索插入位置_binarySearch.cpp)
