@@ -10,6 +10,7 @@
 ### 特殊算法汇总
 - [KMP] 待做
 - [Rabin-Karp] 待做
+- [线段树求解LCIS问题] 待做，53题
 
 # 技巧
 - [提速技巧：java中哈希变为switch](./switch_java_speed.md)

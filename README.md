@@ -24,6 +24,7 @@ python refresh.py -r
 - [递归](#递归)
 - [回溯](#回溯)
 - [分治法](#分治法)
+- [动态规划](#动态规划)
 ### 匹配
 - 整数转罗马数字『生活中从大的位数开始描述数字，因此从大的数与字符开始匹配』 [cpp](./vsc_leetcode/12.整数转罗马数字.cpp) 2020.11.27
 - 罗马数字转整数『总结其中规律：从左开始搜索，如果左边字符小于右，则减去左字符，否则加；对于最右侧字符，一定是用来加的』 [cpp](./vsc_leetcode/13.罗马数字转整数.cpp) 2020.11.28
@@ -39,7 +40,7 @@ python refresh.py -r
 - 有效的括号『先出现的左括号后匹配，因此，可以根据该特点使用栈，匹配了，就出栈，最后所有左括号成功出栈，则匹配成功』 [cpp](./vsc_leetcode/20.有效的括号.cpp) 2020.12.6
 - 括号生成『典型递归回溯，根据左右括号数量平衡这个特点进行剪枝，cpp中定义回溯函数为backtrack；此外，注意函数参数的定义如string&和全局的返回值设置方式』 [cpp](./vsc_leetcode/22.括号生成.cpp) 2020.12.8
 - 实现-str-str『返回首个合规子串索引：尝试了自己逐一搜索，有些乱，逻辑易出错；还可以尝试KMP与Rabin-Karp』 [遍历cpp](./vsc_leetcode/28.实现-str-str.cpp) [Rabin_Karp_cpp](./vsc_leetcode/28.实现-str-str_Rabin_Karp.cpp) [KMP_cpp](./vsc_leetcode/28.实现-str-str_kmp.cpp) 2020.12.20
-- 外观数列『①很典型的递归题目，注意cpp里字符串最后一位是\\0，引出可以妙用溢出②需要单独总结一下string库里的方法，如to_string等等』 [cpp](./vsc_leetcode/38.外观数列.cpp) [递归cpp](./vsc_leetcode/38.外观数列_.recursioncpp) 2020.12.23
+- 外观数列『①很典型的递归题目，注意cpp里字符串最后一位是\\\\0，引出可以妙用溢出②需要单独总结一下string库里的方法，如to_string等等』 [cpp](./vsc_leetcode/38.外观数列.cpp) [递归cpp](./vsc_leetcode/38.外观数列_.recursioncpp) 2020.12.23
 
 ### 双指针法
 - 盛最多水的容器『因为两个边共同决定了上限，因此将较短边向内移动，抛弃搜索次优解』 [py](./vsc_leetcode/11.盛最多水的容器.py) [cpp](./vsc_leetcode/11.盛最多水的容器.cpp) 2020.11.26
@@ -77,7 +78,7 @@ python refresh.py -r
 - 括号生成『典型递归回溯，根据左右括号数量平衡这个特点进行剪枝，cpp中定义回溯函数为backtrack；此外，注意函数参数的定义如string&和全局的返回值设置方式』 [cpp](./vsc_leetcode/22.括号生成.cpp) 2020.12.8
 - 合并k个升序链表『总体上，对链表们分治合并，见函数merge，使用递归实现，包括l、r、情况处理（递归的出口）、mid由位运算求、尾递归调用等经典操作，值得记忆』 [cpp](./vsc_leetcode/23.合并k个升序链表.cpp) 2020.12.9
 - 两两交换链表中的节点『很简单的一道递归题目，两两交换时，定义一个临时指针newHead』 [cpp](./vsc_leetcode/24.两两交换链表中的节点.cpp) 2020.12.11
-- 外观数列『①很典型的递归题目，注意cpp里字符串最后一位是\\0，引出可以妙用溢出②需要单独总结一下string库里的方法，如to_string等等』 [cpp](./vsc_leetcode/38.外观数列.cpp) [递归cpp](./vsc_leetcode/38.外观数列_.recursioncpp) 2020.12.23
+- 外观数列『①很典型的递归题目，注意cpp里字符串最后一位是\\\\0，引出可以妙用溢出②需要单独总结一下string库里的方法，如to_string等等』 [cpp](./vsc_leetcode/38.外观数列.cpp) [递归cpp](./vsc_leetcode/38.外观数列_.recursioncpp) 2020.12.23
 
 ### 回溯
 - 括号生成『典型递归回溯，根据左右括号数量平衡这个特点进行剪枝，cpp中定义回溯函数为backtrack；此外，注意函数参数的定义如string&和全局的返回值设置方式』 [cpp](./vsc_leetcode/22.括号生成.cpp) 2020.12.8
@@ -86,6 +87,10 @@ python refresh.py -r
 - 合并k个升序链表『总体上，对链表们分治合并，见函数merge，使用递归实现，包括l、r、情况处理（递归的出口）、mid由位运算求、尾递归调用等经典操作，值得记忆』 [cpp](./vsc_leetcode/23.合并k个升序链表.cpp) 2020.12.9
 - 二分查找『对于已经排好序的数组，使用经典的二分查找，需要注意：为了防止溢出pivot=left+（right-left）/2、left=pivot+1等技巧』 [cpp](./vsc_leetcode/704.二分查找.cpp) 2020.12.10
 - 搜索插入位置『遍历比较大小，当然，也可以二分法（首先应该想到二分法）』 [cpp](./vsc_leetcode/35.搜索插入位置.cpp) [二分法cpp](./vsc_leetcode/35.搜索插入位置_binarySearch.cpp) 2020.12.22
+- 最大子序和『很经典的动态规划思想，前i个元素构成的数组，与当前x比较，pre+x小于x，则x自己另起炉灶，作为首个元素；此外还有结合线段树的分治法求解』 [cpp](./vsc_leetcode/53.最大子序和.cpp) [分治法cpp](./vsc_leetcode/53.最大子序和_DandC.cpp) 2020.12.25
+
+### 动态规划
+- 最大子序和『很经典的动态规划思想，前i个元素构成的数组，与当前x比较，pre+x小于x，则x自己另起炉灶，作为首个元素；此外还有结合线段树的分治法求解』 [cpp](./vsc_leetcode/53.最大子序和.cpp) [分治法cpp](./vsc_leetcode/53.最大子序和_DandC.cpp) 2020.12.25
 
 ## 日期归档
 - 2020.11.26 盛最多水的容器『因为两个边共同决定了上限，因此将较短边向内移动，抛弃搜索次优解』 双指针法 搜索 [py](./vsc_leetcode/11.盛最多水的容器.py) [cpp](./vsc_leetcode/11.盛最多水的容器.cpp)
@@ -111,3 +116,4 @@ python refresh.py -r
 - 2020.12.20 实现-str-str『返回首个合规子串索引：尝试了自己逐一搜索，有些乱，逻辑易出错；还可以尝试KMP与Rabin-Karp』 字符串 匹配 [遍历cpp](./vsc_leetcode/28.实现-str-str.cpp) [Rabin_Karp_cpp](./vsc_leetcode/28.实现-str-str_Rabin_Karp.cpp) [KMP_cpp](./vsc_leetcode/28.实现-str-str_kmp.cpp)
 - 2020.12.22 搜索插入位置『遍历比较大小，当然，也可以二分法（首先应该想到二分法）』 搜索 分治法 [cpp](./vsc_leetcode/35.搜索插入位置.cpp) [二分法cpp](./vsc_leetcode/35.搜索插入位置_binarySearch.cpp)
 - 2020.12.23 外观数列『①很典型的递归题目，注意cpp里字符串最后一位是\0，引出可以妙用溢出②需要单独总结一下string库里的方法，如to_string等等』 字符串 递归 [cpp](./vsc_leetcode/38.外观数列.cpp) [递归cpp](./vsc_leetcode/38.外观数列_.recursioncpp)
+- 2020.12.25 最大子序和『很经典的动态规划思想，前i个元素构成的数组，与当前x比较，pre+x小于x，则x自己另起炉灶，作为首个元素；此外还有结合线段树的分治法求解』 动态规划 分治法 [cpp](./vsc_leetcode/53.最大子序和.cpp) [分治法cpp](./vsc_leetcode/53.最大子序和_DandC.cpp)
