@@ -41,6 +41,7 @@ python refresh.py -r
 - 括号生成『典型递归回溯，根据左右括号数量平衡这个特点进行剪枝，cpp中定义回溯函数为backtrack；此外，注意函数参数的定义如string&和全局的返回值设置方式』 [cpp](./vsc_leetcode/22.括号生成.cpp) 2020.12.8
 - 实现-str-str『返回首个合规子串索引：尝试了自己逐一搜索，有些乱，逻辑易出错；还可以尝试KMP与Rabin-Karp』 [遍历cpp](./vsc_leetcode/28.实现-str-str.cpp) [Rabin_Karp_cpp](./vsc_leetcode/28.实现-str-str_Rabin_Karp.cpp) [KMP_cpp](./vsc_leetcode/28.实现-str-str_kmp.cpp) 2020.12.20
 - 外观数列『①很典型的递归题目，注意cpp里字符串最后一位是转义0，引出可以妙用溢出②需要单独总结一下string库里的方法，如to_string等等』 [cpp](./vsc_leetcode/38.外观数列.cpp) [递归cpp](./vsc_leetcode/38.外观数列_recursion.cpp) 2020.12.23
+- 最后一个单词的长度『很基础的字符串搜索，要注意边界条件while中大于等于0』 [cpp](./vsc_leetcode/58.最后一个单词的长度.cpp) 2020.12.26
 
 ### 双指针法
 - 盛最多水的容器『因为两个边共同决定了上限，因此将较短边向内移动，抛弃搜索次优解』 [py](./vsc_leetcode/11.盛最多水的容器.py) [cpp](./vsc_leetcode/11.盛最多水的容器.cpp) 2020.11.26
@@ -54,6 +55,7 @@ python refresh.py -r
 ### 搜索
 - 盛最多水的容器『因为两个边共同决定了上限，因此将较短边向内移动，抛弃搜索次优解』 [py](./vsc_leetcode/11.盛最多水的容器.py) [cpp](./vsc_leetcode/11.盛最多水的容器.cpp) 2020.11.26
 - 搜索插入位置『遍历比较大小，当然，也可以二分法（首先应该想到二分法）』 [cpp](./vsc_leetcode/35.搜索插入位置.cpp) [二分法cpp](./vsc_leetcode/35.搜索插入位置_binarySearch.cpp) 2020.12.22
+- 最后一个单词的长度『很基础的字符串搜索，要注意边界条件while中大于等于0』 [cpp](./vsc_leetcode/58.最后一个单词的长度.cpp) 2020.12.26
 
 ### 深度优先搜索
 - 电话号码的字母组合『使用很简单的、直观的递归实现深度优先搜索多层次的遍历，每搜索到最后一层，将该字符串推入结果数组』 [cpp](./vsc_leetcode/17.电话号码的字母组合.cpp) 2020.12.3
@@ -117,3 +119,4 @@ python refresh.py -r
 - 2020.12.22 搜索插入位置『遍历比较大小，当然，也可以二分法（首先应该想到二分法）』 搜索 分治法 [cpp](./vsc_leetcode/35.搜索插入位置.cpp) [二分法cpp](./vsc_leetcode/35.搜索插入位置_binarySearch.cpp)
 - 2020.12.23 外观数列『①很典型的递归题目，注意cpp里字符串最后一位是转义0，引出可以妙用溢出②需要单独总结一下string库里的方法，如to_string等等』 字符串 递归 [cpp](./vsc_leetcode/38.外观数列.cpp) [递归cpp](./vsc_leetcode/38.外观数列_recursion.cpp)
 - 2020.12.25 最大子序和『很经典的动态规划思想，前i个元素构成的数组，与当前x比较，pre+x小于x，则x自己另起炉灶，作为首个元素；此外还有结合线段树的分治法求解』 动态规划 分治法 [cpp](./vsc_leetcode/53.最大子序和.cpp) [分治法cpp](./vsc_leetcode/53.最大子序和_DandC.cpp)
+- 2020.12.26 最后一个单词的长度『很基础的字符串搜索，要注意边界条件while中大于等于0』 搜索 字符串 [cpp](./vsc_leetcode/58.最后一个单词的长度.cpp)
