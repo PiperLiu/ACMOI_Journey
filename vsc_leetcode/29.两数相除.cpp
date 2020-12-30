@@ -50,7 +50,36 @@
 class Solution {
 public:
     int divide(int dividend, int divisor) {
-        
+        if (dividend == 0)
+            return 0;
+        if (divisor == 1)
+            return dividend;
+        if (divisor == -1) {
+            return dividend > INT_MIN ? - dividend : INT_MAX;
+        }
+        int sign = 1;
+        if ((dividend < 0 && divisor > 0) || (dividend > 0 && divisor < 0))
+            sign = - 1;
+        dividend = dividend < 0 ? dividend : - dividend;  // 转为负数防溢出
+        divisor  = divisor  < 0 ? divisor  : - divisor;
+        int res = div(dividend, divisor);
+        return sign > 0 ? res : - res;
+    }
+    int div(int dividend, int divisor)
+    {
+        if (dividend > divisor)
+            return 0;
+        int count = 1;
+        int temp_divisor = divisor;
+        // temp_divisor + temp_divisor >= dividend
+        // temp_divisor - dividend + temp_divisor >= 0
+        // 不同，可参考算例 -2147483648, 2
+        while (temp_divisor - dividend + temp_divisor >= 0)
+        {
+            count = count + count;
+            temp_divisor = temp_divisor + temp_divisor;
+        }
+        return count + div(dividend - temp_divisor, divisor);
     }
 };
 // @lc code=end
