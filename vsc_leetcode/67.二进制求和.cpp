@@ -40,13 +40,36 @@
  * 
  * 
  */
+#include <string>
+#include <algorithm>
+using namespace std;
 
 // @lc code=start
-class Solution {
+class Solution
+{
 public:
-    string addBinary(string a, string b) {
+    string addBinary(string a, string b)
+    {
+        reverse(a.begin(), a.end());
+        reverse(b.begin(), b.end());
 
+        int size = max(a.size(), b.size());
+        int carry = 0; // 决定是否进位
+        string rts;
+        for (int i = 0; i < size; i++)
+        {
+            carry += i < a.size() ? (a[i] == '1') : 0;
+            carry += i < b.size() ? (b[i] == '1') : 0;
+            rts.push_back(
+                carry % 2 ? '1' : '0'
+            );
+            carry /= 2;
+        }
+        if (carry)
+            rts.push_back('1');
+        
+        reverse(rts.begin(), rts.end());
+        return rts;
     }
 };
 // @lc code=end
-
