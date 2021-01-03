@@ -57,11 +57,45 @@
 using namespace std;
 
 // @lc code=start
-class Solution {
+class Solution
+{
 public:
-    int search(vector<int>& nums, int target) {
-        
+    int search(vector<int> &nums, int target)
+    {
+        if (nums.empty())
+            return -1;
+        int n = nums.size();
+        if (n == 1)
+            return nums[0] == target ? 0 : -1;
+        // 二分法
+        /*
+        * 见到有序数组，想到二分法
+        * 旋转了一次，意味着存在两个有序数组
+        * 两个数组存在：数组1最小值大于数组2最大值的关系
+        * 因此比较指针的值，即可判断当前区间上下界
+        */
+        int l = 0, r = n - 1;
+        while (l <= r)
+        {
+            int mid = (l + r) / 2;
+            if (nums[mid] == target)
+                return mid;
+            if (nums[0] <= nums[mid])
+            {
+                if (target >= nums[l] && target < nums[mid])
+                    r = mid - 1;
+                else
+                    l = mid + 1;
+            }
+            else
+            {
+                if (target > nums[mid] && target <= nums[r])
+                    l = mid + 1;
+                else
+                    r = mid - 1;
+            }
+        }
+        return -1;
     }
 };
 // @lc code=end
-
