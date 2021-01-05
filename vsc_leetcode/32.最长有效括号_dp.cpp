@@ -31,6 +31,7 @@
  * 
  */
 #include <string>
+#include <stack>
 using namespace std;
 
 // @lc code=start
@@ -39,29 +40,27 @@ class Solution
 public:
     int longestValidParentheses(string s)
     {
-        int left = 0, right = 0, ans = 0;
+        int ans = 0;
+        stack<int> stk;
+        /*
+        * 当 stk 为空时，放入当前 ')' 对应下标
+        * 很巧妙的一步，将之前的合理字串与之后的合理子串连接了起来
+        * 最后仅通过 i - stk.top() 就可以得到当前合理子串长度
+        * 最为巧妙的是，开始时先压入 -1
+        */
+        stk.push(-1);
         for (int i = 0; i < s.length(); i++)
         {
             if (s[i] == '(')
-                left++;
+                stk.push(i);
             else
-                right++;
-            if (left == right)
-                ans = max(ans, right * 2);
-            else if (right > left)
-                left = right = 0;
-        }
-        left = right = 0;  // 别忘记这句
-        for (int i = (int)s.length() - 1; i >= 0; i--)
-        {
-            if (s[i] == ')')
-                right++;
-            else
-                left++;
-            if (left == right)
-                ans = max(ans, left * 2);
-            else if (left > right)
-                left = right = 0;
+            {
+                stk.pop();
+                if (stk.empty())
+                    stk.push(i);
+                else
+                    ans = max(ans, i - stk.top());
+            }
         }
         return ans;
     }
