@@ -99,11 +99,20 @@ def _order_dict_cata(dict_cata):
         date_str[0] = "{0:04d}".format(date_str[0])
         date_str[1] = "{0:02d}".format(date_str[1])
         date_str[2] = "{0:02d}".format(date_str[2])
+        date_str.append('99')
         return(date_str)
 
     def _order_one_cata(cata_list: str) -> list:
         _date_list = [x.split(' ')[-1] for x in cata_list]
-        _date_list = list(map(_date_to_num, _date_list))
+        # _date_list = list(map(_date_to_num, _date_list))
+        _new_date_list = []
+        for _date in _date_list:
+            _date = _date_to_num(_date)
+            if _date in _new_date_list:
+                _date[3] = str(int(_date[3]) - 1)
+                print(_date)
+            _new_date_list.append(_date)
+        _date_list = _new_date_list
         cata_date_list = list(zip(cata_list, _date_list))
         cata_date_list = list(sorted(cata_date_list, key=lambda x: x[-1]))
         """ [2:-3] for turn '(*,)' into * """
