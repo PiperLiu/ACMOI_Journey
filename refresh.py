@@ -110,13 +110,15 @@ def _order_dict_cata(dict_cata):
             _date = _date_to_num(_date)
             if _date in _new_date_list:
                 _date[3] = str(int(_date[3]) - 1)
-                print(_date)
             _new_date_list.append(_date)
         _date_list = _new_date_list
         cata_date_list = list(zip(cata_list, _date_list))
         cata_date_list = list(sorted(cata_date_list, key=lambda x: x[-1]))
-        """ [2:-3] for turn '(*,)' into * """
-        cata_date_list = [str(x[:-1])[2:-3] for x in cata_date_list]
+        """
+        x[:-1] is a tuple (*,)
+        using list(x[:-1])[0] to get the *
+        """
+        cata_date_list = [list(x[:-1])[0] for x in cata_date_list]
         return cata_date_list
 
     for key in dict_cata:
