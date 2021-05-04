@@ -1,6 +1,6 @@
 #-*- coding:UTF-8 -*-
 """
-refresh README.md
+refresh QuestionBank.md
 """
 import argparse
 import os.path as osp
@@ -12,7 +12,7 @@ def get_args():
     parser.add_argument(
         '--refresh', '-r',
         action='store_true',
-        help='refreah README.md'
+        help='refreah QuestionBank.md'
     )
 
     args = parser.parse_known_args()[0]
@@ -20,7 +20,7 @@ def get_args():
 
 def refreah():
     dirname = osp.dirname(__file__)
-    filepath = osp.join(dirname, "README.md")
+    filepath = osp.join(dirname, "QuestionBank.md")
 
     with open(filepath, 'r+', encoding='utf-8') as f:
         content = f.read()
@@ -130,7 +130,7 @@ def _order_dict_cata(dict_cata):
 
 def cata_index():
     dirname = osp.dirname(__file__)
-    filepath = osp.join(dirname, "README.md")
+    filepath = osp.join(dirname, "QuestionBank.md")
 
     with open(filepath, 'r+', encoding='utf-8') as f:
         content = f.read()
