@@ -145,11 +145,13 @@ int main()
 ##### swap
 
 ```cpp
-void swap(int a, int b)
+void swap(int *a, int *b)
 {
-    int t = a;
-    a = b;
-    b = t;
+    // 太菜了... 这里写的根本不对
+    // 如果把 swap 做成函数的话，应该传入指针 int *a, int *b
+    int t = *a;
+    *a = *b;
+    *b = t;
 }
 ```
 
