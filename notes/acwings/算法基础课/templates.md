@@ -21,13 +21,19 @@ int n;  // n 是序列长度
 int q;  // q 是输入序列
 // 注意：有其他要加入的变量吗？
 
+// 你的函数体：注意修改返回值/参数类型！
+// void func(int q[], int l, int r)
+// {
+
+// }
+
 int main()
 {
     // 接收输入序列
     scanf("%d", &n);
-    for (int i = 0; i < n; i ++) scanf("%d", &q [i]);
+    for (int i = 0; i < n; i ++) scanf("%d", &q[i]);
 
-    // 你的函数体
+    // 你的函数
     // func(q, 0, n - 1);
 
     // 输出序列
