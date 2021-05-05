@@ -69,14 +69,77 @@ int main()
 
     quick_sort(q, 0, n-1);
 
-    for (int i = 0; i < n; i ++) print("%d ", q[i]);
+    for (int i = 0; i < n; i ++) printf("%d ", q[i]);
 
     return 0;
 }
 ```
 
 强调：
-- swap 是交换两个数，如果用的语言没有 swao 可以手写
+- swap 是交换两个数，如果用的语言没有 swap 可以手写
+- **！！写成 `do while` 形式而非 `while do` 形式！！** 否则陷入死循环
+
+如下是错误示例：
+```cpp
+#include <iostream>
+
+using namespace std;
+
+const int N = 1e6 + 10;
+
+int n;
+int q[N];
+
+void quick_sort(int q[], int l, int r)
+{
+    if (l >= r) return;
+    
+    int i = l, j = r, x = q[l + r >> 1];
+    while (i < j)
+    {
+        while (q[i] < x) i++;  // !!! 错误示例
+        while (q[j] > x) j--;
+        if (i < j) swap(q[i], q[j]);
+    }
+    quick_sort(q, l, j), quick_sort(q, j + 1, r);
+}
+
+// 上面这种写法将不适合
+// 2
+// 1 1
+// 因为不是每 while(i < j) 一次就移动一次指针
+
+int main()
+{
+    scanf("%d", &n);
+    for (int i = 0; i < n; i ++) scanf("%d", &q[i]);
+    
+    quick_sort(q, 0, n-1);
+    
+    for (int i = 0; i < n; i ++) printf("%d ", q[i]);
+    
+    return 0;
+}
+```
+
+##### 为什么要写成 `do while` 而不是 `while do`
+
+`do while` 让每 `while(i < j)` 一次就移动一次指针。
+
+又因为 `x` 取自 `q[]` 中一个真实数据，所以最终退出 `while(i < j)` 前， `i` 与 `j` 会在 `x` 的值对应的某个位置上（注意 `x` 可能有多个在序列中），因此分治时是：
+```cpp
+    quick_sort(q, l, j), quick_sort(q, j + 1, r);
+``` 
+如果用 `i` ，则应该是
+```cpp
+    quick_sort(q, l, i), quick_sort(q, i - 1, r);
+    /*
+    3 2 1 3 5 5 5 5 5 5 5 8 6 9 8
+    l       i   x       j       r
+    */
+```
+
+##### swap
 
 ```cpp
 void swap(int a, int b)
@@ -86,6 +149,8 @@ void swap(int a, int b)
     b = t;
 }
 ```
+
+
 
 ### 归并排序（从中心分治）
 - 第一步，确定分界点 `mid=(1+r)/2`
