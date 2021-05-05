@@ -17,8 +17,8 @@ using namespace std;
 
 const int N = 1e5 + 10;  // N 是输入序列最大长度
 
-int n;  // n 是序列长度
-int q;  // q 是输入序列
+int n;     // n 是序列长度
+int q[N];  // q 是输入序列
 // 注意：有其他要加入的变量吗？
 
 // 你的函数体：注意修改返回值/参数类型！
