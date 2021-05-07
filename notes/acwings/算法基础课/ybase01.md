@@ -156,7 +156,50 @@ void swap(int *a, int *b)
 }
 ```
 
+### 快速选择
+快速选择算法基于快速排序。返回序列里第 `k` 个小的数。
 
+![](./images/20210507快选.png)
+
+如上。如果 `k` 小于等于分界点左边序列数字的数量，我们对左边序列递归排序即可，不要右边的；如果 `k` 大于分界点右边序列数字的数量，我们对右边序列递归排序即可，不要左边的。
+
+时间复杂度是 O(n) 。
+
+#### 快排模板
+```cpp
+#include <iostream>
+using namespace std;
+
+const int N = 1e5 + 10;
+int n, k;
+int q[N];
+
+int quick_sort(int l, int r, int k)
+{
+    if (l == r) return q[l];
+
+    int i = l - 1, j = r + 1, x = q[l+r>>1];
+    while (i < j)
+    {
+        while (q[ ++ i] < x);  // 等效于 do i --; while (q[i] < x);
+        while (q[ -- j] > x);
+
+        if (i < j) swap(q[i], q[j]);
+    }
+    int sl = j - l + 1;
+    if (k <= sl) return quick_sort(l, j, k);
+    else return quick_sort(j+1, r, k-sl);
+}
+
+int main()
+{
+    cin >> n >> k;
+    for(int i=0; i<n; i++) scanf("%d", &q[i]);
+
+    cout << quick_sort(0, n-1, k);
+    return 0;
+}
+```
 
 ### 归并排序（从中心分治）
 - 第一步，确定分界点 `mid=(1+r)/2`
