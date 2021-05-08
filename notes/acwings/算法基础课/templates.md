@@ -10,10 +10,11 @@
 ### 数列题模板
 ```cpp
 #include <iostream>
-#define ll long long
 #define mem(x, num) memset(x, num, sizeof x)
 
 using namespace std;
+
+typedef long long LL;
 
 const int N = 1e5 + 10;  // N 是输入序列最大长度
 

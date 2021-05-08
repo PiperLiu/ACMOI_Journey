@@ -5,8 +5,12 @@
 
 - [快速排序（基于分治）](#快速排序基于分治)
   - [快排模板](#快排模板)
+- [快速选择](#快速选择)
+  - [快选模板](#快选模板)
 - [归并排序（从中心分治）](#归并排序从中心分治)
   - [归并模板](#归并模板)
+- [逆序对的数量](#逆序对的数量)
+  - [逆序对的数量模板](#逆序对的数量模板)
 - [整数二分（很多边界问题）](#整数二分很多边界问题)
   - [整数二分模板](#整数二分模板)
   - [整数二分模板挑选心得](#整数二分模板挑选心得)
@@ -165,7 +169,7 @@ void swap(int *a, int *b)
 
 时间复杂度是 O(n) 。
 
-#### 快排模板
+#### 快选模板
 ```cpp
 #include <iostream>
 using namespace std;
@@ -216,6 +220,10 @@ int main()
 
 排序算法是 **稳定** 的：指原序列里两个数值相同，排序后，其位置不发生变化。快排是不稳定的，归并排序是稳定的。如何把快排变稳定？让快排里数唯一：变成`pair`如`a_i => <a_i, i>`
 
+为什么归并有效？
+- 对于两个有序序列，我们进行双指针，可以保证二者合起来之后，是有序的；
+- 归并从小到大排序，因此保证了每次合并的两个序列都是有序的。
+
 ##### 为何归并时间复杂度`nlog(n)`
 ![](./images/20210504快排nlogn.png)
 如上，一共进行了$log_2(n)$层，每层都是检测一次元素$n$。所以是`nlog_2(n)`。
@@ -249,6 +257,60 @@ void merge_sort(int q[], int l, int r)
     while (j <= r) tmp[k ++ ] = q[j ++ ];
 
     for (i = l, j = 0; i <= r; i ++, j ++ ) q[i] = tmp[j];
+}
+```
+
+### 逆序对的数量
+给定一个长度为n的整数数列，请你计算数列中的逆序对的数量。
+
+逆序对的定义如下：对于数列的第 i 个和第 j 个元素，如果满 i < j 且 a[i] > a[j]，则其为一个逆序对；否则不是。
+
+在归并排序中，我们先查看小块区间的逆序对之间的比较。
+
+![](./images/20210508逆序对.png)
+
+此外，注意，因为逆序对数量最大达到 1e10 超过 int 范围，因此我们用 `long long` 。
+
+#### 逆序对的数量模板
+```cpp
+#include <iostream>
+using namespace std;
+
+typedef long long LL;
+
+const int N = 1e5 + 12;
+int n;
+int q[N], temp[N];
+
+LL merge_sort(int l, int r)
+{
+    if (l >= r) return 0;
+    
+    int mid = l + r >> 1;
+    LL res = merge_sort(l, mid) + merge_sort(mid + 1, r);
+    
+    int i = l, j = mid + 1, k = 0;
+    while (i <= mid && j <= r)
+        if (q[i] <= q[j]) temp[k++] = q[i++];
+        else {
+            temp[k++] = q[j++];
+            res += mid - i + 1;
+        }
+    
+    while (i <= mid) temp[k++] = q[i++];
+    while (j <= r) temp[k++] = q[j++];
+    
+    for (i = l, j = 0; i <= r; i++, j++) q[i] = temp[j];
+    return res;
+}
+
+int main()
+{
+    cin >> n;
+    for (int i = 0; i < n; i ++) scanf("%d", &q[i]);
+    
+    cout << merge_sort(0, n-1);
+    return 0;
 }
 ```
 
