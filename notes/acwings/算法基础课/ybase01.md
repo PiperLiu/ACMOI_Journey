@@ -421,9 +421,9 @@ int find_left(int arr[], int n, int k) {
         int mid = l + r >> 1;
         if (arr[mid] >= k) {
             // 说明左边界 可能还在左边，但也有可能是当前元素，所以以当前元素为右端点，向左找
-            r = mid;
+            r = mid; // 希望mid左侧严格小于 k
             // ！！判断性质后，用 mid 更新 r ，因此之前要 mid = l + r >> 1; 否则可能陷入死循环
-        } else l = mid + 1;
+        } else l = mid + 1; // 若不 mid + 1 会陷入死循环，因为 mid 向下取整
     }
     if (arr[l] != k) return -1;
     else return l;
@@ -436,7 +436,7 @@ int find_right(int arr[], int n, int k) {
         int mid = l + r + 1 >> 1;
         if (arr[mid] <= k) {
             // 说明右边界 可能还在右边，但也有可能是当前元素，所以以当前元素为左端点，向右找
-            l = mid;
+            l = mid; // 希望mid右侧严格小于 k
             // ！！判断性质后，用 mid 更新 l ，因此之前要 mid = l + r + 1 >> 1; 否则可能陷入死循环
         } else r = mid - 1;
     }
@@ -468,6 +468,11 @@ int main() {
 - 第二个二分，实际上定义的性质是`左区间<=k，右区间不是`
 
 注意二分一定能给出一个解，但可能不是可行解，因此我们这里做了异常判断。
+
+##### 个人总结一下二分
+- 首先明确二分的效果：最终，l将等于r（在你mid取的合理的情况下）
+- 基于上述前提，结合二分本质是“使得左边满足性质，右边不满足性质”
+- 再去结合[本质](#二分的本质)中的“怎么做”
 
 #### 整数二分模板挑选心得
 
@@ -502,3 +507,32 @@ double bsearch_3(double l, double r)
 
 经验：
 - 如果题目要求四位小数，则 `eps = 1e-6`，五位则 `eps = 1e-7`
+
+例题：求三次方根
+```cpp
+#include <iostream>
+using namespace std;
+
+double n;
+
+int main()
+{
+    cin >> n;
+    
+    double l = -10000, r = 10000;
+    while (r - l > 1e-7)
+    {
+        double mid = (l + r) / 2;
+        if (mid * mid * mid < n) l = mid;
+        else r = mid;
+    }
+    
+    printf("%.6lf", l);
+    return 0;
+}
+```
+
+小 tip ：
+- C++ printf()的用法 http://blog.sina.com.cn/s/blog_9f0dcc370101as1o.html
+- `printf("%.3f", num)` 表示保留三位小数，`f`默认六位小数
+- `printf("%lf", num)` 表示 `long + float` 是 `double`
