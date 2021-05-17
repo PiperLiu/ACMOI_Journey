@@ -38,3 +38,5 @@ Journey of fun, pain & gain.
 
 ### Notes
 我的笔记见于 [./notes/README.md](./notes/README.md) 。
+
+> 听到2.2 29:49
