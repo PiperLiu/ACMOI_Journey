@@ -12,7 +12,6 @@
 - [堆](#堆)
   - [以小根堆为例](#以小根堆为例)
   - [堆排序模板](#堆排序模板)
-  - [模拟堆模板](#模拟堆模板)
 
 <!-- /code_chunk_output -->
 
@@ -484,86 +483,6 @@ STL里对应优先队列。
 
 ```cpp
 #include <iostream>
-#include <algorithm>
-using namespace std;
-
-const int N = 1e5 + 10;
-
-int n, m;
-int h[N], cnt;  // cnt 是堆元素数量，也是最后一个放入元素的地址
-
-void down(int u)
-{
-    int t = u;  // t 目前是当前节点
-    if (u * 2 <= cnt && h[u * 2] < h[t]) t = u * 2;  // 如果左儿子存在，还更小，t成为左儿子
-    if (u * 2 + 1 <= cnt && h[u * 2 + 1] < h[t]) t = u * 2 + 1;  // 如果右儿子存在，还更小，t成为右儿子
-    if (u != t)
-    {
-        swap(h[u], h[t]);
-        down(t);
-    }
-}
-
-int main()
-{
-    scanf("%d%d", &n, &m);
-    for (int i = 1; i <= n; i ++) scanf("%d", &h[i]);
-    cnt = n;
-    
-    for (int i = n / 2; i > 0; i --) down(i);
-    
-    while (m --)
-    {
-        printf("%d ", h[1]);
-        h[1] = h[cnt --];
-        down(1);
-    }
-    
-    return 0;
-}
-```
-
-![](./images/20210518堆排序-错位相减.png)
-
-如上图，排序的话，我们从 `n / 2` 开始 down ，这样是 O(n) 。**对于完全二叉树，`n / 2` 总是取到除了最后一层的所有点。**
-
-up 操作为：
-```cpp
-void up(int u)
-{
-  while (u / 2 && h[u / 2] > h[u])
-  {
-    swap(h[u / 2], h[u]);
-    u /= 2;
-  }
-}
-```
-
-#### 模拟堆模板
-- 维护一个集合，初始时集合为空，支持如下几种操作：
-  - I x，插入一个数 x；
-  - PM，输出当前集合中的最小值；
-  - DM，删除当前集合中的最小值（数据保证此时的最小值唯一）；
-  - D k，删除第 k 个插入的数；
-  - C k x，修改第 k 个插入的数，将其变为 x；
-- 现在要进行 N 次操作，对于所有第 2 个操作，输出当前集合的最小值。
-
-输入格式
-- 第一行包含整数 N。
-- 接下来 N 行，每行包含一个操作指令，操作指令为 I x，PM，DM，D k 或 C k x 中的一种。
-
-输出格式
-- 对于每个输出指令 PM，输出一个结果，表示当前集合中的最小值。
-- 每个结果占一行。
-
-为了找到第 k 个数，**我们要额外存一些信息：**
-- 第 k 个插入数组里的点，对应堆里面的哪个点 `ph: Pointer Heap`
-- 堆里面的点，对应第 k 个插入数组里的哪个点 `hp: Heap Pointer`
-
-![](./images/20210518模拟堆.png)
-
-```cpp
-#include <iostream>
 #include <string.h>
 #include <algorithm>
 using namespace std;
@@ -583,8 +502,8 @@ void swap_heap(int a, int b)
 void down(int u)
 {
     int t = u;
-    if (u * 2 <= cnt && h[u * 2] < h[t]) swap_heap(h[t], h[u * 2]);
-    if (u * 2 + 1 <= cnt && h[u * 2 + 1] < h[t]) swap_heap(h[t], h[u * 2 + 1]);
+    if (u * 2 <= cnt && h[u * 2] < h[t]) t = u * 2;
+    if (u * 2 + 1 <= cnt && h[u * 2 + 1] < h[t]) t = u * 2 + 1;
     if (t != u)
     {
         swap_heap(t, u);
