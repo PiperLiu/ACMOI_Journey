@@ -9,6 +9,10 @@
   - [模板：合并集合](#模板合并集合)
   - [动态维护集合大小信息：连通块中点的数量](#动态维护集合大小信息连通块中点的数量)
   - [另一道例题：食物链](#另一道例题食物链)
+- [堆](#堆)
+  - [以小根堆为例](#以小根堆为例)
+  - [堆排序模板](#堆排序模板)
+  - [模拟堆模板](#模拟堆模板)
 
 <!-- /code_chunk_output -->
 
@@ -358,8 +362,295 @@ int main()
   - 与根节点的距离模3余2，则被吃根节点
   - 与根节点的距离模3余0，则与根节点同类
 
-**分析**
+```cpp
+#include <iostream>
+using namespace std;
 
-!食物链2
-!食物链3
+const int N = 5e4 + 10;
 
+int p[N], d[N];
+int n, m;
+
+int find(int x)
+{
+    if (x != p[x])
+    {
+        int t = find(p[x]);
+        d[x] += d[p[x]];
+        p[x] = t;
+    }
+    return p[x];
+}
+
+int main()
+{
+    scanf("%d%d", &n, &m);
+    for (int i = 1; i <= n; i ++) p[i] = i;
+    
+    int t, x, y;
+    int res = 0;
+    while (m --)
+    {
+        scanf("%d%d%d", &t, &x, &y);
+        if (x > n || y > n) res ++;
+        else
+        {
+            int px = find(x), py = find(y);
+            if (t == 1)
+            {
+                if (px == py && (d[x] - d[y]) % 3) res ++;  // x y都归入了集合但是距离 % 3 不为 0，则假话
+                else if (px != py)  // 两者中有一个还没有归入集合
+                {
+                    p[px] == py;  // 把 x 合到 y 上，即用 px 指向 py
+                    d[px] = d[y] - d[x];  // x y 同类则满足 (d[x] + d[px]) % 3 == (d[y]) % 3才行
+                }
+            }
+            else if (t == 2)
+            {
+                if (px == py && (d[x] - d[y] - 1) % 3) res ++;  // x y 都归入了集合但是 y 吃 x，假话
+                else if (px != py)
+                {
+                    p[px] = py;
+                    d[px] = d[y] + 1 - d[x];  // x 吃 y 则满足 (d[x] + d[px]) % 3 == (d[y] + 1) % 3才行
+                }
+            }
+        }
+    }
+    printf("%d", res);
+    return 0;
+}
+```
+
+> 上述代码可能存在错误！
+
+**分析：** 关于上面两个计算 `p[x]` 的式子，可以考虑方程式如下两张图。
+
+![](./images/20210517并查集-食物链2.png)
+
+![](./images/20210517并查集-食物链3.png)
+
+### 堆
+堆是维护一个数组集合：
+- 插入一个数
+- 求集合当中的最小值
+- 删除最小值
+- 删除任意一个元素
+- 修改任意一个元素
+
+堆的话，是二叉树（完全二叉树：除了最后一层，上面的所有节点都是满的；最后一层从左到右排列）。
+
+#### 以小根堆为例
+- 根节点是最小值
+- 每个点都满足小于等于左右两边的子节点
+
+![](./images/20210518最小堆存储.png)
+
+存储如图：
+- x的左儿子：2x
+- x的右儿子：2x+1
+
+STL里对应优先队列。
+
+**down操作**
+
+![](./images/20210518最小堆存储down.png)
+
+如上，我们把根节点的数变大，变成 6 ，down操作是保证堆的性质被满足，因此，在父节点比子点大时，总是将父节点与较小的子节点交换位置。
+
+**up操作**
+
+![](./images/20210518最小堆存储up.png)
+
+如上，我们把某节点的数变大，变成 2 ，up操作是保证堆的性质被满足，因此，在其父节点比自己大时，总是将父节点与自己交换位置。
+
+有了这两个操作，我们就可用代码表示堆的操作：
+- 插入一个数 `heap[++size] = x; up(size);`
+- 求集合当中的最小值 `heap[1]`
+- 删除最小值，用堆最后一个元素覆盖堆顶（因为一维数组删除头元素很困难，但是删除尾部元素size--就行） `heap[1] = heap[size]; size --; down(1);`
+- 删除任意一个元素 `heap[k] = heap[size]; size --; down(k); up(k);` down 和 up 只会自动执行一个
+- 修改任意一个元素 `heap[k] = x; down(k); up(k);`
+
+注意：**这里下标都是从 1 开始的。** 从 0 开始，会导致 0 的左儿子不满足 `2x` 。
+
+#### 堆排序模板
+- 输入一个长度为 n 的整数数列，从小到大输出前 m 小的数。
+
+输入格式
+- 第一行包含整数 n 和 m。
+- 第二行包含 n 个整数，表示整数数列。
+
+输出格式
+- 共一行，包含 m 个整数，表示整数数列中前 m 小的数。
+
+```cpp
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+const int N = 1e5 + 10;
+
+int n, m;
+int h[N], cnt;  // cnt 是堆元素数量，也是最后一个放入元素的地址
+
+void down(int u)
+{
+    int t = u;  // t 目前是当前节点
+    if (u * 2 <= cnt && h[u * 2] < h[t]) t = u * 2;  // 如果左儿子存在，还更小，t成为左儿子
+    if (u * 2 + 1 <= cnt && h[u * 2 + 1] < h[t]) t = u * 2 + 1;  // 如果右儿子存在，还更小，t成为右儿子
+    if (u != t)
+    {
+        swap(h[u], h[t]);
+        down(t);
+    }
+}
+
+int main()
+{
+    scanf("%d%d", &n, &m);
+    for (int i = 1; i <= n; i ++) scanf("%d", &h[i]);
+    cnt = n;
+    
+    for (int i = n / 2; i > 0; i --) down(i);
+    
+    while (m --)
+    {
+        printf("%d ", h[1]);
+        h[1] = h[cnt --];
+        down(1);
+    }
+    
+    return 0;
+}
+```
+
+![](./images/20210518堆排序-错位相减.png)
+
+如上图，排序的话，我们从 `n / 2` 开始 down ，这样是 O(n) 。**对于完全二叉树，`n / 2` 总是取到除了最后一层的所有点。**
+
+up 操作为：
+```cpp
+void up(int u)
+{
+  while (u / 2 && h[u / 2] > h[u])
+  {
+    swap(h[u / 2], h[u]);
+    u /= 2;
+  }
+}
+```
+
+#### 模拟堆模板
+- 维护一个集合，初始时集合为空，支持如下几种操作：
+  - I x，插入一个数 x；
+  - PM，输出当前集合中的最小值；
+  - DM，删除当前集合中的最小值（数据保证此时的最小值唯一）；
+  - D k，删除第 k 个插入的数；
+  - C k x，修改第 k 个插入的数，将其变为 x；
+- 现在要进行 N 次操作，对于所有第 2 个操作，输出当前集合的最小值。
+
+输入格式
+- 第一行包含整数 N。
+- 接下来 N 行，每行包含一个操作指令，操作指令为 I x，PM，DM，D k 或 C k x 中的一种。
+
+输出格式
+- 对于每个输出指令 PM，输出一个结果，表示当前集合中的最小值。
+- 每个结果占一行。
+
+为了找到第 k 个数，**我们要额外存一些信息：**
+- 第 k 个插入数组里的点，对应堆里面的哪个点 `ph: Pointer Heap`
+- 堆里面的点，对应第 k 个插入数组里的哪个点 `hp: Heap Pointer`
+
+![](./images/20210518模拟堆.png)
+
+```cpp
+#include <iostream>
+#include <string.h>
+#include <algorithm>
+using namespace std;
+
+const int N = 1e5 + 10;
+
+int h[N], hp[N], ph[N];
+int cnt;
+
+void swap_heap(int a, int b)
+{
+    swap(ph[hp[a]], ph[hp[b]]);
+    swap(hp[a], hp[b]);
+    swap(h[a], h[b]);
+}
+
+void down(int u)
+{
+    int t = u;
+    if (u * 2 <= cnt && h[u * 2] < h[t]) swap_heap(h[t], h[u * 2]);
+    if (u * 2 + 1 <= cnt && h[u * 2 + 1] < h[t]) swap_heap(h[t], h[u * 2 + 1]);
+    if (t != u)
+    {
+        swap_heap(t, u);
+        down(t);
+    }
+}
+
+int up(int u)
+{
+    while (u / 2 && h[u / 2] > h[u])
+    {
+        swap_heap(u / 2, u);
+        u /= 2;
+    }
+}
+
+int main()
+{
+    int n, m = 0;  // m 是第 m 个插入的
+    scanf("%d", &n);
+    
+    while (n --)
+    {
+        char op[5];
+        scanf("%s", op);
+        if (!strcmp(op, "I"))
+        {
+            int x = 0;
+            scanf("%d", &x);
+            cnt ++;
+            m ++;
+            h[cnt] = x;
+            ph[m] = cnt, hp[cnt] = m;
+            up(cnt);
+        }
+        else if (!strcmp(op, "PM"))
+        {
+            printf("%d\n", h[1]);
+        }
+        else if (!strcmp(op, "DM"))
+        {
+            swap_heap(1, cnt);
+            cnt --;
+            down(1);
+        }
+        else if (!strcmp(op, "D"))
+        {
+            int k;
+            scanf("%d", &k);
+            k = ph[k];
+            swap_heap(k, cnt);
+            cnt --;
+            down(k), up(k);
+        }
+        else if (!strcmp(op, "C"))
+        {
+            int k, x;
+            scanf("%d%d", &k, &x);
+            k = ph[k];
+            h[k] = x;
+            down(k), up(k);
+        }
+    }
+
+    return 0;
+}
+```
+
+如上，需要重写 `swap_heap` 。

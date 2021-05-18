@@ -13,7 +13,7 @@ Journey of fun, pain & gain.
   - [Platforms](#platforms)
   - [Wikis](#wikis)
 - [Notes](#notes)
-  - [另一道例题：食物链](#另一道例题食物链)
+  - [模拟堆模板](#模拟堆模板)
 
 <!-- /code_chunk_output -->
 
@@ -39,6 +39,4 @@ Journey of fun, pain & gain.
 
 ### Notes
 我的笔记见于 [./notes/README.md](./notes/README.md) 。
-
-> 学到 1:09
 
