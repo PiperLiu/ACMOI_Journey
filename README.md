@@ -13,7 +13,6 @@ Journey of fun, pain & gain.
   - [Platforms](#platforms)
   - [Wikis](#wikis)
 - [Notes](#notes)
-  - [模拟堆模板](#模拟堆模板)
 
 <!-- /code_chunk_output -->
 
@@ -40,3 +39,4 @@ Journey of fun, pain & gain.
 ### Notes
 我的笔记见于 [./notes/README.md](./notes/README.md) 。
 
+> 学到1:12

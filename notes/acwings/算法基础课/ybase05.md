@@ -573,3 +573,6 @@ int main()
 ```
 
 如上，需要重写 `swap_heap` 。
+
+**经验：**
+- 对于 `char op[5]`；我们用`!strcmp(op, "DM")`判断是否 `op` 是 `"DM"`；`strcmp`是`string`中的方法，如果两个字符串相等，则返回0。
