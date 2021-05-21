@@ -13,7 +13,6 @@ Journey of fun, pain & gain.
   - [Platforms](#platforms)
   - [Wikis](#wikis)
 - [Notes](#notes)
-- [Cpp的STL](#cpp的stl)
 
 <!-- /code_chunk_output -->
 
@@ -39,6 +38,4 @@ Journey of fun, pain & gain.
 
 ### Notes
 我的笔记见于 [./notes/README.md](./notes/README.md) 。
-
-> 学到1:12
 

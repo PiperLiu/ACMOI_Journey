@@ -14,6 +14,7 @@
 - [第二章 数据结构（一）](#第二章-数据结构一)
 - [第二章 数据结构（二）](#第二章-数据结构二)
 - [第二章 数据结构（三）](#第二章-数据结构三)
+- [第三章 搜索与图论（一）](#第三章-搜索与图论一)
 
 <!-- /code_chunk_output -->
 ### 错题本
@@ -124,3 +125,7 @@
   - [map/multimap](./ybase06.md#mapmultimap)
   - [unordered_set, unordered_map, unordered_multiset, unordered_multimap, 哈希表](./ybase06.md#unordered_set-unordered_map-unordered_multiset-unordered_multimap-哈希表)
   - [bitset, 圧位](./ybase06.md#bitset-圧位)
+
+### 第三章 搜索与图论（一）
+[./ybase07.md](./ybase07.md)
+
