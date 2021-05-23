@@ -11,6 +11,7 @@ Journey of fun, pain & gain.
 - [My Account](#my-account)
 - [Resources](#resources)
   - [Platforms](#platforms)
+  - [Examination](#examination)
   - [Wikis](#wikis)
 - [Notes](#notes)
 
@@ -30,6 +31,11 @@ Journey of fun, pain & gain.
 - codewars: https://www.codewars.com/
 - codeforces: https://codeforces.com/
 - pta: https://pintia.cn/
+
+#### Examination
+- CCF CSP：每年3、9、12月份，6月也可能有
+- PAT：每年春、秋、冬
+- 蓝桥杯：上半年比赛12月到3月报名
 
 #### Wikis
 - OI Wiki: https://oi-wiki.org/
