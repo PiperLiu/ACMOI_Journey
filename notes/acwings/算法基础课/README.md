@@ -15,6 +15,8 @@
 - [第二章 数据结构（二）](#第二章-数据结构二)
 - [第二章 数据结构（三）](#第二章-数据结构三)
 - [第三章 搜索与图论（一）](#第三章-搜索与图论一)
+- [第三章 搜索与图论（二）](#第三章-搜索与图论二)
+- [第三章 搜索与图论（三）](#第三章-搜索与图论三)
 
 <!-- /code_chunk_output -->
 ### 错题本
@@ -144,5 +146,21 @@
   - [有向图的拓扑序列（图bfs基本应用）](./ybase07.md#有向图的拓扑序列图bfs基本应用)
   - [例题：有向图的拓扑序列](./ybase07.md#例题有向图的拓扑序列)
 
-### 第三章 搜索与图论（三）
+### 第三章 搜索与图论（二）
 [./ybase08.md](./ybase08.md)
+
+- [最短路](./ybase08.md#最短路)
+- [朴素 Dijkstra 算法](./ybase08.md#朴素-dijkstra-算法)
+  - [Dijkstra求最短路 I](./ybase08.md#dijkstra求最短路-i)
+- [堆优化版的 Dijkstra 算法](./ybase08.md#堆优化版的-dijkstra-算法)
+  - [Dijkstra求最短路 II](./ybase08.md#dijkstra求最短路-ii)
+- [bellman-ford（负权）](./ybase08.md#bellman-ford负权)
+  - [有边数限制的最短路](./ybase08.md#有边数限制的最短路)
+- [SPFA](./ybase08.md#spfa)
+  - [spfa求最短路模板](./ybase08.md#spfa求最短路模板)
+  - [spfa判断负环模板](./ybase08.md#spfa判断负环模板)
+- [Floyd求最短路](./ybase08.md#floyd求最短路)
+  - [Floyd求最短路](./ybase08.md#floyd求最短路-1)
+
+### 第三章 搜索与图论（三）
+[./ybase09.md](./ybase09.md)
