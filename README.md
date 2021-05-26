@@ -14,6 +14,11 @@ Journey of fun, pain & gain.
   - [Examination](#examination)
   - [Wikis](#wikis)
 - [Notes](#notes)
+- [SPFA](#spfa)
+  - [spfa求最短路模板](#spfa求最短路模板)
+  - [spfa判断负环模板](#spfa判断负环模板)
+- [Floyd求最短路](#floyd求最短路)
+  - [Floyd求最短路](#floyd求最短路-1)
 
 <!-- /code_chunk_output -->
 
@@ -44,4 +49,3 @@ Journey of fun, pain & gain.
 
 ### Notes
 我的笔记见于 [./notes/README.md](./notes/README.md) 。
-

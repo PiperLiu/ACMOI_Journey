@@ -9,6 +9,11 @@
   - [Dijkstra求最短路 II](#dijkstra求最短路-ii)
 - [bellman-ford（负权）](#bellman-ford负权)
   - [有边数限制的最短路](#有边数限制的最短路)
+- [SPFA](#spfa)
+  - [spfa求最短路模板](#spfa求最短路模板)
+  - [spfa判断负环模板](#spfa判断负环模板)
+- [Floyd求最短路](#floyd求最短路)
+  - [Floyd求最短路](#floyd求最短路-1)
 
 <!-- /code_chunk_output -->
 
@@ -323,4 +328,274 @@ int main()
 此外，参考视频：
 - [https://www.bilibili.com/video/BV1gb41137u4](https://www.bilibili.com/video/BV1gb41137u4)、[https://www.youtube.com/watch?v=lyw4FaxrwHg](https://www.youtube.com/watch?v=lyw4FaxrwHg)，不好的地方在于，没有备份，没法通过 k 次更新得到 k 次可达的最短路
 
-> 学到1:30
+### SPFA
+SPFA（Shortest Path Faster Algorithm, Bellman-Ford using queue optimization）实际上使用队列优化 bellman-ford 算法。
+
+核心：更新了哪个点，把哪个点放入队列，下次循环看看其邻居是不是有必要更新。
+
+[SPFA百度百科](https://baike.baidu.com/item/SPFA%E7%AE%97%E6%B3%95/8297411?fromtitle=SPFA&fromid=11018124&fr=aladdin)：为了避免最坏情况的出现，在正权图上应使用效率更高的Dijkstra算法。
+
+#### spfa求最短路模板
+- 给定一个 n 个点 m 条边的有向图，图中可能存在重边和自环， **边权可能为负数。**
+- 请你求出 1 号点到 n 号点的最短距离，如果无法从 1 号点走到 n 号点，则输出 impossible。
+- **数据保证不存在负权回路。**
+
+输入格式
+- 第一行包含整数 n 和 m。
+- 接下来 m 行每行包含三个整数 x,y,z，表示存在一条从点 x 到点 y 的有向边，边长为 z。
+
+输出格式
+- 输出一个整数，表示 1 号点到 n 号点的最短距离。
+- 如果路径不存在，则输出 impossible。
+
+```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+#include <queue>
+using namespace std;
+
+const int N = 1e5 + 10;
+int m, n;
+int d[N];
+bool s[N];  // s[i] 是目前 i 是否在队列里
+queue<int> q;
+
+int e[N], ne[N], w[N], h[N], idx;
+
+void add(int a, int b, int c)
+{
+    e[idx] = b, w[idx] = c, ne[idx] = h[a], h[a] = idx ++ ;
+}
+
+void spfa()
+{
+    q.push(1);
+    d[1] = 0;
+    s[1] = true;
+    
+    while (q.size())
+    {
+        int t = q.front();
+        q.pop();
+        s[t] = false;  // 这个要放在这里
+
+        for (int i = h[t]; i != -1; i = ne[i])
+        {
+            int j = e[i];
+            if (d[j] > d[t] + w[i])
+            {
+                d[j] = d[t] + w[i];
+                if (!s[t])
+                {
+                    q.push(j);
+                    s[j] = true;
+                }
+            }
+        }
+    }
+}
+
+int main()
+{
+    scanf("%d%d", &n, &m);
+
+    memset(d, 0x3f, sizeof d);
+    memset(h, -1, sizeof h);
+
+    while (m -- )
+    {
+        int a, b, c;
+        scanf("%d%d%d", &a, &b, &c);
+        add(a, b, c);
+    }
+    
+    spfa();
+    
+    if (d[n] == 0x3f3f3f3f) puts("impossible");
+    else printf("%d", d[n]);
+    
+    return 0;
+}
+```
+
+注意，一般地 SPFA 处理不了负权回路，会陷入死循环。
+
+#### spfa判断负环模板
+- 给定一个 n 个点 m 条边的有向图，图中可能存在重边和自环， 边权可能为负数。
+- 请你判断图中是否存在负权回路。
+
+输入格式
+- 第一行包含整数 n 和 m。
+- 接下来 m 行每行包含三个整数 x,y,z，表示存在一条从点 x 到点 y 的有向边，边长为 z。
+
+输出格式
+- 如果图中存在负权回路，则输出 Yes，否则输出 No。
+
+**分析：**
+- `dist[x]` 是最短距离
+- `cnt[x]` 是最短路经过边数
+- 每次更新，都要做两个操作：`dist[x] = dist[t] + w[i]` 以及 `cnt[x] = cnt[t] + 1`
+- 如果某次 `cnt[x] >= n` ，说明从 `1` 到 `x` 至少经过了 `n` 条边，则最短路需要 `n+1` 个以上的点，则肯定存在负环
+
+**注意：**
+- 我们原来做法是从 1 开始找
+- 而这道题判断是否存在负环，不一定把 1 作为起点
+- 因此这道题最开始把所有点都推入队列
+
+```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+#include <queue>
+using namespace std;
+
+const int N = 1e5 + 10;
+
+int e[N], w[N], h[N], ne[N], idx;
+int d[N], cnt[N];
+bool st[N];
+
+int n, m;
+
+void add(int a, int b, int c)
+{
+    e[idx] = b, w[idx] = c, ne[idx] = h[a], h[a] = idx ++;
+}
+
+bool spfa()
+{
+    memset(d, 0x3f, sizeof d);
+    
+    queue<int> q;
+    for (int i = 1; i <= n; i ++ )
+    {
+        q.push(i);  // 把所有点推入队列
+        st[i] = true;
+    }
+    
+    while (q.size())
+    {
+        int t = q.front();
+        q.pop();
+        
+        st[t] = false;
+        
+        for (int i = h[t]; i != -1; i = ne[i])
+        {
+            int j = e[i];
+            if (d[j] > d[t] + w[i])
+            {
+                d[j] = d[t] + w[i];
+                cnt[j] = cnt[t] + 1;
+                
+                if (cnt[j] >= n) return true;
+                if (!st[j])
+                {
+                    q.push(j);
+                    st[j] = true;
+                }
+            }
+        }
+    }
+    
+    return false;
+    
+    
+}
+
+int main()
+{
+    scanf("%d%d", &n, &m);
+    
+    memset(h, -1, sizeof h);
+    while (m -- )
+    {
+        int a, b, c;
+        scanf("%d%d%d", &a, &b, &c);
+        add(a, b, c);
+    }
+    
+    if (spfa()) puts("Yes");
+    else puts("No");
+
+    return 0;
+}
+```
+
+### Floyd求最短路
+```cpp
+for (int k = 1; k <= n; k ++)
+  for (int i = 1; i <= n; i ++)
+    for (int j = 1; j <= n; j ++)
+      d[i, j] = min(d[i, j], d[i, k] + d[k, j])
+```
+
+原理是动态规划：
+- 状态表征是 `d[k, i, j]` ， `k` 是指阶段
+- `d[k, i, j] = d[k - 1, i, k] + d[k - 1, k, j]` 其中 `k` 可以省略，所以有了上式 ``
+
+#### Floyd求最短路
+- 给定一个 n 个点 m 条边的有向图，图中可能存在重边和自环，边权可能为负数。
+- 再给定 k 个询问，每个询问包含两个整数 x 和 y，表示查询从点 x 到点 y 的最短距离，如果路径不存在，则输出 impossible。
+- 数据保证图中不存在负权回路。
+
+输入格式
+- 第一行包含三个整数 n,m,k。
+- 接下来 m 行，每行包含三个整数 x,y,z，表示存在一条从点 x 到点 y 的有向边，边长为 z。
+- 接下来 k 行，每行包含两个整数 x,y，表示询问点 x 到点 y 的最短距离。
+
+输出格式
+- 共 k 行，每行输出一个整数，表示询问的结果，若询问两点间不存在路径，则输出 impossible。
+
+```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+using namespace std;
+
+const int N = 210, INF = 1e9;  // 如果是 2e9 ，则 2e9 + 2e9 = -294967296 越界
+int d[N][N], n, m, Q;
+
+void floyd()
+{
+    for (int k = 1; k <= n; k ++)
+        for (int i = 1; i <= n; i ++)
+            for (int j = 1; j <= n; j ++)
+                d[i][j] = min(d[i][j], d[i][k] + d[k][j]);
+}
+
+int main()
+{
+    scanf("%d%d%d", &n, &m, &Q);
+    for (int i = 1; i <= n; i ++)
+        for (int j = 1; j <= n; j ++)
+            if (i == j) d[i][i] = 0;
+            else d[i][j] = INF;
+    
+    while (m -- )
+    {
+        int a, b, c;
+        scanf("%d%d%d", &a, &b, &c);
+        d[a][b] = min(d[a][b], c);
+    }
+    
+    floyd();
+    
+    while (Q -- )
+    {
+        int a, b;
+        scanf("%d%d", &a, &b);
+        if (d[a][b] > INF / 2) puts("impossible");
+        else printf("%d\n", d[a][b]);
+    }
+    
+    return 0;
+}
+```
+
+**经验：**
+- 因为存在自环和重复的边
+- 因此为了在读入时就消去自环和重复的边，我们初始化时设置 `d[i][i] = 0` 以及 `d[i][j] = INF`
+- 出了 `Segment Fault` 就用删代码大法
+- 如果是 `2e9` ，则 `2e9 + 2e9 = -294967296` 越界
