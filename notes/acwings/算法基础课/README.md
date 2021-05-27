@@ -164,3 +164,14 @@
 
 ### 第三章 搜索与图论（三）
 [./ybase09.md](./ybase09.md)
+
+- [最小生成树](./ybase09.md#最小生成树)
+- [Prim](./ybase09.md#prim)
+  - [Prim模板](./ybase09.md#prim模板)
+- [Kruskal](./ybase09.md#kruskal)
+  - [Kruskal模板：Kruskal算法求最小生成树](./ybase09.md#kruskal模板kruskal算法求最小生成树)
+- [二分图](./ybase09.md#二分图)
+- [染色法判定二分图](./ybase09.md#染色法判定二分图)
+  - [染色法判定二分图模板](./ybase09.md#染色法判定二分图模板)
+- [匈牙利算法](./ybase09.md#匈牙利算法)
+  - [例题：二分图的最大匹配](./ybase09.md#例题二分图的最大匹配)
