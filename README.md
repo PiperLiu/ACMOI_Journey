@@ -14,11 +14,13 @@ Journey of fun, pain & gain.
   - [Examination](#examination)
   - [Wikis](#wikis)
 - [Notes](#notes)
-- [SPFA](#spfa)
-  - [spfa求最短路模板](#spfa求最短路模板)
-  - [spfa判断负环模板](#spfa判断负环模板)
-- [Floyd求最短路](#floyd求最短路)
-  - [Floyd求最短路](#floyd求最短路-1)
+- [约数](#约数)
+  - [试除法求约数](#试除法求约数)
+  - [约数个数与约数之和](#约数个数与约数之和)
+  - [约数个数例题](#约数个数例题)
+  - [约数之和例题](#约数之和例题)
+  - [欧几里得算法（辗转相除法）](#欧几里得算法辗转相除法)
+  - [题目：最大公约数（很优雅gcd）](#题目最大公约数很优雅gcd)
 
 <!-- /code_chunk_output -->
 
