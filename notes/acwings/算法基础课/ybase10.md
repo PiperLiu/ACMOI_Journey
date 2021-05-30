@@ -389,7 +389,7 @@ int main()
 **经验：**
 - 初始化 `unordered_map<int, int> a_map` 后，`a_map[0]` 默认值都是 0
 - 可以用 `auto a : a_map` 遍历赋过值的元素
-- 对于累乘结果取模，不必最后乘完了再取模，可以乘一个，取一次模
+- 对于累乘结果取模，不必最后乘完了再取模，可以乘一个，取一次模（可以把 $A \times B \mod C$ 中 $A$ 拆成 $A = ((A / C \times C + A \mod C) \times B \mod C)$）
 
 #### 约数之和例题
 
