@@ -630,7 +630,7 @@ int main()
         x = k1 * a1 + m1;
         
         LL a = abs(a1 / d * a2);
-        m2 = k1 * a1 + m1;
+        m1 = k1 * a1 + m1;
         a1 = a;
     }
 
