@@ -3,7 +3,7 @@ Journey of fun, pain & gain.
 
 ### Index
 
-<!-- @import "[TOC]" {cmd="toc" depthFrom=3 depthTo=6 orderedList=false} -->
+<!-- @import "[TOC]" {cmd="toc" depthFrom=3 depthTo=4 orderedList=false} -->
 
 <!-- code_chunk_output -->
 
@@ -14,13 +14,6 @@ Journey of fun, pain & gain.
   - [Examination](#examination)
   - [Wikis](#wikis)
 - [Notes](#notes)
-- [约数](#约数)
-  - [试除法求约数](#试除法求约数)
-  - [约数个数与约数之和](#约数个数与约数之和)
-  - [约数个数例题](#约数个数例题)
-  - [约数之和例题](#约数之和例题)
-  - [欧几里得算法（辗转相除法）](#欧几里得算法辗转相除法)
-  - [题目：最大公约数（很优雅gcd）](#题目最大公约数很优雅gcd)
 
 <!-- /code_chunk_output -->
 

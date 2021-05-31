@@ -9,6 +9,13 @@
 - [快速幂](#快速幂)
   - [极简写法的快速幂](#极简写法的快速幂)
   - [快速幂求逆元](#快速幂求逆元)
+- [扩展欧几里得算法](#扩展欧几里得算法)
+  - [裴属定理](#裴属定理)
+  - [扩展欧几里得算法例题](#扩展欧几里得算法例题)
+  - [线性同余方程](#线性同余方程)
+  - [线性同余方程例题](#线性同余方程例题)
+- [中国剩余定理（孙子定理）](#中国剩余定理孙子定理)
+  - [例题：表达整数的奇怪方式](#例题表达整数的奇怪方式)
 
 <!-- /code_chunk_output -->
 
@@ -345,4 +352,297 @@ int main()
 }
 ```
 
-> 学到 1:24
+### 扩展欧几里得算法
+
+#### 裴属定理
+
+[百度百科](https://baike.baidu.com/item/%E8%A3%B4%E8%9C%80%E5%AE%9A%E7%90%86/5186593?fr=aladdin)：
+- 在数论中，裴蜀定理是一个关于最大公约数（或最大公约式）的定理，裴蜀定理得名于法国数学家艾蒂安·裴蜀。
+- 裴蜀定理说明了对任何整数 a、b 和它们的最大公约数 d ，关于未知数 x 以及 y 的线性的丢番图方程（称为裴蜀等式）。
+
+即：若a,b是整数，且$gcd(a,b)=d$，那么对于任意的整数$x,y$，$ax+by$都一定是$d$的倍数，特别地，一定存在整数$x,y$，使$ax+by=d$成立。
+
+证明中，使用构造方法，构造$ax+by=d$，使用了欧几里得算法。
+
+#### 扩展欧几里得算法例题
+
+- 给定 n 对正整数 $a_i,b_i$，对于每对数，求出一组 $x_i,y_i$，使其满足 $a_i\times x_i+b_i\times y_i=gcd(a_i,b_i)$。
+
+输入格式
+- 第一行包含整数 n。
+- 接下来 n 行，每行包含两个整数 $a_i,b_i$。
+
+输出格式
+- 输出共 n 行，对于每组 $a_i,b_i$，求出一组满足条件的 $x_i,y_i$，每组结果占一行。
+- 本题答案不唯一，输出任意满足条件的 $x_i,y_i$ 均可。
+
+**分析：** （参考了[zeroAC](https://www.acwing.com/solution/content/1393/)）
+
+用于求解方程 $ax + by = \gcd(a,b)$ 的解
+
+当 $b=0$ 时， $ax + by = a$ 故而 $x=1, y=0$
+
+当 $b\neq 0$ 时，
+
+因为
+
+$$\gcd(a,b) = \gcd (b, a\%b)$$
+
+而
+
+$$bx' + (a\% b)y' = \gcd(b, a \% b)$$
+
+$$b x' + (a - \lfloor a / b \rfloor \times b) y' = \gcd(b, a\% b)$$
+
+$$ay' + b (x' - \lfloor a / b \rfloor \times y) = \gcd(b,a\% b) = \gcd (a,b)$$
+
+故而
+
+$$x=y', y=x' - \lfloor a / b \rfloor \times y'$$
+
+因此，可以采用递归，求出下一层的 $x', y'$ 再带回本层公式即可。
+
+```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+int exgcd(int a, int b, int &x, int &y)
+{
+    if (!b)
+    {
+        x = 1, y = 0;
+        return a;
+    }
+
+    int d = exgcd(b, a % b, y, x);
+    y -= a / b * x;
+    return d;
+    /*
+    上面的代码不好理解，可以写为
+    int x1, y1;
+    int d = exgcd(b, a % b, x1, y1);
+    x = y1, y = x1 - a / b * y1;
+    return d;
+    */
+}
+
+int main()
+{
+    int n ;
+    scanf("%d", &n);
+    
+    while (n -- )
+    {
+        int a, b, x, y;
+        scanf("%d%d", &a, &b);
+        exgcd(a, b, x, y);
+        printf("%d %d\n", x, y);
+    }
+    return 0;
+}
+```
+
+#### 线性同余方程
+
+**先导知识：** （参考了[zeroAC](https://www.acwing.com/solution/content/1393/)）
+
+##### 对于更一般的方程$ax + by = c$
+
+设 $d = \gcd(a,b)$ 则其有解当且仅当 $d | c$
+
+求解方法如下：
+
+用欧几里得求出 $ax_0 + by_0 = d$ 的解
+
+则 $a(x_0 \times c / d) + b (y_0 \times c /d) = c$
+
+故而特解为 $x' = x_0 \times c / d, y' = y_0 \times c / d$
+
+而 **通解 = 特解 + 齐次解**
+
+而齐次解即为方程 $ax + by = 0$ 的解
+
+故而通解为 $x = x' + k \times b / d, y = y' - k \times a / d, k \in \mathbb{Z}$
+
+##### 应用：求一次同余方程$ax\equiv b (\mod m)$
+
+则等价于求
+
+$$ax = m \times (-y) + b$$
+
+$$ax + my = b$$
+
+有解条件为 $\gcd(a,m) | b$ ，然后用扩展欧几里得求解即可。
+
+特别地，当 $b = 1$ 且 $a$ 与 $m$ 互质时， $x$ 即为 $a$ 的逆元。
+
+#### 线性同余方程例题
+
+- 给定 n 组数据 $a_i,b_i,m_i$，对于每组数求出一个 $x_i$，使其满足 $a_i \times x_i \equiv b_i(\mod m_i)$，如果无解则输出 `impossible`。
+
+输入格式
+- 第一行包含整数 n。
+- 接下来 n 行，每行包含一组数据 $a_i,b_i,m_i$。
+
+输出格式
+- 输出共 n 行，每组数据输出一个整数表示一个满足条件的 $x_i$，如果无解则输出 `impossible`。
+- 每组数据结果占一行，结果可能不唯一，输出任意一个满足条件的结果均可。
+- 输出答案必须在 `int` 范围之内。
+
+```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+typedef long long LL;
+
+int exgcd(int a, int b, int &x, int &y)
+{
+    if (!b)
+    {
+        x = 1, y = 0;
+        return a;
+    }
+
+    int d = exgcd(b, a % b, y, x);
+    y -= a / b * x;
+    return d;
+}
+
+int main()
+{
+    int n ;
+    scanf("%d", &n);
+    
+    while (n -- )
+    {
+        int a, b, m, x, y;
+        scanf("%d%d%d", &a, &b, &m);
+        int d = exgcd(a, m, x, y);
+        if (b % d == 0) printf("%d\n", (LL) b / d * x % m);  // LL 防止 b / d * x 爆 int
+        // x 扩大 b / d 倍再 % m 是为了让 x 尽可能地小
+        else puts("impossible");
+    }
+    return 0;
+}
+```
+
+### 中国剩余定理（孙子定理）
+
+$m_1 , m_2 , ... , m_k$ 两两互质，求 $x$ 使得：
+
+$$x \equiv a_1 (\mod m_1)$$
+$$x \equiv a_2 (\mod m_2)$$
+$$ ... $$
+$$x \equiv a_k (\mod m_k)$$
+
+我们记：
+
+$$M = m_1 m_2 ... m_k$$
+
+$$M_i = M / m_i$$
+
+$ M_i^{-1} $ 为 $M_i$ 模 $m_i$ 的逆
+
+因此
+
+$$x = a_1 M_1 M_1^{-1} + a_2 M_2 M_2^{-1} + ... + a_k M_k M_k^{-1}$$
+
+#### 例题：表达整数的奇怪方式
+
+- 给定 2n 个整数 $a_1,a_2,…,a_n$ 和 $m_1,m_2,…,m_n$，求一个最小的非负整数 x，满足 $\forall i \in [1,n],x \equiv m_i(\mod a_i)$。
+
+输入格式
+- 第 1 行包含整数 n。
+- 第 2…n+1 行：每 i+1 行包含两个整数 $a_i$ 和 $m_i$，数之间用空格隔开。
+
+输出格式
+- 输出最小非负整数 x，如果 x 不存在，则输出 ?1。
+- 如果存在 x，则数据保证 x 一定在 64 位整数范围内。
+
+**分析：**
+- 题目中没有任何限制，然而，中国剩余定理要求 $m_i$ 两两互质
+- 我们只好推导一下
+
+##### 本题的推导
+
+参考[墨染空](https://www.acwing.com/solution/content/3539/)：
+
+![](./images/20210531sunzi01.png)
+![](./images/20210531sunzi02.png)
+![](./images/20210531sunzi03.png)
+![](./images/20210531sunzi04.png)
+![](./images/20210531sunzi05.png)
+![](./images/20210531sunzi06.png)
+![](./images/20210531sunzi07.png)
+![](./images/20210531sunzi08.png)
+
+```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+typedef long long LL;
+
+LL exgcd(LL a, LL b, LL &x, LL &y)
+{
+    if (!b)
+    {
+        x = 1, y = 0;
+        return a;
+    }
+
+    LL d = exgcd(b, a % b, y, x);
+    y -= a / b * x;
+    return d;
+}
+
+int main()
+{
+    int n ;
+    scanf("%d", &n);
+    
+    LL x = 0, a1, m1;
+    scanf("%lld%lld", &a1, &m1);  // 注意 "%lld"
+    for (int i = 0; i < n - 1; i ++)
+    {
+        LL a2, m2;
+        scanf("%lld%lld", &a2, &m2);
+
+        LL k1, k2;
+        LL d = exgcd(a1, -a2, k1, k2);
+        if ((m2 - m1) % d)
+        {
+            x = -1;
+            break;
+        }
+        
+        k1 *= (m2 - m1) / d;
+        k1 = (k1 % (a2/d) + a2/d) % (a2 / d);
+        
+        x = k1 * a1 + m1;
+        
+        LL a = abs(a1 / d * a2);
+        m2 = k1 * a1 + m1;
+        a1 = a;
+    }
+
+    if (x != -1) x = (x % a1 + a1) % a1;  // 为了应对负数取模
+    
+    printf("%lld", x);
+
+    return 0;
+}
+```
+
+> 上述代码有问题
+
+**经验：**
+- C++ 里对负数 `x` 取 `a` 的模 `x = (x % a + a) % a`
