@@ -8,6 +8,10 @@
 - [求组合数](#求组合数)
   - [组合数递推式（以及例题）](#组合数递推式以及例题)
   - [组合数与逆元、快速幂（以及例题）](#组合数与逆元-快速幂以及例题)
+  - [组合数与卢卡斯定理（以及例题）](#组合数与卢卡斯定理以及例题)
+  - [组合数与高精度（不模）](#组合数与高精度不模)
+- [组合计数、卡特兰数](#组合计数-卡特兰数)
+  - [例题：满足条件的01序列](#例题满足条件的01序列)
 
 <!-- /code_chunk_output -->
 
@@ -296,6 +300,8 @@ int main()
 }
 ```
 
+本题的数据范围：10万组数据，$1 \le b \le a \le 2000$，这种方法时间复杂度 $O(N^2)$
+
 #### 组合数与逆元、快速幂（以及例题）
 
 注意这里被模的数是质数才能用逆元。
@@ -365,6 +371,287 @@ int main()
         printf("%d\n", (LL) fact[a] * infact[b] % mod * infact[a - b] % mod);
     }
 
+    return 0;
+}
+```
+
+本题的数据范围：1万组数据，$1 \le b \le a \le 10^5$，这种方法时间复杂度 $O(N \log N)$
+
+
+#### 组合数与卢卡斯定理（以及例题）
+
+来自[Struggle](https://www.acwing.com/solution/content/22147/)：
+
+![](./images/20210602lucas.png)
+
+来自[嘤嘤嘤0](https://www.acwing.com/solution/content/5244/)：
+
+![](./images/20210602lucas2.png)
+
+时间复杂度为：$p \log_p{N} \log{N}$
+
+我们应对 $1 \le b \le a \le 10^18$ ，使用卢卡斯定理：
+
+$$C_a^b \equiv C_{a\%p}^{b\% p} \times C_{a / p}^{b / p} (\mod p)$$
+
+##### 组合数与卢卡斯定理例题
+
+- 给定 n 组询问，每组询问给定三个整数 a,b,p，其中 p 是质数，请你输出 $C_a^b \mod p$ 的值。
+
+输入格式
+- 第一行包含整数 n。
+- 接下来 n 行，每行包含一组 a 和 b。
+
+输出格式
+- 共 n 行，每行输出一个询问的解。
+
+```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+typedef long long LL;
+
+int qmi(int a, int k, int p)
+{
+    int res = 1;
+    while (k)
+    {
+        if (k & 1) res = (LL) res * a % p;
+        a = (LL) a * a % p;
+        k >>= 1;
+    }
+    return res;
+}
+
+int C(int a, int b, int p)
+{
+    if (b > a) return 0;
+    
+    int res = 1;
+    for (int i = 1, j = a; i <= b; i ++, j --)
+    {
+        res = (LL) res * j % p;
+        res = (LL) res * qmi(i, p - 2, p) % p;
+    }
+    
+    return res;
+}
+
+int lucas(LL a, LL b, int p)
+{
+    if (a < p && b < p) return C(a, b, p);
+    return (LL) C(a % p, b % p, p) * lucas(a / p, b / p, p) % p;
+}
+
+int main()
+{
+    int n;
+    cin >> n;
+    
+    while (n --)
+    {
+        LL a, b;
+        int p;
+        cin >> a >> b >> p;
+        cout << lucas(a, b, p) << endl;
+    }
+
+    return 0;
+}
+```
+
+本题的数据范围：20组数据，$1 \le b \le a \le 10^18$，$1\ \le p \le 10^5$，这种方法时间复杂度 $p \log_p{N} \log{N}$
+
+#### 组合数与高精度（不模）
+
+来自[糖豆](https://www.acwing.com/solution/content/38244/)：
+
+![](./images/20210602C1.png)
+![](./images/20210602C2.png)
+![](./images/20210602C3.png)
+
+##### 组合数与高精度例题
+
+- 输入 a,b，求 $C_b^a$ 的值。
+- 注意结果可能很大，需要使用高精度计算。
+
+输入格式
+- 共一行，包含两个整数 a 和 b。
+
+输出格式
+- 共一行，输出 $C_b^a$ 的值。
+
+数据范围
+- $1≤b≤a≤5000$
+
+```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+#include <vector>
+
+using namespace std;
+
+const int N = 5e3 + 10;
+
+int primes[N], cnt;
+bool st[N];
+int sum[N];
+
+void get_primes(int a)
+{
+    for (int i = 2; i <= a; i ++)
+    {
+        if (!st[i]) primes[cnt ++] = i;
+        for (int j = 0; primes[j] <= a / i; j ++)
+        {
+            st[primes[j] * i] = true;
+            if (i % primes[j] == 0) break;
+        }
+    }
+}
+
+int get(int n, int p)
+{
+    int res = 0;
+    while (n)
+    {
+        res += n / p;
+        n /= p;
+    }
+    return res;
+}
+
+vector<int> mul(vector<int> a, int b)
+{
+    vector<int> c;
+    int t = 0;
+    for (int i = 0; i < a.size(); i ++)
+    {
+        t += a[i] * b;
+        c.push_back(t % 10);
+        t /= 10;
+    }
+    while (t)
+    {
+        c.push_back(t % 10);
+        t /= 10;
+    }
+    return c;
+}
+
+int main()
+{
+    int a, b;
+    cin >> a >> b;
+
+    get_primes(a);
+    
+    for (int i = 0; i < cnt; i ++)
+    {
+        int p = primes[i];
+        sum[i] = get(a, p) - get(a - b, p) - get(b, p);
+        // a 的阶乘里面的个数 - (a-b)阶乘里面的个数 - (b) 的阶乘里面的个数
+    }
+
+    vector<int> res;
+    res.push_back(1);
+    
+    for (int i = 0; i < cnt; i ++)
+        for (int j = 0; j < sum[i]; j ++)
+            res = mul(res, primes[i]);
+    
+    for (int i = res.size() - 1; i >= 0; i --) printf("%d", res[i]);
+    puts("");
+    
+    return 0;
+}
+```
+
+### 组合计数、卡特兰数
+
+来自[百度百科](https://baike.baidu.com/item/%E5%8D%A1%E7%89%B9%E5%85%B0%E6%95%B0/6125746)：
+
+![](./images/20210602Catalan2.png)
+
+应用时，更多的是：
+
+$$C_{2n}^n - C_{2n}^{n-1} = \frac{C_{2n}^n}{n+1}$$
+
+#### 例题：满足条件的01序列
+
+- 给定 n 个 0 和 n 个 1，它们将按照某种顺序排成长度为 2n 的序列，求它们能排列成的所有序列中，能够满足任意前缀序列中 0 的个数都不少于 1 的个数的序列有多少个。
+- 输出的答案对 $10^9+7$ 取模。
+
+输入格式
+- 共一行，包含整数 n。
+
+输出格式
+- 共一行，包含一个整数，表示答案。
+
+数据范围
+- $1≤n≤10^5$
+
+**分析：**
+
+对于例子 `n=3` 满足要求的只有以下几种序列：
+
+![](./images/20210602Catalan.png)
+
+来自[番茄酱](https://www.acwing.com/solution/content/8907/)：
+
+将 01 序列置于坐标系中，起点定于原点。若 0 表示向右走，1 表示向上走，那么任何前缀中 0 的个数不少于 1 的个数就转化为，路径上的任意一点，横坐标大于等于纵坐标。题目所求即为这样的合法路径数量。
+
+下图中，表示从 (0,0) 走到 (n,n) 的路径，在绿线及以下表示合法，若触碰红线即不合法。
+
+![](./images/20210602Catalan3.png)
+
+由图可知，任何一条不合法的路径（如黑色路径），都对应一条从 (0,0) 走到 (n−1,n+1) 的一条路径（如灰色路径）。而任何一条 (0,0) 走到 (n−1,n+1) 的路径，也对应了一条从 (0,0) 走到 (n,n) 的不合法路径。
+
+答案如图，即卡特兰数。
+
+```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+typedef long long LL;
+
+const int mod = 1e9 + 7;
+
+int qmi(int a, int k, int p)
+{
+    int res = 1;
+    while (k)
+    {
+        if (k&1) res = (LL) res * a % mod;
+        a = (LL) a * a % mod;
+        k >>= 1;
+    }
+    return res;
+}
+
+int main()
+{
+    int n;
+    scanf("%d", &n);
+    
+    int a = n * 2, b = n;
+    
+    int res = 1;
+    for (int i = a; i > a - b; i --) res = (LL) res * i % mod;
+    
+    for (int i = 1; i <= b; i ++) res = (LL) res * qmi(i, mod - 2, mod) % mod;
+    
+    res = (LL) res * qmi(n + 1, mod - 2, mod) % mod;
+    
+    printf("%d", res);
+    
     return 0;
 }
 ```
