@@ -417,7 +417,7 @@ int main()
 **分析：**
 - 思路与完全背包类似，如下图。
 
-!dp4
+![](./images/20210605dp4.png)
 
 转移方程：`f[i][j] = max(f[i - 1][j - v[i] * k] + w[i] * k)` ，其中 `k` 大于等于 0 ，小于等于 `s[i]`
 
@@ -491,9 +491,9 @@ f[i , j-v]= max( f[i-1,j-v] ,f[i-1,j-2v]+w, ..... f[i-1,j-Sv]+(S-1)w, f[i-1,j-(S
 
 二进制优化参考[Aniway](https://www.acwing.com/solution/content/5527/)：
 
-!dp5
-!dp6
-!dp7
+![](./images/20210605dp5.png)
+![](./images/20210605dp6.png)
+![](./images/20210605dp7.png)
 
 利用二进制优化，时间复杂度就从`O(n^2 * S)`降到`O(n^2logS)`。
 
@@ -575,7 +575,7 @@ int main()
 - $0<S_i≤100$
 - $0<v_{ij},w_{ij}≤100$
 
-!dp8
+![](./images/20210605dp8.png)
 
 ```cpp
 #include <iostream>
