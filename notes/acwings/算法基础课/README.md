@@ -245,4 +245,7 @@
   - [例题：拆分-Nim游戏](./ybase13.md#例题拆分-nim游戏)
 
 ### 第五章 动态规划（一）
-[]
+[./ybase14.md](./ybase14.md)
+
+关于动态规划性质很棒的一篇文章：[什么是动态规划（Dynamic Programming）？动态规划的意义是什么？阮行止的回答，知乎](https://www.zhihu.com/question/23995189/answer/613096905)
+
