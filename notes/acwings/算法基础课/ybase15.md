@@ -11,6 +11,9 @@
   - [例题：编辑距离](#例题编辑距离)
 - [区间动态规划](#区间动态规划)
   - [例题：石子合并](#例题石子合并)
+- [计数类动态规划](#计数类动态规划)
+  - [例题：整数划分](#例题整数划分)
+  - [例题：整数划分另一种思路](#例题整数划分另一种思路)
 
 <!-- /code_chunk_output -->
 
@@ -513,5 +516,144 @@ int main()
 }
 ```
 
- 这道题有讲究，其转移从区间长度从小到大开始，`len = 2` ，而非从 `i` 开始。
- 
+这道题有讲究，其转移从区间长度从小到大开始，`len = 2` ，而非从 `i` 开始。
+
+### 计数类动态规划
+
+#### 例题：整数划分
+
+- 一个正整数 n 可以表示成若干个正整数之和，形如：$n=n_1+n_2+…+n_k$，其中 $n_1≥n_2≥…≥n_k,k≥1$。
+- 我们将这样的一种表示称为正整数 n 的一种划分。
+- 现在给定一个正整数 n，请你求出 n 共有多少种不同的划分方法。
+
+输入格式
+- 共一行，包含一个整数 n。
+
+输出格式
+- 共一行，包含一个整数，表示总划分数量。
+- 由于答案可能很大，输出结果请对 $10^9+7$ 取模。
+
+数据范围
+- $1≤n≤1000$
+
+分析参考[Anish](https://www.acwing.com/solution/content/2954/)：
+
+思路：把$1,2,3, … n$分别看做 n 个物体的体积，这 n 个物体均无使用次数限制，问恰好能装满总体积为 n 的背包的总方案数（完全背包问题变形）
+
+初值问题：
+- 求最大值时，当都不选时，价值显然是 0
+- 而求方案数时，当都不选时，方案数是 1（即前 i 个物品都不选的情况也是一种方案），所以需要初始化为 1
+- 即：`for (int i = 0; i <= n; i ++) f[i][0] = 1;`
+- 等价变形后： `f[0] = 1`
+
+状态计算：
+- $f[i][j]$ 表示前$i$个整数（$1,2…,i$）恰好拼成$j$的方案数
+- 求方案数：把集合选$0$个$i$，$1$个$i$，$2$个$i$，…全部加起来
+- `f[i][j] = f[i - 1][j] + f[i - 1][j - i] + f[i - 1][j - 2 * i] + ...;`
+- `f[i][j - i] = f[i - 1][j - i] + f[i - 1][j - 2 * i] + ...;`
+- 因此 `f[i][j]=f[i−1][j]+f[i][j−i];` (这一步类似完全背包的推导）
+
+朴素做法如下。
+
+```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+const int N = 1e3 + 10, mod = 1e9 + 7;
+int f[N][N];
+
+int main()
+{
+    int n;
+    scanf("%d", &n);
+    for (int i = 0; i <= n; i ++ ) f[i][0] = 1;
+    
+    for (int i = 1; i <= n; i ++ )
+        for (int j = 0; j <= n; j ++)
+        {
+            f[i][j] = f[i - 1][j] % mod;
+            if (j >= i) f[i][j] = (f[i][j] + f[i][j - i]) % mod; 
+        }
+
+    printf("%d", f[n][n]);
+    return 0;
+}
+```
+
+优化如下。
+
+```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+const int N = 1e3 + 10, mod = 1e9 + 7;
+int f[N];
+
+int main()
+{
+    int n;
+    scanf("%d", &n);
+    f[0] = 1;
+    
+    for (int i = 1; i <= n; i ++ )
+        for (int j = i; j <= n; j ++)
+        {
+            f[j] = (f[j] + f[j - i]) % mod; 
+        }
+
+    printf("%d", f[n]);
+    return 0;
+}
+```
+
+#### 例题：整数划分另一种思路
+
+![](./images/20210607dp1.png)
+
+如上，很牛逼的思路，`f[i][j]`表示总和为 i ，并且恰好表示成 j 个数的和的方案。
+
+因此，`f[i][j]` 可以被分成两种情况：
+- 方案中最小值是 1 ，这等价于 `f[i - 1][j - 1]` 的方案数量（相当于把这类方案中的一个 1 去掉）
+- 方案中最小值大于 1 ，这等价于 `f[i - j, j]` 的方案数量（相当于把方案中的所有数都减去 1 ）
+
+因此，状态转移方程：
+- `f[i][j] = f[i - 1][j - 1] + f[i - j][j]`
+
+并且注意，最后得到答案时，要把所有 `f[n][*]` 求和。
+
+```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+const int N = 1e3 + 10, mod = 1e9 + 7;
+int f[N][N];
+
+int main()
+{
+    int n;
+    scanf("%d", &n);
+
+    f[1][1] = 1;
+    for (int i = 2; i <= n; i ++ )
+        for (int j = 1; j <= i; j ++)
+        {
+            f[i][j] = (f[i - 1][j - 1] + f[i - j][j]) % mod;
+        }
+
+    int res = 0;
+    for (int i = 1; i <= n; i ++) res = (res + f[n][i]) % mod;
+    printf("%d", res);
+    return 0;
+}
+```
+
+注意起始条件（`i=2`）、边界值。
