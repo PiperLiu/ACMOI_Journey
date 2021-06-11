@@ -188,13 +188,130 @@ int main()
 
 不加优化：
 ```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
 
+using namespace std;
+typedef long long LL;
+
+const int N = 12, M = 1 << N;
+
+LL f[N][M];
+int m, n;
+bool st[M];  // 保存所有伸出来的状态是否合法
+
+int main()
+{
+    while (cin >> n >> m, n || m)
+    {
+        // 把列的所有状态遍历一遍
+        for (int i = 0; i < 1 << n; i ++)
+        {
+            // 对于本状态 i
+            st[i] = true;
+            int cnt = 0;  // 记录连续 0 的数量
+            // 从第一行的格子开始
+            for (int j = 0; j < n; j ++)
+            {
+                if (i >> j & 1)  // 如果第 j 个格子对应数是 1
+                {
+                    // 连续 0 的数量是奇数
+                    if (cnt & 1)
+                    {
+                        st[i] = false;
+                        break;
+                    }
+                }
+                else cnt ++;
+            }
+            if (cnt & 1) st[i] = false;
+        }
+        
+        memset(f, 0, sizeof f);
+        f[0][0] = 1;  // 对于第 1 列，只有 1 种情况00...000，方案也只有 1 种
+        for (int i = 1; i <= m; i ++)
+            for (int j = 0; j < 1 << n; j ++)
+                for (int k = 0; k < 1 << n; k ++)
+                    if ((j & k) == 0 && st[j | k])  // j 和 k 没有冲突，且 j 和 k 状态合法
+                        f[i][j] += f[i - 1][k];
+        
+        cout << f[m][0] << endl;
+    }
+    return 0;
+}
 ```
 
 加优化（把对于状态`j`来说，其对应的合法`k`保存起来）：
 ```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+#include <vector>
 
+using namespace std;
+typedef long long LL;
+
+const int N = 12, M = 1 << N;
+
+LL f[N][M];
+int m, n;
+bool st[M];  // 保存所有伸出来的状态是否合法
+vector<int> state[M];  // 保存各个合法状态对应的合法前置状态
+
+int main()
+{
+    while (cin >> n >> m, n || m)
+    {
+        // 把列的所有状态遍历一遍
+        for (int i = 0; i < 1 << n; i ++)
+        {
+            // 对于本状态 i
+            st[i] = true;
+            int cnt = 0;  // 记录连续 0 的数量
+            // 从第一行的格子开始
+            for (int j = 0; j < n; j ++)
+            {
+                if (i >> j & 1)  // 如果第 j 个格子对应数是 1
+                {
+                    // 连续 0 的数量是奇数
+                    if (cnt & 1)
+                    {
+                        st[i] = false;
+                        break;
+                    }
+                }
+                else cnt ++;
+            }
+            if (cnt & 1) st[i] = false;
+        }
+        
+        for (int i = 0; i < 1 << n; i ++)
+        {
+            state[i].clear();
+            for (int j = 0; j < 1 << n; j ++)
+                if ((i & j) == 0 && st[i | j])
+                    state[i].push_back(j);
+        }
+        
+        memset(f, 0, sizeof f);
+        f[0][0] = 1;  // 对于第 1 列，只有 1 种情况00...000，方案也只有 1 种
+        for (int i = 1; i <= m; i ++)
+            for (int j = 0; j < 1 << n; j ++)
+                for (auto k: state[j])
+                        f[i][j] += f[i - 1][k];
+        
+        cout << f[m][0] << endl;
+    }
+    return 0;
+}
 ```
+
+
+|提交时间|	状态|	运行时间|	语言|	模式|
+|---|---|---|---|---|
+|53秒前|	Accepted|	211 ms|	C++|	普通|
+|7分钟前|	Accepted|	876 ms|	C++|	普通|
 
 #### 例题：最短Hamilton路径
 
@@ -220,8 +337,43 @@ int main()
 - 状态计算：对于当前状态 `i, j` ，其上一个所在点是 `k` ，则经过的路径是 `i - {j}` （因为还没到达 `j` 点）比如`j = 3, k = 1`，则当前状态 `i = 0b01010` ，而上一步状态 `i - {j} = 0b00010` ，运算是 `i - 1 << j`
 
 ```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
 
+using namespace std;
+
+const int N = 20, M = 1 << N;
+
+int n;
+int w[N][N];
+int f[M][N];
+
+int main()
+{
+    cin >> n;
+    for (int i = 0; i < n; i ++)
+        for (int j = 0; j < n; j ++)
+            scanf("%d", &w[i][j]);
+    
+    memset(f, 0x3f, sizeof f);
+    f[1][0] = 0;  // 路径里只有第 0 点，且状态是 000...001
+
+    for (int i = 0; i < 1 << n; i ++)
+        for (int j = 0; j < n; j ++)
+            if (i >> j & 1)  // 如果路径 i 里有第 j 点
+                for (int k = 0; k < n; k ++)
+                    if (i >> k & 1)  // 如果路径 i 里有第 k 点
+                        f[i][j] = min(f[i - (1 << j)][k] + w[k][j], f[i][j]);
+    
+    printf("%d", f[(1 << n) - 1][n - 1]);
+
+    return 0;
+}
 ```
+
+**经验：**
+- 想得到 `n` 个 `1111` 可以 `(1 << n) - 1`
 
 ### 树形动态规划
 
@@ -252,6 +404,64 @@ int main()
 ![](./images/20210610dp6.png)
 
 ```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+const int N = 6010;
+
+int n;
+int h[N], e[N], ne[N], idx;
+int happy[N];
+int f[N][2];
+bool has_fa[N];
+
+void add(int a, int b)
+{
+    e[idx] = b, ne[idx] = h[a], h[a] = idx ++;
+}
+
+void dfs(int u)
+{
+    // 以 u 为根节点，1 代表方案里有 u ，0 代表没有
+    f[u][1] = happy[u];
+    
+    for (int i = h[u]; i != -1; i = ne[i])
+    {
+        int j = e[i];
+        dfs(j);  // 更新子节点为根节点时的值，下面是回溯加回来
+        
+        f[u][1] += f[j][0];
+        f[u][0] += max(f[j][0], f[j][1]);
+    }
+}
+
+int main()
+{
+    scanf("%d", &n);
+    
+    // 注意这里从 1 开始计数，否则与树的输入不想对应
+    for (int i = 1; i <= n; i ++) scanf("%d", &happy[i]);
+    
+    memset(h, -1, sizeof h);
+    for (int i = 0; i < n - 1; i ++)
+    {
+        int a, b;
+        scanf("%d%d", &a, &b);
+        add(b, a);
+        has_fa[a] = true;
+    }
+    
+    int root = 1;
+    while (has_fa[root]) root ++ ;  // 找到根节点
+    
+    dfs(root);
+    
+    printf("%d", max(f[root][0], f[root][1]));
+    return 0;
+}
 ```
 
 ### 记忆化搜索
@@ -303,6 +513,55 @@ int main()
 - 本题可以用记忆化搜索是因为没有环形状态转移，因为`不能走到更高或等高的坡上`导致无法形成环
 
 ```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+const int N = 310;
+
+int n, m;
+int g[N][N];  // 地图
+int f[N][N];
+
+int dx[4] = {-1, 0, 1, 0}, dy[4] = {0, 1, 0, -1};
+
+int dp(int x, int y)
+{
+    int &v = f[x][y];  // v 就是 f[x][y]
+    if (v != -1) return v;  // v 已经被“记忆”过
+    
+    // OK，从 v 开始，我最远可以到达？
+    v = 1;
+    for (int i = 0; i < 4; i ++)
+    {
+        int a = x + dx[i], b = y + dy[i];
+        if (a >= 1 && a <= n && b >= 1 && b <= m && g[x][y] > g[a][b])  // 合法的移动
+            v = max(v, dp(a, b) + 1);
+    }
+    
+    return v;
+}
+
+int main()
+{
+    scanf("%d%d", &n, &m);
+    for (int i = 1; i <= n; i ++)
+        for (int j = 1; j <= m; j ++)
+            scanf("%d", &g[i][j]);
+    
+    memset(f, -1, sizeof f);
+    
+    int res = 0;
+    for (int i = 1; i <= n; i ++)
+        for (int j = 1; j <= m; j ++)
+            res = max(res, dp(i, j));  // 遍历起点 i, j
+    
+    printf("%d", res);
+    
+    return 0;
+}
 ```
 
 **经验：**
