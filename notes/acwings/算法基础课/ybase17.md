@@ -50,6 +50,45 @@
 - 所以 `ans=cnt` 得证
 
 ```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+const int N = 1e5 + 10;
+
+struct Range
+{
+    int l, r;
+    bool operator < (const Range &w) const
+    {
+        return r < w.r;
+    }
+} range[N];
+
+int main()
+{
+    int n ;
+    scanf("%d", &n);
+    
+    for (int i = 0; i < n; i ++ ) scanf("%d%d", &range[i].l, &range[i].r);
+    
+    sort(range, range + n);
+    
+    int res = 0, ed = -2e9;
+    for (int i = 0; i < n; i ++)
+    {
+        if (range[i].l > ed)
+        {
+            ed = range[i].r;
+            res ++ ;
+        }
+    }
+    
+    printf("%d", res);
+    return 0;
+}
 ```
 
 #### 例题：最大不相交区间数量
@@ -73,7 +112,44 @@
 - 参考[Shadow](https://www.acwing.com/solution/content/5749/)：为什么最大不相交区间数==最少覆盖区间点数呢？因为如果几个区间能被同一个点覆盖，说明他们相交了，所以有几个点就是有几个不相交区间
 
 ```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
 
+using namespace std;
+
+const int N = 1e5;
+
+struct Range
+{
+    int l, r;
+    bool operator < (const Range &w) const
+    {
+        return r < w.r;
+    }
+} range[N];
+
+int main()
+{
+    int n;
+    scanf("%d", &n);
+    for (int i = 0; i < n; i ++ ) scanf("%d%d", &range[i].l, &range[i].r);
+    
+    sort(range, range + n);
+    
+    int res = 0, ed = -2e9;
+    for (int i = 0; i < n; i ++ )
+    {
+        if (range[i].l > ed)
+        {
+            res ++ ;
+            ed = range[i].r;
+        }
+    }
+    
+    printf("%d", res);
+    return 0;
+}
 ```
 
 #### 例题：区间分组
@@ -108,7 +184,61 @@
 - `ans >= cnt` 因为对于 `cnt` 个组来说，其有公共点，则必须至少有 `ans` 个区间
 
 ```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+#include <queue>
+
+using namespace std;
+
+const int N = 1e5 + 10;
+
+struct Range
+{
+    int l, r;
+    bool operator < (const Range &W) const
+    {
+        return l < W.l;
+    }
+} range[N];
+
+int main()
+{
+    int n ;
+    scanf("%d", &n);
+    for (int i = 0; i < n; i ++ )
+    {
+        int l, r;
+        scanf("%d%d", &l, &r);
+        range[i] = {l, r};
+    }
+    
+    sort(range, range + n);
+    
+    // 保存已有的各个组的右端点
+    priority_queue<int, vector<int>, greater<int>> heap;
+
+    for (int i = 0; i < n; i ++)
+    {
+        auto r = range[i];
+        // i = 0 或者 最往左的组都与 r 有重叠，则新开一组
+        if (heap.empty() || heap.top() >= r.l) heap.push(r.r);
+        else
+        {
+            // 否则向组里新加元素
+            heap.pop();
+            heap.push(r.r);
+        }
+    }
+    
+    printf("%d", heap.size());
+
+    return 0 ;
+}
 ```
+
+**经验：**
+- `range[i] = {l, r};` 来声明结构体实例的成员变量时，顺序要和结构体定义的成员变量顺序相对应
 
 ##### 更妙的方式：活动安排教室
 
@@ -123,6 +253,42 @@
 我们可以把所有开始时间和结束时间排序，遇到开始时间就把需要的教室加1，遇到结束时间就把需要的教室减1,在一系列需要的教室个数变化的过程中，峰值就是多同时进行的活动数，也是我们至少需要的教室数。
 
 ```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+const int N = 1e5 + 10;
+
+int b[N * 2];
+
+int main()
+{
+    int n ;
+    scanf("%d", &n);
+    int idx = 0;
+    for (int i = 0; i < n; i ++ )
+    {
+        int l, r;
+        scanf("%d%d", &l, &r);
+        b[idx ++] = l * 2;  // 左端点为偶数
+        b[idx ++] = r * 2 + 1;  // 右端点为奇数，这样避免了左右端点重合
+    }
+    
+    sort(b, b + idx);
+
+    int res = 0, t = 0;
+    for (int i = 0; i < idx; i ++)
+    {
+        if (b[i] % 2 == 0) t ++ ;  // 当前时间，使用教室总数 + 1
+        else t -- ;
+        res = max(res, t);  // 记录最高峰时期教室数量
+    }
+    
+    printf("%d", res);
+    return 0;
+}
 ```
 
 ![](./images/20210612greedy3.png)
@@ -158,6 +324,72 @@
 - 所以有 `ans == cnt
 
 ```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+const int N = 1e5 + 10;
+
+struct Range
+{
+    int l, r;
+    bool operator < (const Range &W) const
+    {
+        return l < W.l;
+    }
+} range[N];
+
+int main()
+{
+    int st, ed;
+    scanf("%d%d", &st, &ed);
+    
+    int n;
+    scanf("%d", &n);
+    for (int i = 0; i < n; i ++ )
+    {
+        int l, r;
+        scanf("%d%d", &l, &r);
+        range[i] = {l, r};
+    }
+    
+    sort(range, range + n);
+    
+    int res = 0;
+    bool success = false;
+    for (int i = 0; i < n; i ++)
+    {
+        int j = i, r = -2e9;
+        // 找包含 st 的区间中， r 最大的
+        while (j < n && range[j].l <= st)
+        {
+            r = max(r, range[j].r);
+            j ++ ;
+        }
+        
+        if (r < st)
+        {
+            res = -1;
+            break;
+        }
+        
+        res ++ ;
+        if (r >= ed)
+        {
+            success = true;
+            break;
+        }
+        
+        st = r;
+        i = j - 1;  // 没必要探索 l 小于 j.l 的了
+    }
+    
+    if (!success) res = -1;
+    printf("%d", res);
+    return 0;
+}
 ```
 
 ### Huffman树
@@ -199,5 +431,36 @@ Huffman树是完全二叉树。[百度百科](https://baike.baidu.com/item/%E5%9
 - $1≤a_i≤20000$
 
 ```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+#include <queue>
 
+using namespace std;
+
+int main()
+{
+    int n ;
+    scanf("%d", &n);
+    
+    priority_queue<int, vector<int>, greater<int>> heap;
+    for (int i = 0; i < n; i ++ )
+    {
+        int a;
+        scanf("%d", &a);
+        heap.push(a);
+    }
+    
+    int res = 0;
+    while (heap.size() > 1)
+    {
+        int a = heap.top(); heap.pop();
+        int b = heap.top(); heap.pop();
+        res += a + b;
+        heap.push(a + b);
+    }
+    
+    printf("%d", res);
+    return 0;
+}
 ```
