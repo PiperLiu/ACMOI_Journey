@@ -12,7 +12,7 @@
 <!-- /code_chunk_output -->
 
 ### 自己的心得
-[./summary/READMD.md](./summary/READMD.md)
+[./summary/README.md](./summary/README.md)
 
 ### y总系列课
 #### 算法基础课
