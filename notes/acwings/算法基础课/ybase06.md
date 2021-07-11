@@ -407,6 +407,8 @@ priority_queue<int, vector<int>, greater<int>> heap;
 - begin()/end()
 - ++, -- 返回前驱和后继，时间复杂度 O(logn)
 
+判断 `set<char> sub_res` 是否存在值，用 `sub_res.find(s[k]) != sub_res.end()` ，存在的话，是不等于。
+
 #### set/multiset
 - insert()  插入一个数
 - find()  查找一个数
@@ -435,6 +437,8 @@ a["yxc"] = 1;
 ```
 
 set里面不能有重复元素，multiset可以。
+
+判断 `map<char, int> table` 是否存在键值，用 `table.count(key)`
 
 #### unordered_set, unordered_map, unordered_multiset, unordered_multimap, 哈希表
 - 和上面类似，但是绝大部分增删改查的时间复杂度是 O(1)
