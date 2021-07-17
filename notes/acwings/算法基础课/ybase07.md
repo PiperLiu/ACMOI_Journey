@@ -9,6 +9,7 @@
 - [BFS](#bfs)
   - [走迷宫问题](#走迷宫问题)
   - [八数码](#八数码)
+  - [补充一道例题：魔板](#补充一道例题魔板)
 - [树与图的表示方法（有向图）](#树与图的表示方法有向图)
 - [树与图的深度优先遍历](#树与图的深度优先遍历)
   - [树的重心](#树的重心)
@@ -485,6 +486,186 @@ for (int i = 0; i < 9; i ++)
     state += *s;
 }
 ```
+
+#### 补充一道例题：魔板
+
+<p>Rubik 先生在发明了风靡全球的魔方之后，又发明了它的二维版本——魔板。</p>
+
+这是一张有 $8$ 个大小相同的格子的魔板：
+
+<pre><code>
+1 2 3 4
+8 7 6 5
+</code></pre>
+
+<p>我们知道魔板的每一个方格都有一种颜色。</p>
+
+这 $8$ 种颜色用前 $8$ 个正整数来表示。
+
+<p>可以用颜色的序列来表示一种魔板状态，规定从魔板的左上角开始，沿顺时针方向依次取出整数，构成一个颜色序列。</p>
+
+对于上图的魔板状态，我们用序列 $(1,2,3,4,5,6,7,8)$ 来表示，这是基本状态。
+
+<p>这里提供三种基本操作，分别用大写字母 A，B，C 来表示（可以通过这些操作改变魔板的状态）：</p>
+
+<p>A：交换上下两行；<br />
+
+B：将最右边的一列插入到最左边；<br />
+
+C：魔板中央对的4个数作顺时针旋转。</p>
+
+<p>下面是对基本状态进行操作的示范：</p>
+
+<p>A：</p>
+
+<pre><code>
+8 7 6 5
+1 2 3 4
+</code></pre>
+
+<p>B：</p>
+
+<pre><code>
+4 1 2 3
+5 8 7 6
+</code></pre>
+
+<p>C：</p>
+
+<pre><code>
+1 7 2 4
+8 6 3 5
+</code></pre>
+
+<p>对于每种可能的状态，这三种基本操作都可以使用。</p>
+
+<p>你要编程计算用最少的基本操作完成基本状态到特殊状态的转换，输出基本操作序列。</p>
+
+<p><strong>注意</strong>：数据保证一定有解。</p>
+
+<h4>输入格式</h4>
+
+输入仅一行，包括 $8$ 个整数，用空格分开，表示目标状态。
+
+<h4>输出格式</h4>
+
+<p>输出文件的第一行包括一个整数，表示最短操作序列的长度。 </p>
+
+<p>如果操作序列的长度大于0，则在第二行输出字典序最小的操作序列。</p>
+
+<h4>数据范围</h4>
+
+输入数据中的所有数字均为 $1$ 到 $8$ 之间的整数。
+
+<h4>输入样例：</h4>
+
+<pre><code>
+2 6 8 4 5 7 3 1
+</code></pre>
+
+<h4>输出样例：</h4>
+
+<pre><code>
+7
+BCABCCB
+</code></pre>
+
+```cpp
+#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <queue>
+#include <algorithm>
+using namespace std;
+
+const string START = "12345678";
+const char opts[4] = {'A', 'B', 'C'};
+
+string A(string t)
+{
+    for (int i = 0; i < 4; ++ i)
+    {
+        swap(t[i], t[7 - i]);
+    }
+    
+    return t;
+}
+
+string B(string t)
+{
+    for (int i = 0; i < 3; ++ i) swap(t[i], t[3]);
+    for (int i = 4; i < 7; ++ i) swap(t[i], t[i + 1]);
+    return t;
+}
+
+string C(string t)
+{
+    swap(t[1], t[2]);
+    swap(t[5], t[6]);
+    swap(t[5], t[1]);
+    return t;
+}
+
+unordered_map<string, pair<string, char>> bfs(string target)
+{
+    unordered_map<string, pair<string, char>> pre;
+    queue<string> q;
+    
+    q.push(START);
+    
+    while (q.size())
+    {
+        auto t = q.front();
+        q.pop();
+        
+        if (t == target) return pre;
+        
+        string ne;
+        for (int i = 0; i < 3; ++ i)
+        {
+            if (i == 0) ne = A(t);
+            else if (i == 1) ne = B(t);
+            else ne = C(t);
+            
+            if (!pre.count(ne))
+            {
+                pre[ne] = {t, opts[i]};
+                q.push(ne);
+            }
+        }
+    }
+}
+
+int main()
+{
+    string target;
+    char s[2];
+    for (int i = 0; i < 8; ++ i)
+    {
+        cin >> s;
+        target += *s;
+    }
+    
+    auto pre = bfs(target);
+    
+    int ans = 0;
+    string res;
+    while (target != START)
+    {
+        ans ++;
+        res += pre[target].second;
+        target = pre[target].first;
+    }
+    
+    reverse(res.begin(), res.end());
+    
+    cout << ans << endl;
+    cout << res;
+}
+```
+
+**经验：**
+- 务必仔细读题！这道题要求从基本状态到目标状态！这个逻辑没搞正确的话， `while(){pre}` 里面会死循环！
 
 ### 树与图的表示方法（有向图）
 树是一种特殊的图：无环连通图。所以我们只讲图就可以了。
