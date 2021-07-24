@@ -11,6 +11,7 @@
 
 - [第二章 搜索](#第二章-搜索)
   - [2.1.3 BFS中的双向广搜和A-star](#213-bfs中的双向广搜和a-star)
+  - [2.2.1 DFS中的连通性和搜索顺序](#221-dfs中的连通性和搜索顺序)
 
 <!-- /code_chunk_output -->
 
@@ -18,3 +19,6 @@
 
 ### 2.1.3 BFS中的双向广搜和A-star
 [./drafts/ypro.2.1.3.md](./drafts/ypro.2.1.3.md)
+
+### 2.2.1 DFS中的连通性和搜索顺序
+[./drafts/ypro.2.2.1.md](./drafts/ypro.2.2.1.md)
