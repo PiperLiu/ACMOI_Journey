@@ -4,8 +4,8 @@
 
 // define 宏定义
 #define pb push_back
-#define fi first
-#define se second
+#define x first
+#define y second
 #define mp make_pair
 
 using namespace std;
