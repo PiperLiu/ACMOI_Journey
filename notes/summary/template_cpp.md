@@ -100,6 +100,14 @@ heap.pop();
 
 #### 优先队列重载
 
+首选是用 `greater<>` （小根堆） 或者 `less<>` （大根堆）：
+
+```cpp
+priority_queue<pair<int, string>, vector<pair<int, string>>, greater<pair<int, string>>>
+```
+
+此外，重载 struct 比较函数也行：
+
 ```cpp
 // 重载比较函数
 struct cmp {
