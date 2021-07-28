@@ -105,7 +105,7 @@
 ### 第二章 数据结构（二）
 [./ybase05.md](./ybase05.md)
 
-- [字典树Tire树](./ybase05.md#字典树tire树)
+- [字典树Trie树](./ybase05.md#字典树Trie树)
   - [模板：Trie字符串统计](./ybase05.md#模板trie字符串统计)
   - [模板：最大异或对](./ybase05.md#模板最大异或对)
 - [并查集](./ybase05.md#并查集)
