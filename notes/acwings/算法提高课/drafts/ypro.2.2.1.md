@@ -273,7 +273,52 @@ int main()
 </code></pre>
 
 ```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+using namespace std;
 
+const int N = 10;
+int ans, m, n;
+bool st[N][N];
+int dx[8] = {1, 1, -1, -1, 2, 2, -2, -2};
+int dy[8] = {2, -2, 2, -2, 1, -1, 1, -1};
+
+void dfs(int x, int y, int cnt)
+{
+    if (n * m == cnt)
+    {
+        ans ++;
+        return;
+    }
+    
+    st[x][y] = true;
+    for (int i = 0; i < 8; ++ i)
+    {
+        int a = x + dx[i], b = y + dy[i];
+        if (a < 0 || a >= n || b < 0 || b >= m) continue;
+        if (st[a][b]) continue;
+        dfs(a, b, cnt + 1);
+    }
+    st[x][y] = false;
+    
+}
+
+int main()
+{
+    int T;
+    cin >> T;
+    while (T -- )
+    {
+        memset(st, false, sizeof st);
+        ans = 0;
+        int x, y;
+        cin >> n >> m >> x >> y;
+        st[x][y] = true;
+        dfs(x, y, 1);
+        cout << ans << endl;
+    }
+}
 ```
 
 #### 单词接龙
@@ -323,6 +368,60 @@ a
 <p>连成的“龙”为 atoucheatactactouchoose。</p>
 
 ```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+using namespace std;
+
+const int N = 20;
+int used[N];
+int g[N][N];  // i 拼 j 最少重叠多少
+string word[N];
+int n;
+int ans;
+
+void dfs(string dragon, int last)
+{
+    ans = max((int) dragon.size(), ans);
+    
+    used[last] ++;
+    for (int i = 0; i < n; ++ i)
+    {
+        if (g[last][i] && used[i] < 2)
+            dfs(dragon + word[i].substr(g[last][i]), i);
+    }
+    used[last] --;
+}
+
+int main()
+{
+    cin >> n;
+    for (int i = 0; i < n; ++ i) cin >> word[i];
+    char start;
+    cin >> start;
+    
+    for (int i = 0; i < n; i ++ )
+        for (int j = 0; j < n; j ++ )
+        {
+            string a = word[i], b = word[j];
+            for (int k = 1; k < min(a.size(), b.size()); ++ k)
+            {
+                if (a.substr(a.size() - k, k) == b.substr(0, k))
+                {
+                    g[i][j] = k;
+                    break;
+                }
+            }
+        }
+    
+    for (int i = 0; i < n; ++ i)
+    {
+        if (word[i][0] == start)
+            dfs(word[i], i);
+    }
+    
+    cout << ans;
+}
 ```
 
 #### 分成互质组
@@ -358,5 +457,74 @@ a
 3
 </code></pre>
 
+这个问题其实挺复杂的，这里数据量小，咱们暴搜就行。加上一些优化。
+
 ```cpp
+// 每层 dfs ，对于未分配的点：
+// ①能否在当前组中；②不能的话新开一组
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+const int N = 11;
+
+int n;
+int p[N];  // 存放数字
+int group[N][N];
+bool st[N];
+int ans = N;
+
+int gcd(int a, int b)  // 欧几里得算法
+{
+    return b ? gcd(b, a % b) : a;
+}
+
+// p[i] 进入组 group 是否合法
+// gc 是 group 内元素数量
+bool check(int group[], int gc, int i)
+{
+    for (int j = 0; j < gc; ++ j)
+    {
+        if (gcd(p[group[j]], p[i]) > 1)
+            return false;
+    }
+    return true;
+}
+
+// 组号 g 组内元素数量 gc 一共元素数量 tc 第 start 个元素尝试进入
+void dfs(int g, int gc, int tc, int start)
+{
+    if (g > ans) return ;
+    if (tc == n) ans = g;
+    
+    bool flag = true;
+    for (int i = start; i < n; ++ i)
+    {
+        if (!st[i] && check(group[g], gc, i))
+        {
+            st[i] = true;
+            group[g][gc] = i;
+            dfs(g, gc + 1, tc + 1, i + 1);
+            st[i] = false;
+            
+            flag = false;
+        }
+    }
+    
+    // 没有数可以进入老组了，开新组
+    if (flag) dfs(g + 1, 0, tc, 0);
+}
+
+int main()
+{
+    cin >> n;
+    for (int i = 0; i < n; i ++ ) cin >> p[i];
+    
+    // 为了方便统计 ans ，组号从 1 而非 0 开始
+    dfs(1, 0, 0, 0);
+    
+    cout << ans;
+}
 ```
