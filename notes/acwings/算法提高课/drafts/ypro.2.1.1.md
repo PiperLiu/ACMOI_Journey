@@ -491,6 +491,69 @@ $0 \le n \le 1000$
 </code></pre>
 
 ```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+#include <queue>
+#include <unordered_map>
+using namespace std;
+
+const int N = 1010;
+
+typedef pair<int, int> PII;
+
+int n;
+int g[N][N];
+bool st[N][N];
+PII pre[N][N];
+int dx[4] = {-1, 0, 1, 0}, dy[4] = {0, 1, 0, -1};
+
+void bfs(int sx, int sy)
+{
+    queue<PII> q;
+    
+    q.push({sx, sy});
+    st[sx][sy] = true;
+
+    while (q.size())
+    {
+        auto t = q.front();
+        q.pop();
+        int x = t.first, y = t.second;
+
+        if (x == 0 && y == 0) break;
+
+        for (int i = 0; i < 4; ++ i)
+        {
+            int a = x + dx[i], b = y + dy[i];
+            if (a < 0 || a >= n || b < 0 || b >= n) continue;
+            if (g[a][b] == 1) continue;
+            if (st[a][b]) continue;
+            q.push({a, b});
+            pre[a][b] = {x, y};
+            st[a][b] = true;
+        }
+    }
+}
+
+int main()
+{
+    cin >> n;
+    for (int i = 0; i < n; i ++ )
+        for (int j = 0; j < n; j ++ )
+            scanf("%d", &g[i][j]);
+    
+    bfs(n - 1, n - 1);
+    
+    PII end(0, 0);
+    
+    while (true)
+    {
+        printf("%d %d\n", end.first, end.second);
+        if (end.first == n - 1 && end.second == n - 1) break;
+        end = pre[end.first][end.second];
+    }
+}
 ```
 
 #### 武士风度的牛
@@ -585,7 +648,64 @@ $1 \le R,C \le 150$
 </code></pre>
 
 ```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+using namespace std;
 
+typedef pair<int, int> PII;
+
+const int N = 155;
+PII q[N * N];
+int n, m;
+int dist[N][N];
+char g[N][N];
+int dx[8] = {1, 2, 2, 1, -1, -2, -2, -1};
+int dy[8] = {2, 1, -1, -2, -2, -1, 1, 2};
+
+int bfs(PII start, PII end)
+{
+    memset(dist, -1, sizeof dist);
+
+    int tt = 0, hh = 0;
+    q[0] = start;
+    dist[start.first][start.second] = 0;
+
+    while (hh <= tt)
+    {
+        auto t = q[hh ++];
+        int x = t.first, y = t.second;
+        
+        for (int i = 0; i < 8; ++ i)
+        {
+            int a = x + dx[i], b = y + dy[i];
+            if (a < 0 || a >= n || b < 0 || b >= m) continue;
+            if (g[a][b] == '*') continue;
+            if (dist[a][b] != -1) continue;
+            dist[a][b] = dist[x][y] + 1;
+            if (a == end.first && b == end.second) return dist[a][b];
+            q[++ tt] = {a, b};
+        }
+    }
+    
+    return -1;
+}
+
+int main()
+{
+    cin >> m >> n;
+    for (int i = 0; i < n; i ++ ) scanf("%s", g[i]);
+    
+    PII start, end;
+    for (int i = 0; i < n; i ++ )
+        for (int j = 0; j < m; j ++ )
+        {
+            if (g[i][j] == 'K') start = {i, j};
+            if (g[i][j] == 'H') end   = {i, j};
+        }
+
+    cout << bfs(start, end);
+}
 ```
 
 #### 抓住那头牛
@@ -628,4 +748,53 @@ $0 \le N,K \le 10^5$
 </code></pre>
 
 ```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+using namespace std;
+
+const int N = 1e5 + 10;
+int n, k;
+int dist[N];
+int q[N];
+
+int bfs()
+{
+    memset(dist, -1, sizeof dist);
+    
+    int tt = 0, hh = 0;
+    q[0] = n;
+    dist[n] = 0;
+    
+    while (hh <= tt)
+    {
+        int t = q[hh ++];
+        if (t == k) return dist[t];
+        
+        if (t - 1 >= 0 && dist[t - 1] == -1)
+        {
+            q[++ tt] = t - 1;
+            dist[t - 1] = dist[t] + 1;
+        }
+        if (t + 1 < N && dist[t + 1] == -1)
+        {
+            q[++ tt] = t + 1;
+            dist[t + 1] = dist[t] + 1;
+        }
+        if (t * 2 <= N && dist[t * 2] == -1)
+        {
+            q[++ tt] = t * 2;
+            dist[t * 2] = dist[t] + 1;
+        }
+    }
+    
+    return -1;
+}
+
+int main()
+{
+    cin >> n >> k;
+    
+    cout << bfs();
+}
 ```
