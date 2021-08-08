@@ -11,6 +11,7 @@
   - [《算法竞赛进阶指南》打卡活动](#算法竞赛进阶指南打卡活动)
   - [AcWing 周赛](#acwing-周赛)
 - [力扣周赛](#力扣周赛)
+  - [力扣双周赛](#力扣双周赛)
 
 <!-- /code_chunk_output -->
 
@@ -32,3 +33,6 @@
 
 ### 力扣周赛
 [./leetcode/README.md](./leetcode/README.md)
+
+#### 力扣双周赛
+[./leetcode_double/README.md](./leetcode_double/README.md)
