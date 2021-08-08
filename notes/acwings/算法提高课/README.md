@@ -11,6 +11,7 @@
 
 - [第二章 搜索](#第二章-搜索)
   - [2.1.1 BFS中的Flood-Fill和最短路模型](#211-bfs中的flood-fill和最短路模型)
+  - [2.1.2 BFS中的多源BFS-双端队列BFS](#212-bfs中的多源bfs-双端队列bfs)
   - [2.1.3 BFS中的双向广搜和A-star](#213-bfs中的双向广搜和a-star)
   - [2.2.1 DFS中的连通性和搜索顺序](#221-dfs中的连通性和搜索顺序)
 
@@ -20,6 +21,9 @@
 
 ### 2.1.1 BFS中的Flood-Fill和最短路模型
 [./drafts/ypro.2.1.1.md](./drafts/ypro.2.1.1.md)
+
+### 2.1.2 BFS中的多源BFS-双端队列BFS
+[./drafts/ypro.2.1.2.md](./drafts/ypro.2.1.2.md)
 
 ### 2.1.3 BFS中的双向广搜和A-star
 [./drafts/ypro.2.1.3.md](./drafts/ypro.2.1.3.md)
