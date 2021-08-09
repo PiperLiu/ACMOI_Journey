@@ -28,6 +28,9 @@
 #### 《算法竞赛进阶指南》打卡活动
 [./acwings/《算法竞赛进阶指南》/README.md](./acwings/《算法竞赛进阶指南》/README.md)
 
+#### PAT甲级辅导课
+[./acwings/PAT甲级辅导课/README.md](./acwings/PAT甲级辅导课/README.md)
+
 #### AcWing 周赛
 [./acwings/acwing/README.md](./acwings/acwing/README.md)
 
