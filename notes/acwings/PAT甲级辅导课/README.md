@@ -40,6 +40,8 @@
 - [字符串减法](./drafts/pat.1.1.md#字符串减法)
 - [说话方式](./drafts/pat.1.1.md#说话方式)
 
+[./drafts/pat.1.2.md](./drafts/pat.1.2.md)
+
 ## 第二章 高精度
 
 ## 第三章 进位制
