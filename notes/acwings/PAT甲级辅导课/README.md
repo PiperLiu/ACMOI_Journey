@@ -13,7 +13,9 @@
   - [第一章第一讲](#第一章第一讲)
   - [第一章第二讲](#第一章第二讲)
 - [第二章 高精度](#第二章-高精度)
+  - [第二章第一讲](#第二章第一讲)
 - [第三章 进位制](#第三章-进位制)
+  - [第三章第一讲](#第三章第一讲)
 - [第四章 排序](#第四章-排序)
 - [第五章 树](#第五章-树)
 - [第六章 图论](#第六章-图论)
@@ -51,7 +53,20 @@
 
 ## 第二章 高精度
 
+### 第二章第一讲
+[./drafts/pat.2.1.md](./drafts/pat.2.1.md)
+
+- [多项式 A + B 1002 A+B for Polynomials (25 point(s))](./drafts/pat.2.1.md#多项式-a-b-1002-ab-for-polynomials-25-points)
+- [多项式乘积 1009 Product of Polynomials (25 point(s))](./drafts/pat.2.1.md#多项式乘积-1009-product-of-polynomials-25-points)
+- [趣味数字 1023 Have Fun with Numbers (20 point(s))](./drafts/pat.2.1.md#趣味数字-1023-have-fun-with-numbers-20-points)
+- [回文数 1024 Palindromic Number (25 point(s))](./drafts/pat.2.1.md#回文数-1024-palindromic-number-25-points)
+
 ## 第三章 进位制
+
+### 第三章第一讲
+[./drafts/pat.3.1.md](./drafts/pat.3.1.md)
+
+
 
 ## 第四章 排序
 
