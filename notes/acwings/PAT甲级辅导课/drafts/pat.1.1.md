@@ -3,17 +3,17 @@
 
 <!-- code_chunk_output -->
 
-- [A + B 格式](#a-b-格式)
-- [拼写正确](#拼写正确)
-- [签到与签出](#签到与签出)
-- [密码](#密码)
-- [男孩 vs 女孩](#男孩-vs-女孩)
-- [字符串减法](#字符串减法)
-- [说话方式](#说话方式)
+- [A + B 格式 1001 A+B Format (20 point(s))](#a-b-格式-1001-ab-format-20-points)
+- [拼写正确 1005 Spell It Right (20 point(s))](#拼写正确-1005-spell-it-right-20-points)
+- [签到与签出 1006 Sign In and Sign Out (25 point(s))](#签到与签出-1006-sign-in-and-sign-out-25-points)
+- [密码 1035 Password (20 point(s))](#密码-1035-password-20-points)
+- [男孩 vs 女孩 1036 Boys vs Girls (25 point(s))](#男孩-vs-女孩-1036-boys-vs-girls-25-points)
+- [字符串减法 1050 String Subtraction (20 point(s))](#字符串减法-1050-string-subtraction-20-points)
+- [说话方式 1071 Speech Patterns (25 point(s))](#说话方式-1071-speech-patterns-25-points)
 
 <!-- /code_chunk_output -->
 
-### A + B 格式
+### A + B 格式 1001 A+B Format (20 point(s))
 
 计算 $a + b$ 并以标准格式输出总和----也就是说，从最低位开始每隔三位数加进一个逗号（千位分隔符），如果结果少于四位则不需添加。
 
@@ -90,7 +90,7 @@ int main()
 }
 ```
 
-### 拼写正确
+### 拼写正确 1005 Spell It Right (20 point(s))
 
 给定一个非负整数 $N$，你的任务是计算 $N$ 的所有数字的总和，并以英语输出总和的每个数字。
 
@@ -162,7 +162,7 @@ int main()
 **经验：**
 - PAT 要求同一行输出最后不能多空格，因此这里先输出第 0 个元素，之后输出 `" " << 第 i 个元素`
 
-### 签到与签出
+### 签到与签出 1006 Sign In and Sign Out (25 point(s))
 
 <p>每天第一个到机房的人负责开门，最后一个从机房离开的人负责锁门。</p>
 
@@ -260,7 +260,7 @@ int main()
 - 用 `if (!i || ...)` 将第 0 个元素赋给用于记录比较的值
 - `HH:MM:SS` 字典序可以用 `string` 自带的运算符 `<` 等排序
 
-### 密码
+### 密码 1035 Password (20 point(s))
 
 <p>为了准备 PAT，系统不得不为用户生成随机密码。</p>
 
@@ -406,7 +406,7 @@ int main()
 }
 ```
 
-### 男孩 vs 女孩
+### 男孩 vs 女孩 1036 Boys vs Girls (25 point(s))
 
 给定 $N$ 个学生的成绩信息，请你求出女生第一名与男生倒数第一名的分数差距。
 
@@ -531,7 +531,7 @@ int main()
 }
 ```
 
-### 字符串减法
+### 字符串减法 1050 String Subtraction (20 point(s))
 
 给定两个字符串 $S_1$ 和 $S_2$，$S = S_1-S_2$ 定义为将 $S_1$ 中包含的所有在 $S_2$ 中出现过的字符删除后得到的字符串。
 
@@ -604,7 +604,7 @@ int main()
 **经验：**
 - C++ 用 `getline(cin, string实例)` 来读一整行，包括空格
 
-### 说话方式
+### 说话方式 1071 Speech Patterns (25 point(s))
 
 <p>不同的人对描述同一种事物的同义词的偏爱程度可能不同。</p>
 
