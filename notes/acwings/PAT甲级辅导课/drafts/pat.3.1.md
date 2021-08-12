@@ -142,6 +142,307 @@ int main()
 
 ### 可逆质数 1015 Reversible Primes (20 point(s))
 
+给定两个整数 $N$ 和 $D$，如果 $N$ 是一个质数，并且将 $N$ 转化为 $D$ 进制表示后，再进行反转，得到的新数字转化为十进制表示后如果也是一个质数，则称 $N$ 在 $D$ 进制系统中，是一个可逆质数。
+
+例如，$N = 73,D = 10$，则 $73$ 是质数，其十进制表示反转后为 $37$ 也是质数，所以 $73$ 在十进制系统中是一个可逆质数。
+
+$N = 23,D = 2$，则 $23$ 是质数，其二进制表示为 $10111$，反转后得到 $11101$，转化为十进制后为 $29$，这也是一个质数，所以 $23$ 在二进制系统中是一个可逆质数。
+
+现在，请你判断所给 $N$ 在 $D$ 进制系统中是否是一个可逆质数。
+
+<h4>输入格式</h4>
+
+<p>输入包含多组测试数据。</p>
+
+每组数据共一行，包含两个整数 $N$ 和 $D$。
+
+<p>当输入一行为一个负数时，表示输入停止。</p>
+
+<h4>输出格式</h4>
+
+<p>对于每组数据，输出一个结果，占一行。</p>
+
+如果所给 $N$ 在 $D$ 进制系统中是一个可逆质数，则输出 <code>Yes</code>，否则输出 <code>No</code>。
+
+<h4>数据范围</h4>
+
+- $1 \le N < 10^5$
+- $1 < D \le 10$
+
+<h4>输入样例：</h4>
+
+<pre><code>
+73 10
+23 2
+23 10
+-2
+</code></pre>
+
+<h4>输出样例：</h4>
+
+<pre><code>
+Yes
+Yes
+No
+</code></pre>
+
+#### 1015 Reversible Primes (20 point(s))
+A reversible prime in any number system is a prime whose "reverse" in that number system is also a prime. For example in the decimal system 73 is a reversible prime because its reverse 37 is also a prime.
+
+Now given any two positive integers $N (<10 
+^5)$ and $D (1<D≤10)$, you are supposed to tell if N is a reversible prime with radix D.
+
+#### Input Specification:
+The input file consists of several test cases. Each case occupies a line which contains two integers N and D. The input is finished by a negative N.
+
+#### Output Specification:
+For each test case, print in one line Yes if N is a reversible prime with radix D, or No if not.
+
+```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+using namespace std;
+
+bool is_prime(int x)
+{
+    if (x == 1) return false;
+    for (int i = 2; i * i <= x; i ++ )
+    {
+        if (x % i == 0) return false;
+    }
+    return true;
+}
+
+bool check(int n, int r)
+{
+    if (!is_prime(n)) return false;
+    
+    int a = 0;
+    while (n)
+    {
+        a = a * r + n % r;
+        n = n / r;
+    }
+    
+    if (is_prime(a)) return true;
+    return false;
+}
+
+int main()
+{
+    int n, r;
+    while (cin >> n >> r, n > 0)
+    {
+        if (check(n, r)) cout << "Yes" << endl;
+        else cout << "No" << endl;
+    }
+}
+```
+
 ### 火星颜色 1027 Colors in Mars (20 point(s))
 
+<p>火星人以与地球人相似的方式在计算机中表示颜色。 </p>
+
+也就是说，颜色由 $6$ 位数字表示，其中前 $2$ 位数字代表红色($R$)，中 $2$ 位数字代表绿色($G$)，后 $2$ 位数字代表蓝色($B$)。
+
+与我们的区别在于，他们使用 $13$ 进制（$0 \sim 9$ 和 $A \sim C$）来表示颜色值。
+
+现在给定三个用来表示颜色值的十进制数字（数字范围在 $[0,168]$ 之间），请你输出他们的火星 $RGB$ 颜色值。
+
+<h4>输入格式</h4>
+
+<p>包含三个十进制整数，分别表示十进制下的 R、G、B 颜色值。</p>
+
+<h4>输出格式</h4>
+
+共一行，先输出一个 `#`，然后输出一个 $6$ 位数字表示火星 RGB 颜色值。
+
+如果某一种颜色的数值换算为 $13$ 进制后，不足 $2$ 位，则在前面补 $0$，凑足 $2$ 位。
+
+<h4>输入样例：</h4>
+
+<pre><code>
+15 43 71
+</code></pre>
+
+<h4>输出样例：</h4>
+
+<pre><code>
+#123456
+</code></pre>
+
+<h4>样例解释</h4>
+
+给定的三个数字 $15,43,71$ 在 $13$ 进制下的表示分别是 $12,34,56$。
+
+<p>所以将它们组合起来，答案即为 <code>#123456</code>。</p>
+
+#### 1027 Colors in Mars (20 point(s))
+People in Mars represent the colors in their computers in a similar way as the Earth people. That is, a color is represented by a 6-digit number, where the first 2 digits are for Red, the middle 2 digits for Green, and the last 2 digits for Blue. The only difference is that they use radix 13 (0-9 and A-C) instead of 16. Now given a color in three decimal numbers (each between 0 and 168), you are supposed to output their Mars RGB values.
+
+#### Input Specification:
+Each input file contains one test case which occupies a line containing the three decimal color values.
+
+#### Output Specification:
+For each test case you should output the Mars RGB value in the following format: first output #, then followed by a 6-digit number where all the English characters must be upper-cased. If a single color is only 1-digit long, you must print a 0 to its left.
+
+```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+using namespace std;
+
+char get(int x)
+{
+    if (x <= 9) return x + '0';
+    else return x - 10 + 'A';
+}
+
+string convert(int x)
+{
+    string s;
+    while (x)
+    {
+        s = get(x % 13) + s;
+        x /= 13;
+    }
+    if (s.size() == 1) s = '0' + s;
+    if (s.size() == 0) s = "00";
+    return s;
+}
+
+int main()
+{
+    cout << "#";
+    for (int i = 0; i < 3; ++ i)
+    {
+        int x;
+        cin >> x;
+        cout << convert(x);
+    }
+}
+```
+
 ### 火星数字 1100 Mars Numbers (20 point(s))
+
+ 火星人用 $13$ 进制来计数：
+
+- <code>zero</code>（零）在火星读作 <code>tret</code>。
+- 地球上的数字 $1 \sim 12$ 在火星读作：<code>jan, feb, mar, apr, may, jun, jly, aug, sep, oct, nov, dec</code>。
+- 对于进位后的 $12$ 个更高位数字，在火星读作：<code>tam, hel, maa, huh, tou, kes, hei, elo, syy, lok, mer, jou</code>。
+
+例如，地球上的 $29$ 在火星读作 <code>hel mar</code>，而火星数字 <code>elo nov</code> 表示的是地球上的数字 $115$。
+
+<p>为了帮助两个星球上的人民之间相互交流，请你编写一个程序，能够实现地球和火星数字之间的相互翻译。</p>
+
+<h4>输入格式</h4>
+
+第一行包含一个整数 $N$，表示要翻译的数字个数。
+
+接下来 $N$ 行，每行包含一个在 $[0,169)$ 范围内的数字，可能以地球形式给出，也可能以火星形式给出。
+
+<h4>输出格式</h4>
+
+共 $N$ 行，对于每个输入数字，用另一种语言在一行中输出对应的数字。
+
+<h4>数据范围</h4>
+
+$1 \le N \le 100$
+
+<h4>输入样例：</h4>
+
+<pre><code>
+5
+29
+5
+13
+elo nov
+tam
+</code></pre>
+
+<h4>输出样例：</h4>
+
+<pre><code>
+hel mar
+may
+tam
+115
+13
+</code></pre>
+
+#### 1100 Mars Numbers (20 point(s))
+People on Mars count their numbers with base 13:
+- Zero on Earth is called "tret" on Mars.
+- The numbers 1 to 12 on Earth is called "jan, feb, mar, apr, may, jun, jly, aug, sep, oct, nov, dec" on Mars, respectively.
+- For the next higher digit, Mars people name the 12 numbers as "tam, hel, maa, huh, tou, kes, hei, elo, syy, lok, mer, jou", respectively.
+
+For examples, the number 29 on Earth is called "hel mar" on Mars; and "elo nov" on Mars corresponds to 115 on Earth. In order to help communication between people from these two planets, you are supposed to write a program for mutual translation between Earth and Mars number systems.
+
+#### Input Specification:
+Each input file contains one test case. For each case, the first line contains a positive integer N (<100). Then N lines follow, each contains a number in `[0, 169)`, given either in the form of an Earth number, or that of Mars.
+
+#### Output Specification:
+For each number, print in a line the corresponding number in the other language.
+
+```cpp
+#include <iostream>
+#include <sstream>
+using namespace std;
+
+char names[][5] = {
+    "tret",  // 0
+    "jan", "feb", "mar", "apr", "may", "jun", "jly", "aug", "sep", "oct", "nov", "dec",  // 1  - 12
+    "tam", "hel", "maa", "huh", "tou", "kes", "hei", "elo", "syy", "lok", "mer", "jou"   // 13 - 24
+};
+
+int get(string word)
+{
+    for (int i = 0; i <= 24; ++ i)
+        if (names[i] == word)
+        {
+            if (i <= 12) return i;
+            else return (i - 12) * 13;
+        }
+    return -1;
+}
+
+int main()
+{
+    int n;
+    cin >> n;
+    getchar();  // 下面要用 getline ，因此要用 getchar 把之前 cin 遗留的 \n 干掉
+    
+    while (n -- )
+    {
+        string line;
+        getline(cin, line);
+        
+        stringstream ssin(line);  // 用 sstream 中的 stringstream 处理一行字符串
+        if (line[0] <= '9')  // 如果是数字转火星文
+        {
+            int v;
+            ssin >> v;  // 如此使用 stringstream 实例
+            if (v < 13) cout << names[v] << endl;
+            else
+            {
+                cout << names[12 + v / 13];
+                if (v % 13 == 0) cout << endl;
+                else cout << " " << names[v % 13] << endl;
+            }
+        }
+        else  // 如果是火星文转数字
+        {
+            int res = 0;
+            string word;
+            while (ssin >> word) res += get(word);
+            cout << res << endl;
+        }
+    }
+}
+```
+
+**经验：**
+- `cin >> n; getchar(); getline(cin, line); stringstream ssin(line); ssin >> word;`
+  - 下面要用 `getline` ，因此要用 `getchar` 把之前 `cin` 遗留的 `\n` 干掉
+  - 用 `sstream` 中的 `stringstream` 处理一行字符串
