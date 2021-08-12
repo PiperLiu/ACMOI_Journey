@@ -66,7 +66,10 @@
 ### 第三章第一讲
 [./drafts/pat.3.1.md](./drafts/pat.3.1.md)
 
-
+- [进制 1010 Radix (25 point(s))](./drafts/pat.3.1.md#进制-1010-radix-25-points)
+- [可逆质数 1015 Reversible Primes (20 point(s))](./drafts/pat.3.1.md#可逆质数-1015-reversible-primes-20-points)
+- [火星颜色 1027 Colors in Mars (20 point(s))](./drafts/pat.3.1.md#火星颜色-1027-colors-in-mars-20-points)
+- [火星数字 1100 Mars Numbers (20 point(s))](./drafts/pat.3.1.md#火星数字-1100-mars-numbers-20-points)
 
 ## 第四章 排序
 
