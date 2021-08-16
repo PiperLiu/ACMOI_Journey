@@ -17,6 +17,7 @@
 - [第三章 进位制](#第三章-进位制)
   - [第三章第一讲](#第三章第一讲)
 - [第四章 排序](#第四章-排序)
+  - [第四章第一讲](#第四章第一讲)
 - [第五章 树](#第五章-树)
 - [第六章 图论](#第六章-图论)
 - [第七章 数学](#第七章-数学)
@@ -75,6 +76,15 @@
 
 ### 第四章第一讲
 [./drafts/pat.4.1.md](./drafts/pat.4.1.md)
+
+- [最佳排名 1012 The Best Rank (25 point(s))](./drafts/pat.4.1.md#最佳排名-1012-the-best-rank-25-points)
+- [数字图书馆 1022 Digital Library (30 point(s))](./drafts/pat.4.1.md#数字图书馆-1022-digital-library-30-points)
+- [PAT 排名 1025 PAT Ranking (25 point(s))](./drafts/pat.4.1.md#pat-排名-1025-pat-ranking-25-points)
+- [列表排序 1028 List Sorting (25 point(s))](./drafts/pat.4.1.md#列表排序-1028-list-sorting-25-points)
+- [学生课程列表 1039 Course List for Student (25 point(s))](./drafts/pat.4.1.md#学生课程列表-1039-course-list-for-student-25-points)
+- [链表排序 1052 Linked List Sorting (25 point(s))](./drafts/pat.4.1.md#链表排序-1052-linked-list-sorting-25-points)
+- [PAT 评测 1075 PAT Judge (25 point(s))](./drafts/pat.4.1.md#pat-评测-1075-pat-judge-25-points)
+- [插入还是堆排序 1098 Insertion or Heap Sort (25 point(s))](./drafts/pat.4.1.md#插入还是堆排序-1098-insertion-or-heap-sort-25-points)
 
 ## 第五章 树
 
