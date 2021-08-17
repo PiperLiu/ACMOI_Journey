@@ -19,6 +19,7 @@
 - [第四章 排序](#第四章-排序)
   - [第四章第一讲](#第四章第一讲)
 - [第五章 树](#第五章-树)
+  - [第五章第一讲](#第五章第一讲)
 - [第六章 图论](#第六章-图论)
 - [第七章 数学](#第七章-数学)
 - [第八章 动态规划](#第八章-动态规划)
@@ -87,6 +88,18 @@
 - [插入还是堆排序 1098 Insertion or Heap Sort (25 point(s))](./drafts/pat.4.1.md#插入还是堆排序-1098-insertion-or-heap-sort-25-points)
 
 ## 第五章 树
+
+### 第五章第一讲
+[./drafts/pat.5.1.md](./drafts/pat.5.1.md)
+
+- [数叶子结点 1004 Counting Leaves (30 point(s))](./drafts/pat.5.1.md#数叶子结点-1004-counting-leaves-30-points)
+- [树的遍历 1020 Tree Traversals (25 point(s))](./drafts/pat.5.1.md#树的遍历-1020-tree-traversals-25-points)
+- [最深的根 1021 Deepest Root (25 point(s))](./drafts/pat.5.1.md#最深的根-1021-deepest-root-25-points)
+- [判断二叉搜索树 1043 Is It a Binary Search Tree (25 point(s))](./drafts/pat.5.1.md#判断二叉搜索树-1043-is-it-a-binary-search-tree-25-points)
+- [完全二叉搜索树 1064 Complete Binary Search Tree (30 point(s))](./drafts/pat.5.1.md#完全二叉搜索树-1064-complete-binary-search-tree-30-points)
+- [再次树遍历 1086 Tree Traversals Again (25 point(s))](./drafts/pat.5.1.md#再次树遍历-1086-tree-traversals-again-25-points)
+- [构建二叉搜索树 1099 Build A Binary Search Tree (30 point(s))](./drafts/pat.5.1.md#构建二叉搜索树-1099-build-a-binary-search-tree-30-points)
+- [反转二叉树 1102 Invert a Binary Tree (25 point(s))](./drafts/pat.5.1.md#反转二叉树-1102-invert-a-binary-tree-25-points)
 
 ## 第六章 图论
 
