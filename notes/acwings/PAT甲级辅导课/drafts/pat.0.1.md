@@ -1,5 +1,6 @@
 # AVL树
 
+AVL 树的意义：是二分查找树 BST 。二分查找树查找某个值时，时间复杂度是 `O(h)` ，因此，我们让树的尽可能平衡，即最大高度尽可能的小。因此有了 AVL 。
 
 <!-- @import "[TOC]" {cmd="toc" depthFrom=3 depthTo=6 orderedList=false} -->
 

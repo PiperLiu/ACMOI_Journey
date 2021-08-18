@@ -1036,6 +1036,86 @@ Each input file contains several test cases. The first line gives a positive int
 #### Output Specification:
 For each test case, print in a line "Yes" if the given tree is a red-black tree, or "No" if not.
 
-```cpp
+![https://www.bilibili.com/video/BV1Tb4y197Fe?share_source=copy_web](./images/2021081812.png)
 
+红黑树也是平衡二叉搜索树的一种，没有 AVL 翻转的频繁，但是也能一定程度上保证平衡，即子树的高度不会彼此差距太大（差距太大，查找效率低）。
+
+本题中，因为红黑树也是一种 BST ，所以其中序遍历就是数的非降排序。
+
+前序遍历有了，中序遍历也有了，树确定了。
+
+判断红黑树非法依据有三：
+- 根是黑色
+- 红色点的儿子是黑色
+- 从任一节点到其每个叶子的所有路径黑色节点数目不相同
+
+```cpp
+#include <iostream>
+#include <algorithm>
+#include <unordered_map>
+
+using namespace std;
+
+const int N = 40;
+
+int pre[N], in[N];
+unordered_map<int, int> pos;
+bool ans;
+
+int build(int il, int ir, int pl, int pr, int& sum)
+{
+    int root = pre[pl];
+    int k = pos[abs(root)];
+
+    if (k < il || k > ir)  // 题目前序遍历序列可能不合法
+    {
+        ans = false;
+        return 0;
+    }
+
+    int left = 0, right = 0, ls = 0, rs = 0;  // ls rs 是 left sum 和 right sum 的意思
+    if (il < k) left = build(il, k - 1, pl + 1, pl + 1 + k - 1 - il, ls);
+    if (k < ir) right = build(k + 1, ir, pl + 1 + k - 1 - il + 1, pr, rs);
+
+    if (ls != rs) ans = false;  // 两个子树经过的黑色节点不相等， ls 和 rs 数值不相等，非法
+    sum = ls;  // ls 和 rs 数值相等，取任何一个为 sum 都可
+    if (root < 0)  // 当前节点为红色，若有红色孩子，则非法红黑树
+    {
+        if (left < 0 || right < 0) ans = false;
+    }
+    else sum ++ ;  // 当前节点为黑色，则路径上黑色节点 + 1
+
+    return root;
+}
+
+int main()
+{
+    int T;
+    cin >> T;
+    while (T -- )
+    {
+        int n;
+        cin >> n;
+        for (int i = 0; i < n; i ++ )
+        {
+            cin >> pre[i];
+            in[i] = abs(pre[i]);
+        }
+
+        sort(in, in + n);
+
+        pos.clear();
+        for (int i = 0; i < n; i ++ ) pos[in[i]] = i;
+
+        ans = true;
+        int sum;
+        int root = build(0, n - 1, 0, n - 1, sum);
+
+        if (root < 0) ans = false;  // 根是黑色
+        if (ans) puts("Yes");
+        else puts("No");
+    }
+
+    return 0;
+}
 ```
