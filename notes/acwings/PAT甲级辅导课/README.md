@@ -20,6 +20,7 @@
   - [第四章第一讲](#第四章第一讲)
 - [第五章 树](#第五章-树)
   - [第五章第一讲](#第五章第一讲)
+  - [第五章第二讲](#第五章第二讲)
 - [第六章 图论](#第六章-图论)
 - [第七章 数学](#第七章-数学)
 - [第八章 动态规划](#第八章-动态规划)
@@ -100,6 +101,11 @@
 - [再次树遍历 1086 Tree Traversals Again (25 point(s))](./drafts/pat.5.1.md#再次树遍历-1086-tree-traversals-again-25-points)
 - [构建二叉搜索树 1099 Build A Binary Search Tree (30 point(s))](./drafts/pat.5.1.md#构建二叉搜索树-1099-build-a-binary-search-tree-30-points)
 - [反转二叉树 1102 Invert a Binary Tree (25 point(s))](./drafts/pat.5.1.md#反转二叉树-1102-invert-a-binary-tree-25-points)
+
+### 第五章第二讲
+[./drafts/pat.5.2.md](./drafts/pat.5.2.md)
+
+
 
 ## 第六章 图论
 
