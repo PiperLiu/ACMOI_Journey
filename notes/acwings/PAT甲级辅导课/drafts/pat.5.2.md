@@ -689,6 +689,91 @@ Each input file contains one test case. For each case, the first line contains a
 #### Output Specification:
 For each test case, print the root of the resulting AVL tree in one line.
 
+![](./images/2021081806.png)
+
+BST 本质上是维护一个有序序列，AVL 树中的左旋右旋操作，并不会改变树的中序遍历结果。
+
+上图中右旋是怎么做的呢？把 B 旋转到根节点，然后把 A 变成 B 的右孩子，把 E 补偿给 A 作为 A 的左孩子。
+
+```cpp
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+const int N = 30;
+
+int l[N], r[N], v[N], h[N], idx;
+
+void update(int u)
+{
+    h[u] = max(h[l[u]], h[r[u]]) + 1;
+}
+
+void R(int& u)
+{
+    int p = l[u];
+    l[u] = r[p], r[p] = u;
+    update(u), update(p);
+    u = p;
+}
+
+void L(int& u)
+{
+    int p = r[u];
+    r[u] = l[p], l[p] = u;
+    update(u), update(p);
+    u = p;
+}
+
+int get_balance(int u)
+{
+    return h[l[u]] - h[r[u]];
+}
+
+void insert(int& u, int w)
+{
+    if (!u) u = ++ idx, v[u] = w;
+    else if (w < v[u])
+    {
+        insert(l[u], w);
+        if (get_balance(u) == 2)
+        {
+            if (get_balance(l[u]) == 1) R(u);  // （一）
+            else L(l[u]), R(u);  // （二）
+        }
+    }
+    else
+    {
+        insert(r[u], w);
+        if (get_balance(u) == -2)
+        {
+            if (get_balance(r[u]) == -1) L(u);  // （三）
+            else R(r[u]), L(u);  // （四）
+        }
+    }
+
+    update(u);
+}
+
+int main()
+{
+    int n, root = 0;
+    cin >> n;
+
+    while (n -- )
+    {
+        int w;
+        cin >> w;
+        insert(root, w);
+    }
+
+    cout << v[root] << endl;
+
+    return 0;
+}
+```
+
 ### 判断完全 AVL 树 1123 Is It a Complete AVL Tree (30 point(s))
 
 <p>AVL树是一种自平衡二叉搜索树。</p>
@@ -759,6 +844,111 @@ Each input file contains one test case. For each case, the first line contains a
 
 #### Output Specification:
 For each test case, insert the keys one by one into an initially empty AVL tree. Then first print in a line the level-order traversal sequence of the resulting AVL tree. All the numbers in a line must be separated by a space, and there must be no extra space at the end of the line. Then in the next line, print `YES` if the tree is complete, or `NO` if not.
+
+```cpp
+#include <iostream>
+
+using namespace std;
+
+const int N = 30;
+
+int n;
+int l[N], r[N], v[N], h[N], idx;
+int q[N], pos[N];
+
+void update(int u)
+{
+    h[u] = max(h[l[u]], h[r[u]]) + 1;
+}
+
+void R(int& u)
+{
+    int p = l[u];
+    l[u] = r[p], r[p] = u;
+    update(u), update(p);
+    u = p;
+}
+
+void L(int& u)
+{
+    int p = r[u];
+    r[u] = l[p], l[p] = u;
+    update(u), update(p);
+    u = p;
+}
+
+int get_balance(int u)
+{
+    return h[l[u]] - h[r[u]];
+}
+
+void insert(int& u, int w)
+{
+    if (!u) u = ++ idx, v[u] = w;
+    else if (w < v[u])
+    {
+        insert(l[u], w);
+        if (get_balance(u) == 2)
+        {
+            if (get_balance(l[u]) == 1) R(u);
+            else L(l[u]), R(u);
+        }
+    }
+    else
+    {
+        insert(r[u], w);
+        if (get_balance(u) == -2)
+        {
+            if (get_balance(r[u]) == -1) L(u);
+            else R(r[u]), L(u);
+        }
+    }
+
+    update(u);
+}
+
+bool bfs(int root)
+{
+    int hh = 0, tt = 0;
+    q[0] = root;
+    pos[root] = 1;
+
+    bool res = true;
+    while (hh <= tt)
+    {
+        int t = q[hh ++ ];
+        if (pos[t] > n) res = false;
+
+        if (l[t]) q[ ++ tt] = l[t], pos[l[t]] = pos[t] * 2;
+        if (r[t]) q[ ++ tt] = r[t], pos[r[t]] = pos[t] * 2 + 1;
+    }
+
+    return res;
+}
+
+int main()
+{
+    int root = 0;
+    cin >> n;
+    for (int i = 0; i < n; i ++ )
+    {
+        int w;
+        cin >> w;
+        insert(root, w);
+    }
+
+    bool res = bfs(root);
+
+    cout << v[q[0]];
+    for (int i = 1; i < n; i ++ ) cout << ' ' << v[q[i]];
+    cout << endl;
+
+    if (res) puts("YES");
+    else puts("NO");
+
+    return 0;
+}
+```
 
 ### 判断红黑树 1135 Is It A Red-Black Tree (30 point(s))
 
