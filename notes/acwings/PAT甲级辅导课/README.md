@@ -105,7 +105,14 @@
 ### 第五章第二讲
 [./drafts/pat.5.2.md](./drafts/pat.5.2.md)
 
-
+- [完全二叉树 1110 Complete Binary Tree (25 point(s))](./drafts/pat.5.2.md#完全二叉树-1110-complete-binary-tree-25-points)
+- [二叉搜索树最后两层结点数量 1115 Counting Nodes in a BST (30 point(s))](./drafts/pat.5.2.md#二叉搜索树最后两层结点数量-1115-counting-nodes-in-a-bst-30-points)
+- [1119 Pre- and Post-order Traversals (30 point(s))](./drafts/pat.5.2.md#1119-pre-and-post-order-traversals-30-points)
+- [Z 字形遍历二叉树 1127 ZigZagging on a Tree (30 point(s))](./drafts/pat.5.2.md#z-字形遍历二叉树-1127-zigzagging-on-a-tree-30-points)
+- [后序遍历 1138 Postorder Traversal (25 point(s))](./drafts/pat.5.2.md#后序遍历-1138-postorder-traversal-25-points)
+- [AVL树的根 1066 Root of AVL Tree (25 point(s))](./drafts/pat.5.2.md#avl树的根-1066-root-of-avl-tree-25-points)
+- [判断完全 AVL 树 1123 Is It a Complete AVL Tree (30 point(s))](./drafts/pat.5.2.md#判断完全-avl-树-1123-is-it-a-complete-avl-tree-30-points)
+- [判断红黑树 1135 Is It A Red-Black Tree (30 point(s))](./drafts/pat.5.2.md#判断红黑树-1135-is-it-a-red-black-tree-30-points)
 
 ## 第六章 图论
 

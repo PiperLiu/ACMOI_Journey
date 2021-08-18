@@ -5,7 +5,7 @@
 
 - [完全二叉树 1110 Complete Binary Tree (25 point(s))](#完全二叉树-1110-complete-binary-tree-25-points)
 - [二叉搜索树最后两层结点数量 1115 Counting Nodes in a BST (30 point(s))](#二叉搜索树最后两层结点数量-1115-counting-nodes-in-a-bst-30-points)
-- [1119 Pre- and Post-order Traversals (30 point(s))](#1119-pre-and-post-order-traversals-30-points)
+- [前序和后序遍历 1119 Pre- and Post-order Traversals (30 point(s))](#前序和后序遍历-1119-pre-and-post-order-traversals-30-points)
 - [Z 字形遍历二叉树 1127 ZigZagging on a Tree (30 point(s))](#z-字形遍历二叉树-1127-zigzagging-on-a-tree-30-points)
 - [后序遍历 1138 Postorder Traversal (25 point(s))](#后序遍历-1138-postorder-traversal-25-points)
 - [AVL树的根 1066 Root of AVL Tree (25 point(s))](#avl树的根-1066-root-of-avl-tree-25-points)
@@ -86,9 +86,69 @@ Each input file contains one test case. For each case, the first line gives a po
 #### Output Specification:
 For each case, print in one line YES and the index of the last node if the tree is a complete binary tree, or NO and the index of the root if not. There must be exactly one space separating the word and the number.
 
-```cpp
+![](./images/2021081804.png)
 
+完全二叉树性质：按照层序遍历，父节点是 `x` 时，其子节点一定是 `x * 2` 和 `x * 2 + 1` 。因此，如果按照该规则把节点存下来，而 `1~n` 中有空缺，则一定不是完全二叉树。
+
+```cpp
+#include <cstring>
+#include <iostream>
+
+using namespace std;
+
+const int N = 25;
+
+int n;
+int l[N], r[N];
+bool has_father[N];
+int maxk, maxid;
+
+void dfs(int u, int k)
+{
+    if (u == -1) return;
+
+    if (k > maxk)
+    {
+        maxk = k;
+        maxid = u;
+    }
+
+    // 假设是完全二叉树，然后赋给其符合完全二叉树规则的索引
+    dfs(l[u], k * 2);
+    dfs(r[u], k * 2 + 1);
+}
+
+int main()
+{
+    memset(l, -1, sizeof l);
+    memset(r, -1, sizeof r);
+
+    cin >> n;
+    for (int i = 0; i < n; i ++ )
+    {
+        string a, b;
+        cin >> a >> b;
+        if (a != "-") l[i] = stoi(a), has_father[l[i]] = true;
+        if (b != "-") r[i] = stoi(b), has_father[r[i]] = true;
+    }
+
+    int root = 0;
+    while (has_father[root]) root ++ ;
+
+    dfs(root, 1);
+
+    if (maxk == n) printf("YES %d\n", maxid);
+    else printf("NO %d\n", root);
+
+    return 0;
+}
 ```
+
+**经验：**
+- C++ 中 `stoi(s)` 把 `string` 转为 `int`
+- C++ 中 `stof(s)` 把 `string` 转为 `float`
+- C++ 中 `stod(s)` 把 `string` 转为 `double`
+- C++ 中 `stold(s)` 把 `string` 转为 `long double`
 
 ### 二叉搜索树最后两层结点数量 1115 Counting Nodes in a BST (30 point(s))
 
@@ -155,7 +215,63 @@ n1 + n2 = n
 
 where n1 is the number of nodes in the lowest level, n2 is that of the level above, and n is the sum.
 
-### 1119 Pre- and Post-order Traversals (30 point(s))
+```cpp
+// 本题难点在于插入
+#include <iostream>
+
+using namespace std;
+
+const int N = 1010;
+
+int n;
+int l[N], r[N], v[N], idx;  // l r 保存的是索引（地址），默认值是 0 代表不存在该节点  v 保存的是值
+int cnt[N], max_depth;
+
+// 因为插入操作会令 root 变化，因此是 int& u 注意
+void insert(int& u, int w)
+{
+    // 如果不存在该节点
+    if (!u)
+    {
+        u = ++ idx;
+        v[u] = w;
+    }
+    else if (w <= v[u]) insert(l[u], w);
+    else insert(r[u], w);
+}
+
+void dfs(int u, int depth)
+{
+    if (!u) return;
+    cnt[depth] ++ ;
+    max_depth = max(max_depth, depth);
+    dfs(l[u], depth + 1);
+    dfs(r[u], depth + 1);
+}
+
+int main()
+{
+    cin >> n;
+
+    // 0 代表空值，没有节点
+    int root = 0;
+    for (int i = 0; i < n; i ++ )
+    {
+        int w;
+        cin >> w;
+        insert(root, w);
+    }
+
+    dfs(root, 0);
+
+    int n1 = cnt[max_depth], n2 = cnt[max_depth - 1];
+    printf("%d + %d = %d\n", n1, n2, n1 + n2);
+
+    return 0;
+}
+```
+
+### 前序和后序遍历 1119 Pre- and Post-order Traversals (30 point(s))
 
 <p>假设一个二叉树上所有结点的权值都互不相同。</p>
 
@@ -232,6 +348,63 @@ Each input file contains one test case. For each case, the first line gives a po
 #### Output Specification:
 For each test case, first printf in a line Yes if the tree is unique, or No if not. Then print in the next line the inorder traversal sequence of the corresponding binary tree. If the solution is not unique, any answer would do. It is guaranteed that at least one solution exists. All the numbers in a line must be separated by exactly one space, and there must be no extra space at the end of the line.
 
+![](./images/2021081805.png)
+
+```cpp
+#include <iostream>
+
+using namespace std;
+
+const int N = 40;
+
+int n;
+int pre[N], post[N];
+
+// 本质上还是暴搜；枚举左右子树间断点
+// 如果发现了两种方案以上，则没必要再枚举
+int dfs(int l1, int r1, int l2, int r2, string& in)
+{
+    if (l1 > r1) return 1;  // 空树肯定对应一种方案
+    if (pre[l1] != post[r2]) return 0;  // 返回 0 代表该方案不可行
+
+    int cnt = 0;
+    for (int i = l1; i <= r1; i ++ )  // 枚举前序遍历中左子树右端点
+    {
+        string lin, rin;
+        int lcnt = dfs(l1 + 1, i, l2, l2 + i - l1 - 1, lin);  // 前序/后序遍历左子树位置
+        int rcnt = dfs(i + 1, r1, l2 + i - l1 - 1 + 1, r2 - 1, rin);  // 前序/后序遍历右子树位置
+
+        if (lcnt && rcnt)  // 如此分割可行时
+        {
+            // in 记录中序遍历 左子树 + 根节点 + 右子树
+            in = lin + to_string(pre[l1]) + ' ' + rin;
+            cnt += lcnt * rcnt;
+            if (cnt > 1) break;
+        }
+    }
+
+    return cnt;
+}
+
+int main()
+{
+    cin >> n;
+    for (int i = 0; i < n; i ++ ) cin >> pre[i];
+    for (int i = 0; i < n; i ++ ) cin >> post[i];
+
+    string in;    
+    int cnt = dfs(0, n - 1, 0, n - 1, in);
+
+    if (cnt > 1) puts("No");
+    else puts("Yes");
+
+    in.pop_back();  // 把 string 的最后一个字符 pop
+    cout << in << endl;
+
+    return 0;
+}
+```
+
 ### Z 字形遍历二叉树 1127 ZigZagging on a Tree (30 point(s))
 
 <p>假设一个二叉树上各结点的权值互不相同。</p>
@@ -287,7 +460,73 @@ Each input file contains one test case. For each case, the first line gives a po
 For each test case, print the zigzagging sequence of the tree in a line. All the numbers in a line must be separated by exactly one space, and there must be no extra space at the end of the line.
 
 ```cpp
+#include <iostream>
+#include <algorithm>
+#include <unordered_map>
 
+using namespace std;
+
+using namespace std;
+
+const int N = 40;
+
+int n;
+unordered_map<int, int> l, r, pos;
+int in[N], post[N];
+int q[N];
+
+int build(int il, int ir, int pl, int pr)
+{
+    int root = post[pr];
+    int k = pos[root];
+
+    if (il < k) l[root] = build(il, k - 1, pl, pl + k - 1 - il);
+    if (k < ir) r[root] = build(k + 1, ir, pl + k - 1 - il + 1, pr - 1);
+
+    return root;
+}
+
+void bfs(int root)
+{
+    int hh = 0, tt = 0;
+    q[0] = root;
+
+    int step = 0;  // 记录层数
+    while (hh <= tt)
+    {
+        int head = hh, tail = tt;
+        while (hh <= tail)
+        {
+            int t = q[hh ++ ];
+            if (l.count(t)) q[ ++ tt] = l[t];
+            if (r.count(t)) q[ ++ tt] = r[t];
+        }
+
+        // 如果层数是奇数，那就翻转，该思路很牛逼
+        if ( ++ step % 2) reverse(q + head, q + tail + 1);
+    }
+}
+
+int main()
+{
+    cin >> n;
+    for (int i = 0; i < n; i ++ )
+    {
+        cin >> in[i];
+        pos[in[i]] = i;
+    }
+    for (int i = 0; i < n; i ++ ) cin >> post[i];
+
+    int root = build(0, n - 1, 0, n - 1);
+
+    bfs(root);
+
+    cout << q[0];
+    for (int i = 1; i < n; i ++ ) cout << ' ' << q[i];
+    cout << endl;
+
+    return 0;
+}
 ```
 
 ### 后序遍历 1138 Postorder Traversal (25 point(s))
@@ -336,6 +575,51 @@ Each input file contains one test case. For each case, the first line gives a po
 For each test case, print in one line the first number of the postorder traversal sequence of the corresponding binary tree.
 
 ```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+#include <unordered_map>
+using namespace std;
+
+const int N = 1e5 + 10;
+
+int n;
+unordered_map<int, int> pos;
+int in[N], pre[N];
+int post;
+
+void build(int il, int ir, int pl, int pr)
+{
+    int root = pre[pl];
+    int k = pos[root];
+    
+    if (il < k) build(il, k - 1, pl + 1, pl + 1 + (k - 1 - il));
+    if (ir > k) build(k + 1, ir, pl + 1 + (k - 1 - il) + 1, pr);
+    
+    // 上述递归过程，最终讲让整个树中左儿子的左儿子的左儿子...第一个左儿子得到赋值
+    // 即后序遍历的第一个数
+    if (!post) post = root;
+}
+
+int main()
+{
+    scanf("%d", &n);
+    
+    for (int i = 0; i < n; i ++ )
+    {
+        scanf("%d", &pre[i]);
+    }
+    
+    for (int i = 0; i < n; i ++ )
+    {
+        scanf("%d", &in[i]);
+        pos[in[i]] = i;
+    }
+    
+    build(0, n-1, 0, n-1);
+    
+    printf("%d\n", post);
+}
 ```
 
 ### AVL树的根 1066 Root of AVL Tree (25 point(s))
