@@ -72,6 +72,66 @@ Each input file contains one test case. For each test case, the first line conta
 For each test case, print in one line two numbers: the number of different shortest paths between $C_1$ and $C_2$, and the maximum amount of rescue teams you can possibly gather. All the numbers in a line must be separated by exactly one space, and there is no extra space allowed at the end of a line.
 
 ```cpp
+#include <cstring>
+#include <iostream>
+
+using namespace std;
+
+const int N = 510;
+
+int n, m, S, T;
+int w[N], d[N][N];
+int dist[N], cnt[N], sum[N];  // dist 最短路 cnt 分支数量 sum 途径救援队
+bool st[N];
+
+void dijkstra()
+{
+    memset(dist, 0x3f, sizeof dist);
+    dist[S] = 0, cnt[S] = 1, sum[S] = w[S];
+
+    for (int i = 0; i < n; i ++ )
+    {
+        int t = -1;
+        for (int j = 0; j < n; j ++ )
+            if (!st[j] && (t == -1 || dist[t] > dist[j]))
+                t = j;
+        st[t] = true;
+
+        for (int j = 0; j < n; j ++ )
+            if (dist[j] > dist[t] + d[t][j])
+            {
+                dist[j] = dist[t] + d[t][j];
+                cnt[j] = cnt[t];
+                sum[j] = sum[t] + w[j];
+            }
+            else if (dist[j] == dist[t] + d[t][j])
+            {
+                cnt[j] += cnt[t];
+                sum[j] = max(sum[j], sum[t] + w[j]);
+            }
+    }
+}
+
+int main()
+{
+    cin >> n >> m >> S >> T;
+
+    for (int i = 0; i < n; i ++ ) cin >> w[i];
+
+    memset(d, 0x3f, sizeof d);
+    while (m -- )
+    {
+        int a, b, c;
+        cin >> a >> b >> c;
+        d[a][b] = d[b][a] = min(d[a][b], c);
+    }
+
+    dijkstra();
+
+    cout << cnt[T] << ' ' << sum[T] << endl;
+
+    return 0;
+}
 ```
 
 ### 旅行计划 1030 Travel Plan (30 point(s))
@@ -137,7 +197,80 @@ where the numbers are all integers no more than 500, and are separated by a spac
 For each test case, print in one line the cities along the shortest path from the starting point to the destination, followed by the total distance and the total cost of the path. The numbers must be separated by a space and there must be no extra space at the end of output.
 
 ```cpp
+#include <iostream>
+#include <cstring>
+#include <vector>
 
+using namespace std;
+
+const int N = 510;
+
+int n, m, S, T;
+int d[N][N], c[N][N];
+int dist[N], cost[N], pre[N];
+bool st[N];
+
+void dijkstra()  // 典型的 dijkstra
+{
+    memset(dist, 0x3f, sizeof dist);
+    memset(cost, 0x3f, sizeof cost);
+
+    dist[S] = 0, cost[S] = 0;
+    for (int i = 0; i < n; i ++ )
+    {
+        int t = -1;
+        for (int j = 0; j < n; j ++ )
+            if (!st[j] && (t == -1 || dist[t] > dist[j]))
+                t = j;
+        st[t] = true;
+
+        for (int j = 0; j < n; j ++ )
+            if (dist[j] > dist[t] + d[t][j])
+            {
+                dist[j] = dist[t] + d[t][j];
+                cost[j] = cost[t] + c[t][j];
+                pre[j] = t;
+            }
+            else if (dist[j] == dist[t] + d[t][j] && cost[j] > cost[t] + c[t][j])
+            {
+                cost[j] = cost[t] + c[t][j];
+                pre[j] = t;
+            }
+    }
+}
+
+int main()
+{
+    cin >> n >> m >> S >> T;
+    memset(d, 0x3f, sizeof d);
+    memset(c, 0x3f, sizeof c);
+
+    while (m -- )
+    {
+        int a, b, x, y;
+        cin >> a >> b >> x >> y;
+        if (x < d[a][b])
+        {
+            d[a][b] = d[b][a] = x;
+            c[a][b] = c[b][a] = y;
+        }
+        else if (x == d[a][b] && y < c[a][b])
+        {
+            c[a][b] = c[b][a] = y;
+        }
+    }
+
+    dijkstra();
+
+    vector<int> path;
+    for (int i = T; i != S; i = pre[i]) path.push_back(i);
+
+    cout << S;
+    for (int i = path.size() - 1; i >= 0; i -- ) cout << ' ' << path[i];
+    cout << ' ' << dist[T] << ' ' << cost[T] << endl;
+
+    return 0;
+}
 ```
 
 ### 团伙头目 1034 Head of a Gang (30 point(s))

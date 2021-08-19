@@ -143,6 +143,10 @@
 
 - [紧急情况 1003 Emergency (25 point(s))](./drafts/pat.6.1.md#紧急情况-1003-emergency-25-points)
 - [旅行计划 1030 Travel Plan (30 point(s))](./drafts/pat.6.1.md#旅行计划-1030-travel-plan-30-points)
+- [团伙头目 1034 Head of a Gang (30 point(s))](./drafts/pat.6.1.md#团伙头目-1034-head-of-a-gang-30-points)
+- [条条大路通罗马 1087 All Roads Lead to Rome (30 point(s))](./drafts/pat.6.1.md#条条大路通罗马-1087-all-roads-lead-to-rome-30-points)
+- [在线地图 1111 Online Map (30 point(s))](./drafts/pat.6.1.md#在线地图-1111-online-map-30-points)
+- [哈密顿回路 1122 Hamiltonian Cycle (25 point(s))](./drafts/pat.6.1.md#哈密顿回路-1122-hamiltonian-cycle-25-points)
 
 ## 第七章 数学
 
