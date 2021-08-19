@@ -3,19 +3,92 @@
 
 <!-- code_chunk_output -->
 
-- [定长数组](#定长数组)
-  - [数组](#数组)
-- [变长数组](#变长数组)
-  - [vector](#vector)
-- [哈希表](#哈希表)
-  - [有序字典](#有序字典)
-- [优先队列](#优先队列)
-  - [优先队列重载](#优先队列重载)
-- [排序](#排序)
-  - [排序返回索引](#排序返回索引)
+- [算法API](#算法api)
+  - [数与字符串转换](#数与字符串转换)
+  - [排序](#排序)
+    - [排序返回索引](#排序返回索引)
+- [数据结构](#数据结构)
+  - [定长数组](#定长数组)
+    - [数组](#数组)
+  - [变长数组](#变长数组)
+    - [vector](#vector)
+  - [哈希表](#哈希表)
+    - [有序字典](#有序字典)
+  - [优先队列](#优先队列)
+    - [优先队列重载](#优先队列重载)
 
 <!-- /code_chunk_output -->
 
+## 算法API
+### 数与字符串转换
+
+要求：
+- 数字到字符/字符串
+- 字符串到数字（整型与浮点）
+
+数字到字符/字符串：
+```cpp
+int a = 123;
+string b = to_string(a);
+char c[] = b.c_str();
+
+// 另一种方法，强制转换，根据 ASCII 码
+int tmp = 97;
+char ac = tmp;
+cout << ac << endl;  // 输出 a
+```
+
+字符串到数字（整型与浮点）：
+```cpp
+char a;
+cin >> a;
+int num1 = a - '0';
+int num2 = a - 'A';
+int num3 = a - 'a';
+
+string b;
+cin >> b;
+int          num4 = stoi(b);
+float        num5 = stof(b);
+double       num6 = stod(b);
+long double  num7 = stold(b);
+```
+
+### 排序
+
+要求：
+- 重载排序规则
+- 排序返回索引
+
+```cpp
+vector<int> ans;
+sort(ans.begin(), ans.end());  // 默认从小到大
+
+vector<pair<int, int>> res;
+sort(res.begin(), res.begin());  // 默认比较第一个元素
+```
+
+#### 排序返回索引
+
+```cpp
+vector<int> data = {5, 16, 4, 7};   
+vector<int> index(data.size(), 0);
+for (int i = 0 ; i != index.size() ; i++) {
+    index[i] = i;
+}
+sort(index.begin(), index.end(),
+    [&](const int& a, const int& b) {
+        return (data[a] < data[b]);
+    }
+);
+for (int i = 0 ; i != index.size() ; i++) {
+    cout << index[i] << endl;
+}
+// 版权声明：本文为CSDN博主「liangbaqiang」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+// 原文链接：https://blog.csdn.net/qq_36523492/article/details/114122256
+```
+
+## 数据结构
 ### 定长数组
 
 要求：
@@ -129,38 +202,4 @@ int main() {
 
 // 版权声明：本文为CSDN博主「leagalhigh」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
 // 原文链接：https://blog.csdn.net/u014257954/article/details/78623215
-```
-
-### 排序
-
-要求：
-- 重载排序规则
-- 排序返回索引
-
-```cpp
-vector<int> ans;
-sort(ans.begin(), ans.end());  // 默认从小到大
-
-vector<pair<int, int>> res;
-sort(res.begin(), res.begin());  // 默认比较第一个元素
-```
-
-#### 排序返回索引
-
-```cpp
-vector<int> data = {5, 16, 4, 7};   
-vector<int> index(data.size(), 0);
-for (int i = 0 ; i != index.size() ; i++) {
-    index[i] = i;
-}
-sort(index.begin(), index.end(),
-    [&](const int& a, const int& b) {
-        return (data[a] < data[b]);
-    }
-);
-for (int i = 0 ; i != index.size() ; i++) {
-    cout << index[i] << endl;
-}
-// 版权声明：本文为CSDN博主「liangbaqiang」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
-// 原文链接：https://blog.csdn.net/qq_36523492/article/details/114122256
 ```
