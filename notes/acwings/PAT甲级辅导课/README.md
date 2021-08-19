@@ -23,7 +23,9 @@
 - [第五章 树](#第五章-树)
   - [第五章第一讲](#第五章第一讲)
   - [第五章第二讲](#第五章第二讲)
+  - [第五章第三讲](#第五章第三讲)
 - [第六章 图论](#第六章-图论)
+  - [第六章第一讲](#第六章第一讲)
 - [第七章 数学](#第七章-数学)
 - [第八章 动态规划](#第八章-动态规划)
 - [第九章 哈希表](#第九章-哈希表)
@@ -121,7 +123,23 @@
 - [判断完全 AVL 树 1123 Is It a Complete AVL Tree (30 point(s))](./drafts/pat.5.2.md#判断完全-avl-树-1123-is-it-a-complete-avl-tree-30-points)
 - [判断红黑树 1135 Is It A Red-Black Tree (30 point(s))](./drafts/pat.5.2.md#判断红黑树-1135-is-it-a-red-black-tree-30-points)
 
+### 第五章第三讲
+[./drafts/pat.5.3.md](./drafts/pat.5.3.md)
+
+- [等重路径 1053 Path of Equal Weight (30 point(s))](./drafts/pat.5.3.md#等重路径-1053-path-of-equal-weight-30-points)
+- [最大的一代 1094 The Largest Generation (25 point(s))](./drafts/pat.5.3.md#最大的一代-1094-the-largest-generation-25-points)
+- [供应链总销售额 1079 Total Sales of Supply Chain (25 point(s))](./drafts/pat.5.3.md#供应链总销售额-1079-total-sales-of-supply-chain-25-points)
+- [供应链最高价格 1090 Highest Price in Supply Chain (25 point(s))](./drafts/pat.5.3.md#供应链最高价格-1090-highest-price-in-supply-chain-25-points)
+- [供应链最低价格 1106 Lowest Price in Supply Chain (25 point(s))](./drafts/pat.5.3.md#供应链最低价格-1106-lowest-price-in-supply-chain-25-points)
+- [堆路径 1155 Heap Paths (30 point(s))](./drafts/pat.5.3.md#堆路径-1155-heap-paths-30-points)
+
 ## 第六章 图论
+
+### 第六章第一讲
+[./drafts/pat.6.1.md](./drafts/pat.6.1.md)
+
+- [紧急情况 1003 Emergency (25 point(s))](./drafts/pat.6.1.md#紧急情况-1003-emergency-25-points)
+- [旅行计划 1030 Travel Plan (30 point(s))](./drafts/pat.6.1.md#旅行计划-1030-travel-plan-30-points)
 
 ## 第七章 数学
 
