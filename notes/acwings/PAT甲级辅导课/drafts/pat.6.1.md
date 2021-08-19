@@ -372,7 +372,81 @@ where Name1 and Name2 are the names of people at the two ends of the call, and T
 For each test case, first print in a line the total number of gangs. Then for each gang, print in a line the name of the head and the total number of the members. It is guaranteed that the head is unique for each gang. The output must be sorted according to the alphabetical order of the names of the heads.
 
 ```cpp
+#include <cstring>
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <unordered_map>
+
+using namespace std;
+
+int n, k;
+unordered_map<string, vector<pair<string, int>>> g;  // 邻接表
+unordered_map<string, int> total;  // 每个人打电话时长
+unordered_map<string, bool> st;  // 是否被遍历（用于检查连通性）
+
+int dfs(string ver, vector<string> &nodes)
+{
+    st[ver] = true;
+    nodes.push_back(ver);
+
+    int sum = 0;
+    for (auto edge : g[ver])
+    {
+        sum += edge.second;  // A->B 是会记录一次时间；B->A时还会记录一次时间；因此main 里 sum / 2
+        string cur = edge.first;
+        if (!st[cur]) sum += dfs(cur, nodes);
+        // 可不可以是 if (!st[cur]) sum += edge.second, sum += dfs(cur, nodes); 这样呢
+        // 不可以，因为这样加入顺序是 A->B->C 的探索顺序的话， A->C 的边权就无法计入 sum
+    }
+
+    return sum;
+}
+
+int main()
+{
+    cin >> n >> k;
+    while (n -- )
+    {
+        string a, b;
+        int t;
+        cin >> a >> b >> t;
+        g[a].push_back({b, t});  // 双向图
+        g[b].push_back({a, t});
+        total[a] += t;
+        total[b] += t;
+    }
+
+    vector<pair<string, int>> res;
+    for (auto item : total)
+    {
+        // cout << item.first << " " << item.second << endl; 经验： auto t: unordered_map 输出 pair<键, 值>
+        string ver = item.first;
+        // 对于每个节点 ver ，看看其是否是新的连通区域
+        vector<string> nodes;
+        int sum = dfs(ver, nodes) / 2;  // 这里除以 2 注意
+
+        if (nodes.size() > 2 && sum > k)
+        {
+            string boss = nodes[0];
+            for (string node : nodes)
+                if (total[boss] < total[node])
+                    boss = node;
+            res.push_back({boss, (int)nodes.size()});
+        }
+    }
+
+    sort(res.begin(), res.end());
+
+    cout << res.size() << endl;
+    for (auto item : res) cout << item.first << ' ' << item.second << endl;
+
+    return 0;
+}
 ```
+
+**经验**：
+- `auto t: unordered_map` 输出 `pair<键, 值>`
 
 ### 条条大路通罗马 1087 All Roads Lead to Rome (30 point(s))
 
@@ -450,7 +524,105 @@ For each test case, we are supposed to find the route with the least cost. If su
 Hence in the first line of output, you must print 4 numbers: the number of different routes with the least cost, the cost, the happiness, and the average happiness (take the integer part only) of the recommanded route. Then in the next line, you are supposed to print the route in the format `City1->City2->...->ROM`.
 
 ```cpp
+// 在更新中凸显优先级
+#include <iostream>
+#include <cstring>
+#include <unordered_map>
+#include <vector>
 
+using namespace std;
+
+const int N = 210;
+
+int n, m;
+int w[N];
+int d[N][N];
+int dist[N], cnt[N], cost[N], sum[N], pre[N];
+// 最短距离，最短路数量，最大点权，最小点数, 最短路径的前一个点
+bool st[N];
+
+string city[N];
+unordered_map<string, int> mp;
+
+void dijkstra()
+{
+    memset(dist, 0x3f, sizeof dist);
+    dist[1] = 0, cnt[1] = 1;
+
+    for (int i = 0; i < n; i ++ )
+    {
+        int t = -1;
+        for (int j = 1; j <= n; j ++ )
+            if (!st[j] && (t == -1 || dist[t] > dist[j]))
+                t = j;
+        st[t] = true;
+
+        for (int j = 1; j <= n; j ++ )
+            if (dist[j] > dist[t] + d[t][j])
+            {
+                dist[j] = dist[t] + d[t][j];
+                cnt[j] = cnt[t];
+                cost[j] = cost[t] + w[j];
+                sum[j] = sum[t] + 1;
+                pre[j] = t;
+            }
+            else if (dist[j] == dist[t] + d[t][j])
+            {
+                cnt[j] += cnt[t];
+                if (cost[j] < cost[t] + w[j])  // 点权取大的
+                {
+                    cost[j] = cost[t] + w[j];
+                    sum[j] = sum[t] + 1;
+                    pre[j] = t;
+                }
+                else if (cost[j] == cost[t] + w[j])
+                {
+                    if (sum[j] > sum[t] + 1)
+                    {
+                        sum[j] = sum[t] + 1;
+                        pre[j] = t;
+                    }
+                }
+            }
+    }
+}
+
+int main()
+{
+    cin >> n >> m >> city[1];
+    mp[city[1]] = 1;
+
+    for (int i = 2; i <= n; i ++ )
+    {
+        cin >> city[i] >> w[i];
+        mp[city[i]] = i;
+    }
+
+    memset(d, 0x3f, sizeof d);
+    while (m -- )
+    {
+        string x, y;
+        int c;
+        cin >> x >> y >> c;
+        int a = mp[x], b = mp[y];
+        d[a][b] = d[b][a] = min(d[a][b], c);
+    }
+
+    dijkstra();
+
+    int T = mp["ROM"];
+    cout << cnt[T] << ' ' << dist[T] << ' ' << cost[T] << ' ' << cost[T] / sum[T] << endl;
+
+    vector<int> path;
+    for (int i = T; i != 1; i = pre[i]) path.push_back(i);
+
+    cout << city[1];
+    for (int i = path.size() - 1; i >= 0; i -- )
+        cout << "->" << city[path[i]];
+    cout << endl;
+
+    return 0;
+}
 ```
 
 ### 在线地图 1111 Online Map (30 point(s))
@@ -584,6 +756,103 @@ Distance = D; Time = T: source -> u1 -> ... -> destination
 ```
 
 ```cpp
+#include <cstring>
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+const int N = 510, M = N * N;
+
+int n, m, S, T;
+int h[N], e[M], w1[M], w2[M], ne[M], idx;
+int dist1[N], dist2[N], pre[N];
+bool st[N];
+
+void add(int a, int b, int c, int d)
+{
+    e[idx] = b, w1[idx] = c, w2[idx] = d, ne[idx] = h[a], h[a] = idx ++ ;
+}
+
+pair<int, string> dijkstra(int w1[], int w2[], int type)  // pair<总长, 答案路径>
+{
+    memset(dist1, 0x3f, sizeof dist1);
+    memset(dist2, 0x3f, sizeof dist2);
+    memset(st, 0, sizeof st);
+    dist1[S] = dist2[S] = 0;
+
+    for (int i = 0; i < n; i ++ )
+    {
+        int t = -1;
+        for (int j = 0; j < n; j ++ )
+            if (!st[j] && (t == -1 || dist1[t] > dist1[j]))
+                t = j;
+        st[t] = true;
+        for (int u = h[t]; ~u; u = ne[u])
+        {
+            int j = e[u];
+            int cost;
+            if (type == 0) cost = w2[u];
+            else cost = 1;  // 如果最快路线不唯一，则输出经过路口最少的那条路线
+
+            if (dist1[j] > dist1[t] + w1[u])
+            {
+                dist1[j] = dist1[t] + w1[u];
+                dist2[j] = dist2[t] + cost;
+                pre[j] = t;
+            }
+            else if (dist1[j] == dist1[t] + w1[u])
+            {
+                if (dist2[j] > dist2[t] + cost)
+                {
+                    dist2[j] = dist2[t] + cost;
+                    pre[j] = t;
+                }
+            }
+        }
+    }
+
+    vector<int> path;
+    for (int i = T; i != S; i = pre[i]) path.push_back(i);
+
+    pair<int, string> res;
+    res.first = dist1[T];
+    res.second = to_string(S);
+    for (int i = path.size() - 1; i >= 0; i -- )
+        res.second += " -> " + to_string(path[i]);
+    return res;
+}
+
+int main()
+{
+    cin >> n >> m;
+
+    memset(h, -1, sizeof h);
+    while (m -- )
+    {
+        int a, b, t, c, d;
+        cin >> a >> b >> t >> c >> d;
+        add(a, b, c, d);
+        if (!t) add(b, a, c, d);
+    }
+
+    cin >> S >> T;
+
+    auto A = dijkstra(w1, w2, 0);
+    auto B = dijkstra(w2, w1, 1);
+
+    if (A.second != B.second)
+    {
+        printf("Distance = %d: %s\n", A.first, A.second.c_str());
+        printf("Time = %d: %s\n", B.first, B.second.c_str());
+    }
+    else
+    {
+        printf("Distance = %d; Time = %d: %s\n", A.first, B.first, A.second.c_str());
+    }
+
+    return 0;
+}
 ```
 
 ### 哈密顿回路 1122 Hamiltonian Cycle (25 point(s))
@@ -671,5 +940,63 @@ where n is the number of vertices in the list, and $V_i$'s are the vertices on a
 For each query, print in a line `YES` if the path does form a Hamiltonian cycle, or `NO` if not.
 
 ```cpp
+#include <iostream>
+#include <cstring>
 
+using namespace std;
+
+const int N = 210;
+
+int n, m;
+bool g[N][N], st[N];
+int nodes[N * 2];
+
+// 检查路径是否满足 4 个条件即可
+// 起点与终点相同
+// 点数量 n+1 （是否包含每个节点）
+// 每一步都有边
+// 所有点均走到
+bool check(int cnt)
+{
+    if (nodes[0] != nodes[cnt - 1] || cnt != n + 1) return false;
+
+    memset(st, 0, sizeof st);
+    for (int i = 0; i < cnt - 1; i ++ )
+    {
+        st[nodes[i]] = true;
+        if (!g[nodes[i]][nodes[i + 1]])
+            return false;
+    }
+
+    for (int i = 1; i <= n; i ++ )
+        if (!st[i])
+            return false;
+
+    return true;
+}
+
+int main()
+{
+    cin >> n >> m;
+    while (m -- )
+    {
+        int a, b;
+        cin >> a >> b;
+        g[a][b] = g[b][a] = true;
+    }
+
+    int k;
+    cin >> k;
+    while (k -- )
+    {
+        int cnt;
+        cin >> cnt;
+        for (int i = 0; i < cnt; i ++ ) cin >> nodes[i];
+
+        if (check(cnt)) puts("YES");
+        else puts("NO");
+    }
+
+    return 0;
+}
 ```
