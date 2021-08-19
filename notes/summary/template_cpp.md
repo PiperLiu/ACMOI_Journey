@@ -23,29 +23,38 @@
 ### 数与字符串转换
 
 要求：
-- 数字到字符/字符串
-- 字符串到数字（整型与浮点）
+- 数字到字符（ASCII码）
+- 数字到字符串（表面值）
+- 字符到数字（ASCII码）
+- 字符串到数字（表面值）
 
-数字到字符/字符串：
+数字到字符（ASCII码）：
 ```cpp
-int a = 123;
-string b = to_string(a);
-char c[] = b.c_str();
-
-// 另一种方法，强制转换，根据 ASCII 码
+// 强制转换，根据 ASCII 码
 int tmp = 97;
 char ac = tmp;
 cout << ac << endl;  // 输出 a
 ```
 
-字符串到数字（整型与浮点）：
+数字到字符串（表面值）：
+```cpp
+int tmp = 97;
+string as = to_string(tmp);
+cout << as << endl;  // 输出 97
+```
+
+字符到数字（ASCII码）：
 ```cpp
 char a;
 cin >> a;
 int num1 = a - '0';
 int num2 = a - 'A';
 int num3 = a - 'a';
+```
 
+
+字符串到数字（表面值）：
+```cpp
 string b;
 cin >> b;
 int          num4 = stoi(b);
