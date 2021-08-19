@@ -24,6 +24,7 @@
   - [第五章第一讲](#第五章第一讲)
   - [第五章第二讲](#第五章第二讲)
   - [第五章第三讲](#第五章第三讲)
+  - [第五章第四讲](#第五章第四讲)
 - [第六章 图论](#第六章-图论)
   - [第六章第一讲](#第六章第一讲)
 - [第七章 数学](#第七章-数学)
@@ -128,10 +129,12 @@
 
 - [等重路径 1053 Path of Equal Weight (30 point(s))](./drafts/pat.5.3.md#等重路径-1053-path-of-equal-weight-30-points)
 - [最大的一代 1094 The Largest Generation (25 point(s))](./drafts/pat.5.3.md#最大的一代-1094-the-largest-generation-25-points)
-- [供应链总销售额 1079 Total Sales of Supply Chain (25 point(s))](./drafts/pat.5.3.md#供应链总销售额-1079-total-sales-of-supply-chain-25-points)
-- [供应链最高价格 1090 Highest Price in Supply Chain (25 point(s))](./drafts/pat.5.3.md#供应链最高价格-1090-highest-price-in-supply-chain-25-points)
-- [供应链最低价格 1106 Lowest Price in Supply Chain (25 point(s))](./drafts/pat.5.3.md#供应链最低价格-1106-lowest-price-in-supply-chain-25-points)
-- [堆路径 1155 Heap Paths (30 point(s))](./drafts/pat.5.3.md#堆路径-1155-heap-paths-30-points)
+
+### 第五章第四讲
+- [供应链总销售额 1079 Total Sales of Supply Chain (25 point(s))](./drafts/pat.5.4.md#供应链总销售额-1079-total-sales-of-supply-chain-25-points)
+- [供应链最高价格 1090 Highest Price in Supply Chain (25 point(s))](./drafts/pat.5.4.md#供应链最高价格-1090-highest-price-in-supply-chain-25-points)
+- [供应链最低价格 1106 Lowest Price in Supply Chain (25 point(s))](./drafts/pat.5.4.md#供应链最低价格-1106-lowest-price-in-supply-chain-25-points)
+- [堆路径 1155 Heap Paths (30 point(s))](./drafts/pat.5.4.md#堆路径-1155-heap-paths-30-points)
 
 ## 第六章 图论
 
