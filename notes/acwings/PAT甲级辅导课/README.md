@@ -27,6 +27,7 @@
   - [第五章第四讲](#第五章第四讲)
 - [第六章 图论](#第六章-图论)
   - [第六章第一讲](#第六章第一讲)
+  - [第六章第二讲](#第六章第二讲)
 - [第七章 数学](#第七章-数学)
 - [第八章 动态规划](#第八章-动态规划)
 - [第九章 哈希表](#第九章-哈希表)
@@ -147,6 +148,18 @@
 - [条条大路通罗马 1087 All Roads Lead to Rome (30 point(s))](./drafts/pat.6.1.md#条条大路通罗马-1087-all-roads-lead-to-rome-30-points)
 - [在线地图 1111 Online Map (30 point(s))](./drafts/pat.6.1.md#在线地图-1111-online-map-30-points)
 - [哈密顿回路 1122 Hamiltonian Cycle (25 point(s))](./drafts/pat.6.1.md#哈密顿回路-1122-hamiltonian-cycle-25-points)
+
+### 第六章第二讲
+[./drafts/pat.6.2.md](./drafts/pat.6.2.md)
+
+- [欧拉路径 1126 Eulerian Path (25 point(s))](./drafts/pat.6.2.md#欧拉路径-1126-eulerian-path-25-points)
+- [地铁地图 1131 Subway Map (30 point(s))](./drafts/pat.6.2.md#地铁地图-1131-subway-map-30-points)
+- [顶点覆盖 1134 Vertex Cover (25 point(s))](./drafts/pat.6.2.md#顶点覆盖-1134-vertex-cover-25-points)
+- [第一次接触 1139 First Contact (30 point(s))](./drafts/pat.6.2.md#第一次接触-1139-first-contact-30-points)
+- [最大集团 1142 Maximal Clique (25 point(s))](./drafts/pat.6.2.md#最大集团-1142-maximal-clique-25-points)
+- [拓扑顺序 1146 Topological Order (25 point(s))](./drafts/pat.6.2.md#拓扑顺序-1146-topological-order-25-points)
+- [旅行商问题 1150 Travelling Salesman Problem (25 point(s))](./drafts/pat.6.2.md#旅行商问题-1150-travelling-salesman-problem-25-points)
+- [顶点着色 1154 Vertex Coloring (25 point(s))](./drafts/pat.6.2.md#顶点着色-1154-vertex-coloring-25-points)
 
 ## 第七章 数学
 

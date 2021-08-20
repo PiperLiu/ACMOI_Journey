@@ -853,7 +853,76 @@ After the graph, there is another positive integer M (≤ 100). Then M lines of 
 For each of the M queries, print in a line Yes if the given subset of vertices can form a maximal clique; or if it is a clique but not a maximal clique, print Not Maximal; or if it is not a clique at all, print Not a Clique.
 
 ```cpp
+#include <iostream>
+#include <cstring>
 
+using namespace std;
+
+const int N = 210;
+
+int n, m;
+bool g[N][N], st[N];
+int vers[N];
+
+bool check_clique(int cnt)
+{
+    for (int i = 0; i < cnt; i ++ )
+        for (int j = 0; j < i; j ++ )
+            if (!g[vers[i]][vers[j]])  // 任意两点间没有连接，不是团
+                return false;
+    return true;
+}
+
+bool check_maximum(int cnt)
+{
+    memset(st, 0, sizeof st);
+    for (int i = 0; i < cnt; i ++ )
+        st[vers[i]] = true;
+
+    for (int i = 1; i <= n; i ++ )
+        if (!st[i])
+        {
+            bool success = true;
+            for (int j = 0; j < cnt; j ++ )
+                if (!g[i][vers[j]])
+                {
+                    success = false;  // 外部任一点与内部没有连接，是最大团，此外部点通过检验
+                    break;
+                }
+
+            if (success) return false;
+        }
+
+    return true;
+}
+
+int main()
+{
+    cin >> n >> m;
+    while (m -- )
+    {
+        int a, b;
+        cin >> a >> b;
+        g[a][b] = g[b][a] = true;
+    }
+
+    int k;
+    cin >> k;
+    while (k -- )
+    {
+        int cnt;
+        cin >> cnt;
+        for (int i = 0; i < cnt; i ++ ) cin >> vers[i];
+        if (check_clique(cnt))
+        {
+            if (check_maximum(cnt)) puts("Yes");
+            else puts("Not Maximal");
+        }
+        else puts("Not a Clique");
+    }
+
+    return 0;
+}
 ```
 
 ### 拓扑顺序 1146 Topological Order (25 point(s))
@@ -932,6 +1001,58 @@ Each input file contains one test case. For each case, the first line gives two 
 Print in a line all the indices of queries which correspond to "NOT a topological order". The indices start from zero. All the numbers are separated by a space, and there must no extra space at the beginning or the end of the line. It is graranteed that there is at least one answer.
 
 ```cpp
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+const int N = 1010, M = 10010;
+
+int n, m;
+struct Edge
+{
+    int a, b;
+}e[M];     // 因为本题是遍历边不是遍历图，所以用 struct 存就行
+int p[N];  // 存储每个节点在给定拓扑排序中的下标
+
+int main()
+{
+    cin >> n >> m;
+    for (int i = 0; i < m; i ++ ) cin >> e[i].a >> e[i].b;
+
+    int k;
+    cin >> k;
+
+    bool is_first = true;
+    for (int i = 0; i < k; i ++ )
+    {
+        for (int j = 1; j <= n; j ++ )
+        {
+            int x;
+            cin >> x;
+            p[x] = j;
+        }
+
+        bool success = true;
+        for (int j = 0; j < m; j ++ )
+            if (p[e[j].a] > p[e[j].b])  // 如果拓扑排序中尾比头靠前
+            {
+                success = false;
+                break;
+            }
+
+        if (!success)
+        {
+            if (is_first) is_first = false;
+            else cout << ' ';
+            cout << i;
+        }
+    }
+
+    cout << endl;
+
+    return 0;
+}
 ```
 
 ### 旅行商问题 1150 Travelling Salesman Problem (25 point(s))
@@ -1036,6 +1157,51 @@ For each path, print in a line Path X: TotalDist (Description) where X is the in
 Finally print in a line `Shortest Dist(X) = TotalDist` where X is the index of the cycle that is the closest to the solution of a travelling salesman problem, and TotalDist is its total distance. It is guaranteed that such a solution is unique.
 
 ```cpp
+#include <iostream>
+#include <cstring>
+#include <unordered_set>
+
+using namespace std;
+
+const int N = 10010;
+
+int n, m;
+struct Edge
+{
+    int a, b;
+}e[N];  // 本题只遍历边
+int color[N];
+
+int main()
+{
+    cin >> n >> m;
+    for (int i = 0; i < m; i ++ ) cin >> e[i].a >> e[i].b;
+
+    int k;
+    cin >> k;
+    while (k -- )
+    {
+        for (int i = 0; i < n; i ++ ) cin >> color[i];
+
+        bool success = true;
+        for (int i = 0; i < m; i ++ )
+            if (color[e[i].a] == color[e[i].b])
+            {
+                success = false;
+                break;
+            }
+
+        if (success)
+        {
+            unordered_set<int> S;
+            for (int i = 0; i < n; i ++ ) S.insert(color[i]);
+            printf("%d-coloring\n", S.size());
+        }
+        else puts("No");
+    }
+
+    return 0;
+}
 ```
 
 ### 顶点着色 1154 Vertex Coloring (25 point(s))
@@ -1115,5 +1281,49 @@ After the graph, a positive integer K (≤ 100) is given, which is the number of
 For each coloring, print in a line k-coloring if it is a proper k-coloring for some positive k, or No if not.
 
 ```cpp
+#include <iostream>
+#include <cstring>
+#include <unordered_set>
 
+using namespace std;
+
+const int N = 10010;
+
+int n, m;
+struct Edge
+{
+    int a, b;
+}e[N];  // 本题只遍历边
+int color[N];
+
+int main()
+{
+    cin >> n >> m;
+    for (int i = 0; i < m; i ++ ) cin >> e[i].a >> e[i].b;
+
+    int k;
+    cin >> k;
+    while (k -- )
+    {
+        for (int i = 0; i < n; i ++ ) cin >> color[i];
+
+        bool success = true;
+        for (int i = 0; i < m; i ++ )
+            if (color[e[i].a] == color[e[i].b])
+            {
+                success = false;
+                break;
+            }
+
+        if (success)
+        {
+            unordered_set<int> S;
+            for (int i = 0; i < n; i ++ ) S.insert(color[i]);
+            printf("%d-coloring\n", S.size());
+        }
+        else puts("No");
+    }
+
+    return 0;
+}
 ```
