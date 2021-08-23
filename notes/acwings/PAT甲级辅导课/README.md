@@ -18,6 +18,7 @@
   - [第二章第一讲](#第二章第一讲)
 - [第三章 进位制](#第三章-进位制)
   - [第三章第一讲](#第三章第一讲)
+  - [第三章第二讲](#第三章第二讲)
 - [第四章 排序](#第四章-排序)
   - [第四章第一讲](#第四章第一讲)
 - [第五章 树](#第五章-树)
@@ -29,6 +30,7 @@
   - [第六章第一讲](#第六章第一讲)
   - [第六章第二讲](#第六章第二讲)
 - [第七章 数学](#第七章-数学)
+  - [第七章第一讲](#第七章第一讲)
 - [第八章 动态规划](#第八章-动态规划)
 - [第九章 哈希表](#第九章-哈希表)
 - [第十章 并查集](#第十章-并查集)
@@ -84,6 +86,11 @@
 - [可逆质数 1015 Reversible Primes (20 point(s))](./drafts/pat.3.1.md#可逆质数-1015-reversible-primes-20-points)
 - [火星颜色 1027 Colors in Mars (20 point(s))](./drafts/pat.3.1.md#火星颜色-1027-colors-in-mars-20-points)
 - [火星数字 1100 Mars Numbers (20 point(s))](./drafts/pat.3.1.md#火星数字-1100-mars-numbers-20-points)
+
+### 第三章第二讲
+[./drafts/pat.3.2.md](./drafts/pat.3.2.md)
+
+- [普通回文数 1019 General Palindromic Number (20 point(s))](./drafts/pat.3.2.md#普通回文数-1019-general-palindromic-number-20-points)
 
 ## 第四章 排序
 
@@ -162,6 +169,9 @@
 - [顶点着色 1154 Vertex Coloring (25 point(s))](./drafts/pat.6.2.md#顶点着色-1154-vertex-coloring-25-points)
 
 ## 第七章 数学
+
+### 第七章第一讲
+[./drafts/pat.7.1.md](./drafts/pat.7.1.md)
 
 ## 第八章 动态规划
 
