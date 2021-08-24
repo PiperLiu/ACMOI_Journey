@@ -3,6 +3,9 @@
 - [质因子 1059 Prime Factors (25 point(s))](#质因子-1059-prime-factors-25-points)
 - [有理数的和 1081 Rational Sum (20 point(s))](#有理数的和-1081-rational-sum-20-points)
 - [有理数运算 1088 Rational Arithmetic (20 point(s))](#有理数运算-1088-rational-arithmetic-20-points)
+- [连续因子 1096 Consecutive Factors (20 point(s))](#连续因子-1096-consecutive-factors-20-points)
+- [整数分解 1103 Integer Factorization (30 point(s))](#整数分解-1103-integer-factorization-30-points)
+- [数段之和 1104 Sum of Number Segments (20 point(s))](#数段之和-1104-sum-of-number-segments-20-points)
 
 ### 1 的个数 1049 Counting Ones (30 point(s))
 
@@ -530,6 +533,399 @@ int main()
     sub(a, b, c, d);
     mul(a, b, c, d);
     div(a, b, c, d);
+
+    return 0;
+}
+```
+
+我的代码在 AcWing 上 AC ，但是在 PAT 上有一道错题。很奇怪。
+
+### 连续因子 1096 Consecutive Factors (20 point(s))
+
+在一个正整数 $N$ 的所有因子中，可能存在几个连续的数字。
+
+例如，$630$ 可以分解为 $3×5×6×7$，其中 $5、6、7$ 是三个连续的数字。
+
+现在给定任意正整数 $N$，请你找到最大连续因子数，并列出连续因子的最小序列。
+
+<h4>输入格式</h4>
+
+一个正整数 $N$。
+
+<h4>输出格式</h4>
+
+<p>第一行输出最大连续因子数。</p>
+
+第二行以 `factor[1]*factor[2]*...*factor[k]` 的格式输出连续因子的最小序列。
+
+因子按升序排序，不包括 $1$。
+
+<h4>数据范围</h4>
+
+$1 < N < 2^{31}$
+
+<h4>输入样例：</h4>
+
+<pre><code>
+630
+</code></pre>
+
+<h4>输出样例：</h4>
+
+<pre><code>
+3
+5*6*7
+</code></pre>
+
+#### 1096 Consecutive Factors (20 point(s))
+Among all the factors of a positive integer N, there may exist several consecutive numbers. For example, 630 can be factored as 3×5×6×7, where 5, 6, and 7 are the three consecutive numbers. Now given any positive N, you are supposed to find the maximum number of consecutive factors, and list the smallest sequence of the consecutive factors.
+
+#### Input Specification:
+Each input file contains one test case, which gives the integer $N (1<N<2^{31})$.
+
+#### Output Specification:
+For each test case, print in the first line the maximum number of consecutive factors. Then in the second line, print the smallest sequence of the consecutive factors in the format `factor[1]*factor[2]*...*factor[k]`, where the factors are listed in increasing order, and 1 is NOT included.
+
+```cpp
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int main()
+{
+    int n;
+    cin >> n;
+
+    // 最简单枚举就行
+    vector<int> res;
+    for (int i = 2; i <= n / i; i ++ )
+        if (n % i == 0)
+        {
+            vector<int> seq;
+            for (int m = n, j = i; m % j == 0; j ++ )
+            {
+                seq.push_back(j);
+                m /= j;
+            }
+
+            if (seq.size() > res.size()) res = seq;
+        }
+
+    if (res.empty()) res.push_back(n);
+
+    cout << res.size() << endl;
+    cout << res[0];
+    for (int i = 1; i < res.size(); i ++ ) cout << '*' << res[i];
+
+    return 0;
+}
+```
+
+### 整数分解 1103 Integer Factorization (30 point(s))
+
+正整数 $N$ 的 $K-P$ 分解，是将 $N$ 写为 $K$ 个正整数的 $P$ 次幂的和。
+
+请你编写一个程序，给定 $N,K,P$ 的情况下，找到 $N$ 的 $K-P$ 分解。
+
+<h4>输入格式</h4>
+
+共一行，包含三个整数 $N,K,P$。
+
+<h4>输出格式</h4>
+
+如果存在 $N$ 的 $K-P$ 分解，则以如下格式输出：
+
+<pre><code>
+N = n[1]^P + ... n[K]^P
+</code></pre>
+
+其中，$n[i]$ 是第 $i$ 个因子，所有因子必须按照不升序顺序输出。
+
+<p>注意，答案也许不唯一。</p>
+
+例如，$169$ 的 $5-2$ 分解共有 $9$ 种，如 $12^2+4^2+2^2+2^2+1^2$，$11^2+6^2+2^2+2^2+2^2$ 等等。
+
+<p>你需要输出各因子之和最大的一种解法。</p>
+
+<p>如果仍不能确定唯一解法，则选择因子序列更大的解法。</p>
+
+我们称序列 $\lbrace a_1,a_2,...,a_K \rbrace$ 大于序列 $\lbrace b_1,b_2,...,b_K \rbrace$，当且仅当存在 $1 \le L \le K$，满足当 $i < L$ 时，$a_i = b_i$ 且 $a_L > b_L$。
+
+<p>如果无解，则直接输出 <code>Impossible</code>。</p>
+
+<h4>数据范围</h4>
+
+- $1 \le K \le N \le 400$,
+- $2 \le P \le 7$
+
+<h4>输入样例1：</h4>
+
+<pre><code>
+169 5 2
+</code></pre>
+
+<h4>输出样例1：</h4>
+
+<pre><code>
+169 = 6^2 + 6^2 + 6^2 + 6^2 + 5^2
+</code></pre>
+
+<h4>输入样例2：</h4>
+
+<pre><code>
+169 167 3
+</code></pre>
+
+<h4>输出样例2：</h4>
+
+<pre><code>
+Impossible
+</code></pre>
+
+#### 1103 Integer Factorization (30 point(s))
+The K−P factorization of a positive integer N is to write N as the sum of the P-th power of K positive integers. You are supposed to write a program to find the K−P factorization of N for any positive integers N, K and P.
+
+#### Input Specification:
+Each input file contains one test case which gives in a line the three positive integers $N (≤400)$, $K (≤N)$ and $P (1<P≤7)$. The numbers in a line are separated by a space.
+
+#### Output Specification:
+For each case, if the solution exists, output in the format:
+```
+N = n[1]^P + ... n[K]^P
+```
+
+where `n[i] (i = 1, ..., K)` is the i-th factor. All the factors must be printed in non-increasing order.
+
+Note: the solution may not be unique. For example, the 5-2 factorization of 169 has 9 solutions, such as $12^2+4^2+2^2+2^2+1^2$, $11^2+6^2+2^2+2^2+2^2$, or more. You must output the one with the maximum sum of the factors. If there is a tie, the largest factor sequence must be chosen -- sequence $\lbrace a_1,a_2,...,a_K \rbrace$ is said to be larger than $\lbrace b_1,b_2,...,b_K \rbrace$ if there exists 1≤L≤K such that $a_i = b_i$ for $i<L$ and $a_L > b_L$.
+
+If there is no solution, simple output `Impossible`.
+
+![](./images/2021082302.png)
+
+如上，可以看作二维限制完全背包问题。且目标是最大化价值。
+
+![](./images/2021082303.png)
+
+`f[i][j][k]` 表示只考虑前 `i` 个物品且总 p 次方和恰好是 `j` 且数的个数恰好是 `k` 的选法带来的最大总和。
+
+```cpp
+/*
+    f(i, j, k) = max(f(i-1, j, k), f(i-1, j-i^p, k-1) + i, f(i-1, j-i^{2p}, k-2) + 2i, ...)
+    上述状态转移表示，我们的可选物件从 i-1 拓展到了 i ，带来的最大价值，是max(不选i, 选1个i, 选2个i, ...)
+    f(i, j-i^p, k-1) = max(f(i-1, j-i^p, k-1), f(i-1, j-i^{2p}, k-2) + i, ...)
+    上式的出现用于化简 f(i, j, k)
+    最终，转移公式为 f(i, j, k) = max(f(i-1, j, k), f(i, j-i^p, k-1) + i)
+*/
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+const int N = 410;
+
+int n, k, p;
+int f[21][N][N];
+
+int power(int a, int b)
+{
+    int res = 1;
+    for (int i = 0; i < b; i ++ ) res *= a;
+    return res;
+}
+
+int main()
+{
+    cin >> n >> k >> p;
+
+    memset(f, -0x3f, sizeof f);
+    f[0][0][0] = 0;
+
+    int m;
+    for (m = 1; ; m ++ )
+    {
+        int v = power(m, p);
+        if (v > n) break;
+
+        for (int i = 0; i <= n; i ++ )
+            for (int j = 0; j <= k; j ++ )
+            {
+                f[m][i][j] = f[m - 1][i][j];
+                
+                // 下式中，程序上要求 i >= v && j != 0 这样下标不溢出
+                // 数学上，要求 i >= v && j >= 0 才可以达成转移要求
+                if (i >= v && j) f[m][i][j] = max(f[m][i][j], f[m][i - v][j - 1] + m);
+            }
+    }
+
+    m -- ;
+
+    if (f[m][n][k] < 0) puts("Impossible");
+    else
+    {
+        printf("%d = ", n);
+        bool is_first = true;
+        while (m)
+        {
+            int v = power(m, p);
+            // 动态规划是一棵树，我们现在从叶子往回走
+            // 满足 f[m][n - v][k - 1] + m == f[m][n][k] 则说明该是 dp 树的枝干
+            // m 从大到小，一方面是因为我们在构建 dp 树时是 m 从大到小
+            // 另一方面，是因为题目中要求结果输出最大的字典序，即 m 越大越好
+            while (n >= v && k && f[m][n - v][k - 1] + m == f[m][n][k])
+            {
+                if (is_first) is_first = false;
+                else printf(" + ");
+
+                printf("%d^%d", m, p);
+                n -= v, k --;
+            }
+
+            m -- ;
+        }
+    }
+
+    return 0;
+}
+```
+
+**经验：**
+- C++ 可以用 `memset(a, -0x3f, sizeof a)` 来初始化负无穷 `int`
+  - `-0x3f` 后 `int` 是 `-1044266559` ，二进制四个 `11000001`
+  - `0x3f` 后 `int` 是 `1061109567` ，二进制四个 `00111111`
+
+### 数段之和 1104 Sum of Number Segments (20 point(s))
+
+<p>给定一个正数序列，每个非空连续子序列都可被称作一个数段。</p>
+
+例如，给定序列 <code>{ 0.1, 0.2, 0.3, 0.4 }</code>，该序列共包含 $10$ 个不同数段，$(0.1) (0.1, 0.2) (0.1, 0.2, 0.3) (0.1, 0.2, 0.3, 0.4) (0.2) (0.2, 0.3) (0.2, 0.3, 0.4) (0.3) (0.3, 0.4) (0.4)$。
+
+<p>现在给定一个序列，请你求出该序列的所有数段中所有数字的总和。</p>
+
+对于前面的示例，$10$ 个数段的总和为 <code>0.1 + 0.3 + 0.6 + 1.0 + 0.2 + 0.5 + 0.9 + 0.3 + 0.7 + 0.4 = 5.0</code>。
+
+<h4>输入格式</h4>
+
+第一行包含正数 $N$，表示序列中元素的个数。
+
+第二行包含 $N$ 个正数，均不超过 $1.0$，数字之间用空格隔开。
+
+<h4>输出格式</h4>
+
+<p>输出所有数段中所有数字的总和。</p>
+
+<p>结果保留两位小数。</p>
+
+<h4>数据范围</h4>
+
+$1 \le N \le 10^5$,
+
+<h4>输入样例：</h4>
+
+<pre><code>
+4
+0.1 0.2 0.3 0.4
+</code></pre>
+
+<h4>输出样例：</h4>
+
+<pre><code>
+5.00
+</code></pre>
+
+#### 1104 Sum of Number Segments (20 point(s))
+Given a sequence of positive numbers, a segment is defined to be a consecutive subsequence. For example, given the sequence { 0.1, 0.2, 0.3, 0.4 }, we have 10 segments: (0.1) (0.1, 0.2) (0.1, 0.2, 0.3) (0.1, 0.2, 0.3, 0.4) (0.2) (0.2, 0.3) (0.2, 0.3, 0.4) (0.3) (0.3, 0.4) and (0.4).
+
+Now given a sequence, you are supposed to find the sum of all the numbers in all the segments. For the previous example, the sum of all the 10 segments is 0.1 + 0.3 + 0.6 + 1.0 + 0.2 + 0.5 + 0.9 + 0.3 + 0.7 + 0.4 = 5.0.
+
+#### Input Specification:
+Each input file contains one test case. For each case, the first line gives a positive integer N, the size of the sequence which is no more than $10^5$. The next line contains N positive numbers in the sequence, each no more than 1.0, separated by a space.
+
+#### Output Specification:
+For each test case, print in one line the sum of all the numbers in all the segments, accurate up to 2 decimal places.
+
+```cpp
+// 简单合并求和公式后 sum a[i] * (n - i) * (i + 1)
+#include <iostream>
+using namespace std;
+
+const int N = 1e5 + 10;
+
+double a[N];
+
+int main()
+{
+    int n;
+    scanf("%d", &n);
+    
+    for (int i = 0; i < n; ++ i) scanf("%lf", &a[i]);
+    
+    double ans = 0;
+    for (int i = 0; i < n; ++ i)
+        ans += a[i] * (n - i) * (i + 1);
+
+    printf("%.2lf\n", ans);
+}
+
+// 输出：83545541146315.91
+// 期望：83545541146314.58
+```
+
+如上，我的代码没法 AC 。
+
+哦，不是我的问题。
+
+这题里需要使用 `long double` ，否则精度不够。
+
+```cpp
+// 简单合并求和公式后 sum a[i] * (n - i) * (i + 1)
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    int n;
+    scanf("%d", &n);
+
+    long double ans = 0;
+    for (int i = 0; i < n; ++ i)
+    {
+        long double a;
+        scanf("%llf", &a);
+        ans += a * (n - i) * (i + 1);
+    }
+
+    printf("%.2llf\n", ans);
+}
+```
+
+**经验：**
+- `long double` 用 `%Lf` 或者 `%llf` 输出读入
+- 部分数据过不掉，可能是精度不够，考虑开 `long`
+- 对于 `int x, y; double z;` ，我们做乘法时 `double r = x * y * z;` 是错的，要把 `double` 放在前面 `double r = z * x * y;` 这样防止整数溢出
+
+看看 y 总的。数学上与我相同，只不过思路更简单：对于包含 `a[i]` 的区间（下标从 1 开始），这个区间的左端点有 `i` 个，右端点有 `n - i + 1` 个，因此总和是 `a[i] * i * (n - i + 1)` 。
+
+```cpp
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    int n;
+    cin >> n;
+    long double res = 0;
+    // 注意下标从 1 开始
+    for (int i = 1; i <= n; i ++ )
+    {
+        long double x;
+        cin >> x;
+
+        res += x * i * (n - i + 1);
+    }
+
+    printf("%.2Lf", res);
 
     return 0;
 }

@@ -173,6 +173,14 @@
 ### 第七章第一讲
 [./drafts/pat.7.1.md](./drafts/pat.7.1.md)
 
+- [1 的个数 1049 Counting Ones (30 point(s))](./drafts/pat.7.1.md#1-的个数-1049-counting-ones-30-points)
+- [质因子 1059 Prime Factors (25 point(s))](./drafts/pat.7.1.md#质因子-1059-prime-factors-25-points)
+- [有理数的和 1081 Rational Sum (20 point(s))](./drafts/pat.7.1.md#有理数的和-1081-rational-sum-20-points)
+- [有理数运算 1088 Rational Arithmetic (20 point(s))](./drafts/pat.7.1.md#有理数运算-1088-rational-arithmetic-20-points)
+- [连续因子 1096 Consecutive Factors (20 point(s))](./drafts/pat.7.1.md#连续因子-1096-consecutive-factors-20-points)
+- [整数分解 1103 Integer Factorization (30 point(s))](./drafts/pat.7.1.md#整数分解-1103-integer-factorization-30-points)
+- [数段之和 1104 Sum of Number Segments (20 point(s))](./drafts/pat.7.1.md#数段之和-1104-sum-of-number-segments-20-points)
+
 ## 第八章 动态规划
 
 ## 第九章 哈希表
