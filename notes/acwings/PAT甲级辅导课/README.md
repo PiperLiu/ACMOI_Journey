@@ -32,6 +32,7 @@
 - [第七章 数学](#第七章-数学)
   - [第七章第一讲](#第七章第一讲)
 - [第八章 动态规划](#第八章-动态规划)
+  - [第八章第一讲](#第八章第一讲)
 - [第九章 哈希表](#第九章-哈希表)
 - [第十章 并查集](#第十章-并查集)
 - [第十一章 模拟](#第十一章-模拟)
@@ -183,7 +184,18 @@
 
 ## 第八章 动态规划
 
+### 第八章第一讲
+[./drafts/pat.8.1.md](./drafts/pat.8.1.md)
+
+- [最大子序列和 1007 Maximum Subsequence Sum (25 point(s))](./drafts/pat.8.1.md#最大子序列和-1007-maximum-subsequence-sum-25-points)
+- [最佳彩色带 1045 Favorite Color Stripe (30 point(s))](./drafts/pat.8.1.md#最佳彩色带-1045-favorite-color-stripe-30-points)
+- [找更多硬币 1068 Find More Coins (30 point(s))](./drafts/pat.8.1.md#找更多硬币-1068-find-more-coins-30-points)
+- [PAT 计数 1093 Count PAT's (25 point(s))](./drafts/pat.8.1.md#pat-计数-1093-count-pats-25-points)
+- [快速排序 1101 Quick Sort (25 point(s))](./drafts/pat.8.1.md#快速排序-1101-quick-sort-25-points)
+
 ## 第九章 哈希表
+
+
 
 ## 第十章 并查集
 
