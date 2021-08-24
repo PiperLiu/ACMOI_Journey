@@ -34,6 +34,7 @@
 - [第八章 动态规划](#第八章-动态规划)
   - [第八章第一讲](#第八章第一讲)
 - [第九章 哈希表](#第九章-哈希表)
+  - [第九章第一讲](#第九章第一讲)
 - [第十章 并查集](#第十章-并查集)
 - [第十一章 模拟](#第十一章-模拟)
 - [第十二章 贪心](#第十二章-贪心)
@@ -195,7 +196,14 @@
 
 ## 第九章 哈希表
 
+### 第九章第一讲
+[./drafts/pat.9.1.md](./drafts/pat.9.1.md)
 
+- [找硬币 1048 Find Coins (25 point(s))](./drafts/pat.9.1.md#找硬币-1048-find-coins-25-points)
+- [集合相似度 1063 Set Similarity (25 point(s))](./drafts/pat.9.1.md#集合相似度-1063-set-similarity-25-points)
+- [朋友数 1120 Friend Numbers (20 point(s))](./drafts/pat.9.1.md#朋友数-1120-friend-numbers-20-points)
+- [漏掉的数字 1144 The Missing Number (20 point(s))](./drafts/pat.9.1.md#漏掉的数字-1144-the-missing-number-20-points)
+- [危险品装箱 1149 Dangerous Goods Packaging (25 point(s))](./drafts/pat.9.1.md#危险品装箱-1149-dangerous-goods-packaging-25-points)
 
 ## 第十章 并查集
 
