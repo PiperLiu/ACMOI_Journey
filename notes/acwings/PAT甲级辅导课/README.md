@@ -226,6 +226,10 @@
 ### 第十章第一讲
 [./drafts/pat.10.1.md](./drafts/pat.10.1.md)
 
+- [战争中的城市 1013 Battle Over Cities (25 point(s))](./drafts/pat.10.1.md#战争中的城市-1013-battle-over-cities-25-points)
+- [家产 1114 Family Property (25 point(s))](./drafts/pat.10.1.md#家产-1114-family-property-25-points)
+- [森林里的鸟 1118 Birds in Forest (25 point(s))](./drafts/pat.10.1.md#森林里的鸟-1118-birds-in-forest-25-points)
+
 ## 第十一章 模拟
 
 ## 第十二章 贪心

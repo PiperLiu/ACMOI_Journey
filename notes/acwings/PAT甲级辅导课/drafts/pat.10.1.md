@@ -75,7 +75,62 @@ Each input file contains one test case. Each case starts with a line containing 
 For each of the K cities, output in a line the number of highways need to be repaired if that city is lost.
 
 ```cpp
+#include <iostream>
+#include <cstring>
 
+using namespace std;
+
+const int N = 1010, M = 500010;
+
+int n, m, k;
+int p[N];
+
+struct Edge
+{
+    int a, b;
+}e[M];
+
+int find(int x)
+{
+    if (p[x] != x) p[x] = find(p[x]);
+    return p[x];
+}
+
+int main()
+{
+    scanf("%d%d%d", &n, &m, &k);
+
+    for (int i = 0; i < m; i ++ ) scanf("%d%d", &e[i].a, &e[i].b);
+
+    while (k -- )
+    {
+        int x;
+        scanf("%d", &x);
+
+        for (int i = 1; i <= n; i ++ ) p[i] = i;
+
+        // 有 k 个连通块，则需要 k - 1 条边
+        // 因此假设一开始有 n 个连通块，则 n - 1 条边，即 cnt 初始值
+        int cnt = n - 1;
+        for (int i = 0; i < m; i ++ )
+        {
+            int a = e[i].a, b = e[i].b;
+            if (a != x && b != x)
+            {
+                int pa = find(a), pb = find(b);
+                if (pa != pb)  // 发现原来有两个连通块是可以合并的，则需要边数 cnt -- ;
+                {
+                    p[pa] = pb;
+                    cnt -- ;
+                }
+            }
+        }
+
+        printf("%d\n", cnt - 1);
+    }
+
+    return 0;
+}
 ```
 
 ### 家产 1114 Family Property (25 point(s))
@@ -162,7 +217,99 @@ For each case, first print in a line the number of families (all the people that
 where ID is the smallest ID in the family; M is the total number of family members; $AVG_{sets} is the average number of sets of their real estate; and $AVG_{area}$ is the average area. The average numbers must be accurate up to 3 decimal places. The families must be given in descending order of their average areas, and in ascending order of the ID's if there is a tie.
 
 ```cpp
+#include <iostream>
+#include <algorithm>
+#include <vector>
 
+using namespace std;
+
+const int N = 10010;
+
+int n;
+int p[N], c[N], hc[N], ha[N];  // 上一级节点，人数，房产数，总面积
+bool st[N];  // 这个编号是否用过
+
+struct Edge
+{
+    int a, b;
+}e[N];  // (2+5) * 1000 开 N 条边肯定够用了
+
+struct Family
+{
+    int id, c, hc, ha;
+
+    bool operator< (const Family &t) const
+    {
+        // ha / c ? t.ha / t.c  // 防止精度不够，这里不用除法
+        if (ha * t.c != t.ha * c) return ha * t.c > t.ha * c;
+        return id < t.id;
+    }
+};
+
+int find(int x)
+{
+    if (p[x] != x) p[x] = find(p[x]);
+    return p[x];
+}
+
+int main()
+{
+    cin >> n;
+
+    int m = 0;
+    for (int i = 0; i < n; i ++ )
+    {
+        int id, father, mother, k;
+        cin >> id >> father >> mother >> k;
+        
+        // 记录边
+        st[id] = true;
+        if (father != -1) e[m ++ ] = {id, father};
+        if (mother != -1) e[m ++ ] = {id, mother};
+        for (int j = 0; j < k; j ++ )
+        {
+            int son;
+            cin >> son;
+            e[m ++ ] = {id, son};
+        }
+        
+        // 记录这个节点的房产数、总面积
+        cin >> hc[id] >> ha[id];
+    }
+
+    // 初始化，每个节点都是自己的根，人数都是 1
+    for (int i = 0; i < N; i ++ ) p[i] = i, c[i] = 1;
+    for (int i = 0; i < m; i ++ )
+    {
+        int a = e[i].a, b = e[i].b;
+
+        st[a] = st[b] = true;
+        int pa = find(a), pb = find(b);
+        // 合并两个家族，我们总是把 id 最小的作为家族根节点（为了方便输出）
+        // 这样只需要保证根节点里代表家族的信息就可以了
+        if (pa != pb)
+        {
+            if (pb > pa) swap(pa, pb);
+            c[pb] += c[pa];
+            hc[pb] += hc[pa];
+            ha[pb] += ha[pa];
+            p[pa] = pb;
+        }
+    }
+
+    vector<Family> family;
+    for (int i = 0; i < N; i ++ )
+        if (st[i] && p[i] == i)
+            family.push_back({i, c[i], hc[i], ha[i]});
+
+    sort(family.begin(), family.end());
+
+    cout << family.size() << endl;
+    for (auto f : family)
+        printf("%04d %d %.3lf %.3lf\n", f.id, f.c, (double)f.hc / f.c, (double)f.ha / f.c);
+
+    return 0;
+}
 ```
 
 ### 森林里的鸟 1118 Birds in Forest (25 point(s))
@@ -239,5 +386,69 @@ After the pictures there is a positive number $Q (≤10^4)$ which is the number 
 For each test case, first output in a line the maximum possible number of trees and the number of birds. Then for each query, print in a line Yes if the two birds belong to the same tree, or No if not.
 
 ```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
 
+using namespace std;
+
+const int N = 10010;
+
+int n;
+int birds[10];
+int p[N];
+bool st[N];
+
+int find(int x)
+{
+    if (p[x] != x) p[x] = find(p[x]);
+    return p[x];
+}
+
+int main()
+{
+    scanf("%d", &n);
+
+    for (int i = 0; i < N; i ++ ) p[i] = i;
+
+    int cnt = 0;
+    for (int i = 0; i < n; i ++ )
+    {
+        int k;
+        scanf("%d", &k);
+        for (int j = 0; j < k; j ++ )
+        {
+            scanf("%d", &birds[j]);
+            st[birds[j]] = true;
+        }
+
+        for (int j = 1; j < k; j ++ )
+        {
+            int a = birds[j - 1], b = birds[j];
+            a = find(a), b = find(b);
+            if (a != b)
+            {
+                p[a] = b;
+                cnt ++ ;  // 又一对新块被连通
+            }
+        }
+    }
+
+    int tot = 0;
+    for (int i = 0; i < N; i ++ ) tot += st[i];  // 总共有多少鸟？
+
+    printf("%d %d\n", tot - cnt, tot);  // 总结点数 - 连通次数 = 孤立块数
+
+    int q;
+    scanf("%d", &q);
+    while (q -- )
+    {
+        int a, b;
+        scanf("%d%d", &a, &b);
+        if (find(a) == find(b)) puts("Yes");
+        else puts("No");
+    }
+
+    return 0;
+}
 ```
