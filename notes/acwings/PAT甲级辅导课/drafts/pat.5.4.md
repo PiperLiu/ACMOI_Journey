@@ -81,8 +81,79 @@ where in the i-th line, $K_i$ is the total number of distributors or retailers w
 #### Output Specification:
 For each test case, print in one line the total sales we can expect from all the retailers, accurate up to 1 decimal place. It is guaranteed that the number will not exceed $10^{10}$.
 
-```cpp
+![](./images/2021082503.png)
 
+如上，用 `dfs` 是很直观的思路。
+
+**但本题可以用树形DP来做。**
+
+`f(i)` 表示 `i` 到根的距离。
+
+可以用记忆化搜索更好地表示图，无序再写链表等等。
+
+```cpp
+// 记忆化搜索
+dfs (点 u)
+{
+    if (f[u] 已存在) return f[u];
+    if (u 是 root) retrun 0;
+    return f[u] = dfs(p[u]) + 1;  // p[u] 是 u 父节点
+}
+```
+
+```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+#include <cmath>
+
+using namespace std;
+
+const int N = 100010;
+
+int n;
+double P, R;
+int p[N], f[N], c[N];
+
+// 记忆化搜索 dfs(i)
+int dfs(int u)
+{
+    if (f[u] != -1) return f[u];
+
+    if (p[u] == -1) return f[u] = 0;
+    return f[u] = dfs(p[u]) + 1;
+}
+
+int main()
+{
+    cin >> n >> P >> R;
+
+    memset(p, -1, sizeof p);
+    for (int i = 0; i < n; i ++ )
+    {
+        int k;
+        cin >> k;
+        for (int j = 0; j < k; j ++ )
+        {
+            int son;
+            cin >> son;
+            p[son] = i;
+        }
+
+        if (!k) cin >> c[i];
+    }
+
+    memset(f, -1, sizeof f);
+
+    double res = 0;
+    for (int i = 0; i < n; i ++ )
+        if (c[i])
+            res += c[i] * P * pow(1 + R / 100, dfs(i));
+
+    printf("%.1lf\n", res);
+
+    return 0;
+}
 ```
 
 ### 供应链最高价格 1090 Highest Price in Supply Chain (25 point(s))
@@ -139,7 +210,45 @@ Each input file contains one test case. For each case, The first line contains t
 For each test case, print in one line the highest price we can expect from some retailers, accurate up to 2 decimal places, and the number of retailers that sell at the highest price. There must be one space between the two numbers. It is guaranteed that the price will not exceed $10^10$.
 
 ```cpp
+#include <iostream>
+#include <cstring>
+#include <cmath>
 
+using namespace std;
+
+const int N = 100010;
+
+int n;
+double P, R;
+int p[N], f[N];
+
+int dfs(int u)
+{
+    if (f[u] != -1) return f[u];
+    if (p[u] == -1) return f[u] = 0;
+    return f[u] = dfs(p[u]) + 1;
+}
+
+int main()
+{
+    cin >> n >> P >> R;
+    for (int i = 0; i < n; i ++ ) cin >> p[i];
+
+    memset(f, -1, sizeof f);
+
+    int res = 0, cnt = 0;
+    for (int i = 0; i < n; i ++ )
+        if (dfs(i) > res)
+        {
+            res = dfs(i);
+            cnt = 1;  // 注意这里还需要数量
+        }
+        else if (dfs(i) == res) cnt ++ ;
+
+    printf("%.2lf %d\n", P * pow(1 + R / 100, res), cnt);
+
+    return 0;
+}
 ```
 
 ### 供应链最低价格 1106 Lowest Price in Supply Chain (25 point(s))
@@ -215,5 +324,58 @@ where in the i-th line, $K_i$ is the total number of distributors or retailers w
 For each test case, print in one line the highest price we can expect from some retailers, accurate up to 4 decimal places, and the number of retailers that sell at the highest price. There must be one space between the two numbers. It is guaranteed that the price will not exceed $10^10$.
 
 ```cpp
+#include <iostream>
+#include <cstring>
+#include <cmath>
 
+using namespace std;
+
+const int N = 100010;
+
+int n;
+double P, R;
+int p[N], f[N];
+bool is_leaf[N];
+
+int dfs(int u)
+{
+    if (f[u] != -1) return f[u];
+    if (p[u] == -1) return f[u] = 0;
+    return f[u] = dfs(p[u]) + 1;
+}
+
+int main()
+{
+    cin >> n >> P >> R;
+
+    memset(p, -1, sizeof p);  // 别忘了初始化父节点标记，用于找根
+    for (int i = 0; i < n; i ++ )
+    {
+        int k;
+        cin >> k;
+        for (int j = 0; j < k; j ++ )
+        {
+            int son;
+            cin >> son;
+            p[son] = i;
+        }
+
+        if (!k) is_leaf[i] = true;
+    }
+
+    // 记忆化搜索别忘了 memset(f, -1, sizeof f);
+    memset(f, -1, sizeof f);
+
+    int res = N, cnt = 0;
+    for (int i = 0; i < n; i ++ )
+        if (is_leaf[i])
+        {
+            if (res > dfs(i)) res = dfs(i), cnt = 1;
+            else if (res == dfs(i)) cnt ++ ;
+        }
+
+    printf("%.4lf %d\n", P * pow(1 + R / 100, res), cnt);
+
+    return 0;
+}
 ```
