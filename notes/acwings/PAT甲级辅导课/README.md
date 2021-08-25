@@ -26,6 +26,7 @@
   - [第五章第二讲](#第五章第二讲)
   - [第五章第三讲](#第五章第三讲)
   - [第五章第四讲](#第五章第四讲)
+  - [第五章第五讲](#第五章第五讲)
 - [第六章 图论](#第六章-图论)
   - [第六章第一讲](#第六章第一讲)
   - [第六章第二讲](#第六章第二讲)
@@ -35,7 +36,9 @@
   - [第八章第一讲](#第八章第一讲)
 - [第九章 哈希表](#第九章-哈希表)
   - [第九章第一讲](#第九章第一讲)
+  - [第九章第二讲](#第九章第二讲)
 - [第十章 并查集](#第十章-并查集)
+  - [第十章第一讲](#第十章第一讲)
 - [第十一章 模拟](#第十一章-模拟)
 - [第十二章 贪心](#第十二章-贪心)
 - [第十三章 链表](#第十三章-链表)
@@ -141,10 +144,16 @@
 - [最大的一代 1094 The Largest Generation (25 point(s))](./drafts/pat.5.3.md#最大的一代-1094-the-largest-generation-25-points)
 
 ### 第五章第四讲
+[./drafts/pat.5.4.md](./drafts/pat.5.4.md)
+
 - [供应链总销售额 1079 Total Sales of Supply Chain (25 point(s))](./drafts/pat.5.4.md#供应链总销售额-1079-total-sales-of-supply-chain-25-points)
 - [供应链最高价格 1090 Highest Price in Supply Chain (25 point(s))](./drafts/pat.5.4.md#供应链最高价格-1090-highest-price-in-supply-chain-25-points)
 - [供应链最低价格 1106 Lowest Price in Supply Chain (25 point(s))](./drafts/pat.5.4.md#供应链最低价格-1106-lowest-price-in-supply-chain-25-points)
-- [堆路径 1155 Heap Paths (30 point(s))](./drafts/pat.5.4.md#堆路径-1155-heap-paths-30-points)
+
+### 第五章第五讲
+[./drafts/pat.5.5.md](./drafts/pat.5.5.md)
+
+- [堆路径 1155 Heap Paths (30 point(s))](./drafts/pat.5.5.md#堆路径-1155-heap-paths-30-points)
 
 ## 第六章 图论
 
@@ -205,7 +214,17 @@
 - [漏掉的数字 1144 The Missing Number (20 point(s))](./drafts/pat.9.1.md#漏掉的数字-1144-the-missing-number-20-points)
 - [危险品装箱 1149 Dangerous Goods Packaging (25 point(s))](./drafts/pat.9.1.md#危险品装箱-1149-dangerous-goods-packaging-25-points)
 
+### 第九章第二讲
+[./drafts/pat.9.2.md](./drafts/pat.9.2.md)
+
+- [哈希 1078 Hashing (25 point(s))](./drafts/pat.9.2.md#哈希-1078-hashing-25-points)
+- [期终成绩 1137 Final Grading (25 point(s))](./drafts/pat.9.2.md#期终成绩-1137-final-grading-25-points)
+- [哈希 - 平均查找时间 1145 Hashing - Average Search Time (25 point(s))](./drafts/pat.9.2.md#哈希-平均查找时间-1145-hashing-average-search-time-25-points)
+
 ## 第十章 并查集
+
+### 第十章第一讲
+[./drafts/pat.10.1.md](./drafts/pat.10.1.md)
 
 ## 第十一章 模拟
 
