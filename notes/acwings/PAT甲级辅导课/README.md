@@ -14,6 +14,7 @@
 - [第一章 字符串处理](#第一章-字符串处理)
   - [第一章第一讲](#第一章第一讲)
   - [第一章第二讲](#第一章第二讲)
+  - [第一章第三讲](#第一章第三讲)
 - [第二章 高精度](#第二章-高精度)
   - [第二章第一讲](#第二章第一讲)
 - [第三章 进位制](#第三章-进位制)
@@ -71,6 +72,14 @@
 - [电话账单 1016 Phone Bills (25 point(s))](./drafts/pat.1.2.md#电话账单-1016-phone-bills-25-points)
 - [银行排队 1017 Queueing at Bank (25 point(s))](./drafts/pat.1.2.md#银行排队-1017-queueing-at-bank-25-points)
 - [乒乓球 1026 Table Tennis (30 point(s))](./drafts/pat.1.2.md#乒乓球-1026-table-tennis-30-points)
+
+### 第一章第三讲
+[./drafts/pat.1.3.md](./drafts/pat.1.3.md)
+
+- [它们是否相等 1060 Are They Equal (25 point(s))](./drafts/pat.1.3.md#它们是否相等-1060-are-they-equal-25-points)
+- [科学计数法 1073 Scientific Notation (20 point(s))](./drafts/pat.1.3.md#科学计数法-1073-scientific-notation-20-points)
+- [Kuchiguse 1077 Kuchiguse (20 point(s))](./drafts/pat.1.3.md#kuchiguse-1077-kuchiguse-20-points)
+- [中文读数字 1082 Read Number in Chinese (25 point(s))](./drafts/pat.1.3.md#中文读数字-1082-read-number-in-chinese-25-points)
 
 ## 第二章 高精度
 
