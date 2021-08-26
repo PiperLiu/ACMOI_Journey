@@ -154,6 +154,9 @@
 [./drafts/pat.5.5.md](./drafts/pat.5.5.md)
 
 - [堆路径 1155 Heap Paths (30 point(s))](./drafts/pat.5.5.md#堆路径-1155-heap-paths-30-points)
+- [中缀表达式 1130 Infix Expression (25 point(s))](./drafts/pat.5.5.md#中缀表达式-1130-infix-expression-25-points)
+- [最低公共祖先 1143 Lowest Common Ancestor (30 point(s))](./drafts/pat.5.5.md#最低公共祖先-1143-lowest-common-ancestor-30-points)
+- [二叉树中的最低公共祖先 1151 LCA in a Binary Tree (30 point(s))](./drafts/pat.5.5.md#二叉树中的最低公共祖先-1151-lca-in-a-binary-tree-30-points)
 
 ## 第六章 图论
 
