@@ -15,6 +15,7 @@
   - [第一章第一讲](#第一章第一讲)
   - [第一章第二讲](#第一章第二讲)
   - [第一章第三讲](#第一章第三讲)
+  - [第一章第四讲](#第一章第四讲)
 - [第二章 高精度](#第二章-高精度)
   - [第二章第一讲](#第二章第一讲)
 - [第三章 进位制](#第三章-进位制)
@@ -80,6 +81,15 @@
 - [科学计数法 1073 Scientific Notation (20 point(s))](./drafts/pat.1.3.md#科学计数法-1073-scientific-notation-20-points)
 - [Kuchiguse 1077 Kuchiguse (20 point(s))](./drafts/pat.1.3.md#kuchiguse-1077-kuchiguse-20-points)
 - [中文读数字 1082 Read Number in Chinese (25 point(s))](./drafts/pat.1.3.md#中文读数字-1082-read-number-in-chinese-25-points)
+
+### 第一章第四讲
+[./drafts/pat.1.4.md](./drafts/pat.1.4.md)
+
+- [坏掉的键盘 1084 Broken Keyboard (20 point(s))](./drafts/pat.1.4.md#坏掉的键盘-1084-broken-keyboard-20-points)
+- [求平均值 1108 Finding Average (20 point(s))](./drafts/pat.1.4.md#求平均值-1108-finding-average-20-points)
+- [微博转发抽奖 1124 Raffle for Weibo Followers (20 point(s))](./drafts/pat.1.4.md#微博转发抽奖-1124-raffle-for-weibo-followers-20-points)
+- [PAT单位排行 1141 PAT Ranking of Institutions (25 point(s))](./drafts/pat.1.4.md#pat单位排行-1141-pat-ranking-of-institutions-25-points)
+- [解码PAT准考证 1153 Decode Registration Card of PAT (25 point(s))](./drafts/pat.1.4.md#解码pat准考证-1153-decode-registration-card-of-pat-25-points)
 
 ## 第二章 高精度
 
