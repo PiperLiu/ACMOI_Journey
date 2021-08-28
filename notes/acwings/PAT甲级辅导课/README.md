@@ -38,6 +38,7 @@
   - [第六章第四讲](#第六章第四讲)
 - [第七章 数学](#第七章-数学)
   - [第七章第一讲](#第七章第一讲)
+  - [第七章第二讲](#第七章第二讲)
 - [第八章 动态规划](#第八章-动态规划)
   - [第八章第一讲](#第八章第一讲)
 - [第九章 哈希表](#第九章-哈希表)
@@ -45,6 +46,7 @@
   - [第九章第二讲](#第九章第二讲)
 - [第十章 并查集](#第十章-并查集)
   - [第十章第一讲](#第十章第一讲)
+  - [第十章第二讲](#第十章第二讲)
 - [第十一章 模拟](#第十一章-模拟)
 - [第十二章 贪心](#第十二章-贪心)
 - [第十三章 链表](#第十三章-链表)
@@ -239,6 +241,13 @@
 - [整数分解 1103 Integer Factorization (30 point(s))](./drafts/pat.7.1.md#整数分解-1103-integer-factorization-30-points)
 - [数段之和 1104 Sum of Number Segments (20 point(s))](./drafts/pat.7.1.md#数段之和-1104-sum-of-number-segments-20-points)
 
+### 第七章第二讲
+[./drafts/pat.7.2.md](./drafts/pat.7.2.md)
+
+- [卡住的键盘 1112 Stucked Keyboard (20 point(s))](./drafts/pat.7.2.md#卡住的键盘-1112-stucked-keyboard-20-points)
+- [C 语言竞赛 1116 Come on! Let's C (20 point(s))](./drafts/pat.7.2.md#c-语言竞赛-1116-come-on-lets-c-20-points)
+- [谷歌的招聘 1152 Google Recruitment (20 point(s))](./drafts/pat.7.2.md#谷歌的招聘-1152-google-recruitment-20-points)
+
 ## 第八章 动态规划
 
 ### 第八章第一讲
@@ -276,6 +285,11 @@
 - [战争中的城市 1013 Battle Over Cities (25 point(s))](./drafts/pat.10.1.md#战争中的城市-1013-battle-over-cities-25-points)
 - [家产 1114 Family Property (25 point(s))](./drafts/pat.10.1.md#家产-1114-family-property-25-points)
 - [森林里的鸟 1118 Birds in Forest (25 point(s))](./drafts/pat.10.1.md#森林里的鸟-1118-birds-in-forest-25-points)
+
+### 第十章第二讲
+[./drafts/pat.10.2.md](./drafts/pat.10.2.md)
+
+- [社会集群 1107 Social Clusters (30 point(s))](./drafts/pat.10.2.md#社会集群-1107-social-clusters-30-points)
 
 ## 第十一章 模拟
 
