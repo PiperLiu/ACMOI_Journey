@@ -18,11 +18,13 @@
   - [第一章第四讲](#第一章第四讲)
 - [第二章 高精度](#第二章-高精度)
   - [第二章第一讲](#第二章第一讲)
+  - [第二章第二讲](#第二章第二讲)
 - [第三章 进位制](#第三章-进位制)
   - [第三章第一讲](#第三章第一讲)
   - [第三章第二讲](#第三章第二讲)
 - [第四章 排序](#第四章-排序)
   - [第四章第一讲](#第四章第一讲)
+  - [第四章第二讲](#第四章第二讲)
 - [第五章 树](#第五章-树)
   - [第五章第一讲](#第五章第一讲)
   - [第五章第二讲](#第五章第二讲)
@@ -32,6 +34,8 @@
 - [第六章 图论](#第六章-图论)
   - [第六章第一讲](#第六章第一讲)
   - [第六章第二讲](#第六章第二讲)
+  - [第六章第三讲](#第六章第三讲)
+  - [第六章第四讲](#第六章第四讲)
 - [第七章 数学](#第七章-数学)
   - [第七章第一讲](#第七章第一讲)
 - [第八章 动态规划](#第八章-动态规划)
@@ -101,6 +105,11 @@
 - [趣味数字 1023 Have Fun with Numbers (20 point(s))](./drafts/pat.2.1.md#趣味数字-1023-have-fun-with-numbers-20-points)
 - [回文数 1024 Palindromic Number (25 point(s))](./drafts/pat.2.1.md#回文数-1024-palindromic-number-25-points)
 
+### 第二章第二讲
+[./drafts/pat.2.2.md](./drafts/pat.2.2.md)
+
+- [霍格沃茨的 A + B 1058 A+B in Hogwarts (20 point(s))](./drafts/pat.2.2.md#霍格沃茨的-a-b-1058-ab-in-hogwarts-20-points)
+- [延迟的回文数 1136 A Delayed Palindrome (20 point(s))](./drafts/pat.2.2.md#延迟的回文数-1136-a-delayed-palindrome-20-points)
 ## 第三章 进位制
 
 ### 第三章第一讲
@@ -129,6 +138,11 @@
 - [链表排序 1052 Linked List Sorting (25 point(s))](./drafts/pat.4.1.md#链表排序-1052-linked-list-sorting-25-points)
 - [PAT 评测 1075 PAT Judge (25 point(s))](./drafts/pat.4.1.md#pat-评测-1075-pat-judge-25-points)
 - [插入还是堆排序 1098 Insertion or Heap Sort (25 point(s))](./drafts/pat.4.1.md#插入还是堆排序-1098-insertion-or-heap-sort-25-points)
+
+### 第四章第二讲
+[./drafts/pat.4.2.md](./drafts/pat.4.2.md)
+
+- [插入还是归并 1089 Insert or Merge (25 point(s))](./drafts/pat.4.2.md#插入还是归并-1089-insert-or-merge-25-points)
 
 ## 第五章 树
 
@@ -200,6 +214,17 @@
 - [拓扑顺序 1146 Topological Order (25 point(s))](./drafts/pat.6.2.md#拓扑顺序-1146-topological-order-25-points)
 - [旅行商问题 1150 Travelling Salesman Problem (25 point(s))](./drafts/pat.6.2.md#旅行商问题-1150-travelling-salesman-problem-25-points)
 - [顶点着色 1154 Vertex Coloring (25 point(s))](./drafts/pat.6.2.md#顶点着色-1154-vertex-coloring-25-points)
+
+### 第六章第三讲
+[./drafts/pat.6.3.md](./drafts/pat.6.3.md)
+
+- [公共自行车管理 1018 Public Bike Management (30 point(s))](./drafts/pat.6.3.md#公共自行车管理-1018-public-bike-management-30-points)
+- [加油站 1072 Gas Station (30 point(s))](./drafts/pat.6.3.md#加油站-1072-gas-station-30-points)
+
+### 第六章第四讲
+[./drafts/pat.6.4.md](./drafts/pat.6.4.md)
+
+- [微博转发 1076 Forwards on Weibo (30 point(s))](./drafts/pat.6.4.md#微博转发-1076-forwards-on-weibo-30-points)
 
 ## 第七章 数学
 

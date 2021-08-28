@@ -377,3 +377,107 @@ where Rank is the rank (start from 1) of the institution; School is the institut
 The institutions are ranked according to their TWS. If there is a tie, the institutions are supposed to have the same rank, and they shall be printed in ascending order of Ns. If there is still a tie, they shall be printed in alphabetical order of their codes.
 
 ### 解码PAT准考证 1153 Decode Registration Card of PAT (25 point(s))
+
+PAT 准考证号由 $4$ 部分组成：
+
+- 第 $1$ 位是级别，即 <code>T</code> 代表顶级；<code>A</code> 代表甲级；<code>B</code> 代表乙级；
+- 第 $2 \sim 4$ 位是考场编号，范围从 $101$ 到 $999$；
+- 第 $5 \sim 10$ 位是考试日期，格式为年、月、日顺次各占 $2$ 位；
+- 最后 $11 \sim 13$ 位是考生编号，范围从 $000$ 到 $999$。
+
+现给定一系列考生的准考证号和他们的成绩，请你按照要求输出各种统计信息。
+
+<h4>输入格式</h4>
+
+输入首先在一行中给出两个正整数 $N$ 和 $M$，分别为考生人数和统计要求的个数。
+
+接下来 $N$ 行，每行给出一个考生的准考证号和其分数（在区间 $[0,100]$ 内的整数），其间以空格分隔。
+
+考生信息之后，再给出 $M$ 行，每行给出一个统计要求，格式为：<code>类型 指令</code>，其中
+
+- <code>类型</code> 为 $1$ 表示要求按分数非升序输出某个指定级别的考生的成绩，对应的 <code>指令</code> 则给出代表指定级别的字母；
+- <code>类型</code> 为 $2$ 表示要求将某指定考场的考生人数和总分统计输出，对应的 <code>指令</code> 则给出指定考场的编号；
+- <code>类型</code> 为 $3$ 表示要求将某指定日期的考生人数分考场统计输出，对应的 <code>指令</code> 则给出指定日期，格式与准考证上日期相同。
+
+<h4>输出格式</h4>
+
+对每项统计要求，首先在一行中输出 <code>Case #: 要求</code>，其中 <code>#</code> 是该项要求的编号，从 $1$ 开始；<code>要求</code> 即复制输入给出的要求。随后输出相应的统计结果：
+
+- <code>类型</code> 为 1 的指令，输出格式与输入的考生信息格式相同，即 <code>准考证号 成绩</code>。对于分数并列的考生，按其准考证号的字典序递增输出（题目保证无重复准考证号）；
+- <code>类型</code> 为 2 的指令，按 <code>人数 总分</code> 的格式输出；
+- <code>类型</code> 为 3 的指令，输出按人数非递增顺序，格式为 <code>考场编号 总人数</code>。若人数并列则按考场编号递增顺序输出。
+<p>如果查询结果为空，则输出 <code>NA</code>。</p>
+
+<h4>数据范围</h4>
+
+- $1 \le N \le 10^4$,
+- $1 \le M \le 100$
+
+<h4>输入样例：</h4>
+
+<pre><code>
+8 4
+B123180908127 99
+B102180908003 86
+A112180318002 98
+T107150310127 62
+A107180908108 100
+T123180908010 78
+B112160918035 88
+A107180908021 98
+1 A
+2 107
+3 180908
+2 999
+</code></pre>
+
+<h4>输出样例：</h4>
+
+<pre><code>
+Case 1: 1 A
+A107180908108 100
+A107180908021 98
+A112180318002 98
+Case 2: 2 107
+3 260
+Case 3: 3 180908
+107 2
+123 2
+102 1
+Case 4: 2 999
+NA
+</code></pre>
+
+#### 1153 Decode Registration Card of PAT (25 point(s))
+A registration card number of PAT consists of 4 parts:
+
+- the 1st letter represents the test level, namely, T for the top level, A for advance and B for basic;
+- the 2nd - 4th digits are the test site number, ranged from 101 to 999;
+- the 5th - 10th digits give the test date, in the form of yymmdd;
+- finally the 11th - 13th digits are the testee's number, ranged from 000 to 999.
+
+Now given a set of registration card numbers and the scores of the card owners, you are supposed to output the various statistics according to the given queries.
+
+#### Input Specification:
+Each input file contains one test case. For each case, the first line gives two positive integers N $(≤10^4)$ and M (≤100), the numbers of cards and the queries, respectively.
+
+Then N lines follow, each gives a card number and the owner's score (integer in [0,100]), separated by a space.
+
+After the info of testees, there are M lines, each gives a query in the format Type Term, where
+
+- Type being 1 means to output all the testees on a given level, in non-increasing order of their scores. The corresponding Term will be the letter which specifies the level;
+- Type being 2 means to output the total number of testees together with their total scores in a given site. The corresponding Term will then be the site number;
+- Type being 3 means to output the total number of testees of every site for a given test date. The corresponding Term will then be the date, given in the same format as in the registration card.
+
+#### Output Specification:
+For each query, first print in a line Case #: input, where # is the index of the query case, starting from 1; and input is a copy of the corresponding input query. Then output as requested:
+
+- for a type 1 query, the output format is the same as in input, that is, CardNumber Score. If there is a tie of the scores, output in increasing alphabetical order of their card numbers (uniqueness of the card numbers is guaranteed);
+- for a type 2 query, output in the format Nt Ns where Nt is the total number of testees and Ns is their total score;
+- for a type 3 query, output in the format Site Nt where Site is the site number and Nt is the total number of testees at Site. The output must be in non-increasing order of Nt's, or in increasing order of site numbers if there is a tie of Nt.
+
+If the result of a query is empty, simply print NA.
+
+```cpp
+
+```
