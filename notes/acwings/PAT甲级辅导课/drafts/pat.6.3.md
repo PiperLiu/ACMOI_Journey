@@ -380,8 +380,11 @@ int main()
 
     if (res == -1) puts("No Solution");
     else printf("G%d\n%.1lf %.1lf\n", res - n, (double)mind, (double)sumd / n + 1e-8);
-    // **经验：** 有时双浮点数 double 输出 3.249999999 （数学上值是 3.25）我们希望数学上表达争取则加上 `1e+8` 比如 `(double)sumd / n + 1e-8`
+    // 有时双浮点数 double 输出 3.249999999 （数学上值是 3.25）我们希望数学上表达争取则加上 `1e+8` 比如 `(double)sumd / n + 1e-8`
 
     return 0;
 }
 ```
+
+**经验：**
+- 有时双浮点数 double 输出 3.249999999 （数学上值是 3.25）我们希望数学上表达争取则加上 `1e+8` 比如 `(double)sumd / n + 1e-8`
