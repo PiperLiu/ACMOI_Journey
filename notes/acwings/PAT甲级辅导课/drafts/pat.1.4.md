@@ -214,7 +214,56 @@ Each input file contains one test case. For each case, the first line gives a po
 For each illegal input number, print in a line ERROR: X is not a legal number where X is the input. Then finally print in a line the result: The average of K numbers is Y where K is the number of legal inputs and Y is their average, accurate to 2 decimal places. In case the average cannot be calculated, output Undefined instead of Y. In case K is only 1, output The average of 1 number is Y instead.
 
 ```cpp
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    int n;
+
+    cin >> n;
+
+    int cnt = 0;
+    double sum = 0;
+
+    while (n -- )
+    {
+        string num;
+        cin >> num;
+        double x;
+
+        bool success = true;
+        try  // 好家伙 头一次用 try
+        {
+            size_t idx;
+            x = stof(num, &idx);  // stof 报错，则是字符串
+
+            if (idx < num.size()) success = false;
+        }
+        catch(...)  // 好家伙还可用 `catch ...` 捕获异常
+        {
+            success = false;
+        }
+
+        if (x < -1000 || x > 1000) success = false;
+        int k = num.find('.');
+        if (k != -1 && num.size() - k > 3) success = false;  // 小数位大于等于 3
+
+        if (success) cnt ++, sum += x;
+        else printf("ERROR: %s is not a legal number\n", num.c_str());
+    }
+
+    if (cnt > 1) printf("The average of %d numbers is %.2lf\n", cnt, sum / cnt);
+    else if (cnt == 1) printf("The average of 1 number is %.2lf\n", sum);
+    else puts("The average of 0 numbers is Undefined");
+
+    return 0;
+}
 ```
+
+**经验：**
+- C++ `try{}catch(...){}` 还可用 `catch (...)` 捕获异常
 
 ### 微博转发抽奖 1124 Raffle for Weibo Followers (20 point(s))
 
@@ -290,6 +339,39 @@ Note: it is possible that someone would forward more than once, but no one can w
 For each case, print the list of winners in the same order as in the input, each nickname occupies a line. If there is no winner yet, print Keep going... instead.
 
 ```cpp
+#include <iostream>
+#include <cstring>
+#include <unordered_set>
+
+using namespace std;
+
+const int N = 1010;
+
+int m, n, s;
+string name[N];
+
+int main()
+{
+    cin >> m >> n >> s;
+    for (int i = 1; i <= m; i ++ ) cin >> name[i];  // 从 1 开始
+
+    unordered_set<string> hash;
+    int k = s;
+    while (k <= m)
+    {
+        if (hash.count(name[k])) k ++ ;
+        else
+        {
+            cout << name[k] << endl;
+            hash.insert(name[k]);
+            k += n;
+        }
+    }
+
+    if (hash.empty()) puts("Keep going...");
+
+    return 0;
+}
 ```
 
 ### PAT单位排行 1141 PAT Ranking of Institutions (25 point(s))
@@ -479,5 +561,85 @@ For each query, first print in a line Case #: input, where # is the index of the
 If the result of a query is empty, simply print NA.
 
 ```cpp
+#include <iostream>
+#include <cstring>
+#include <unordered_map>
+#include <algorithm>
+#include <vector>
 
+using namespace std;
+
+const int N = 10010;
+
+int n, m;
+struct Person
+{
+    string id;
+    int grade;
+
+    bool operator< (const Person &t) const
+    {
+        if (grade != t.grade) return grade > t.grade;
+        return id < t.id;
+    }
+}p[N];
+
+int main()
+{
+    cin >> n >> m;
+    for (int i = 0; i < n; i ++ ) cin >> p[i].id >> p[i].grade;
+
+    for (int k = 1; k <= m; k ++ )
+    {
+        string t, c;
+        cin >> t >> c;
+
+        // 记录输入，直接暴力做就行 1000log1000 * 100
+        printf("Case %d: %s %s\n", k, t.c_str(), c.c_str());
+        if (t == "1")
+        {
+            vector<Person> persons;
+            for (int i = 0; i < n; i ++ )
+                if (p[i].id[0] == c[0])
+                    persons.push_back(p[i]);
+
+            sort(persons.begin(), persons.end());
+
+            if (persons.empty()) puts("NA");
+            else
+                for (auto person : persons) printf("%s %d\n", person.id.c_str(), person.grade);
+        }
+        else if (t == "2")
+        {
+            int cnt = 0, sum = 0;
+            for (int i = 0; i < n; i ++ )
+                if (p[i].id.substr(1, 3) == c)
+                {
+                    cnt ++ ;
+                    sum += p[i].grade;
+                }
+
+            if (!cnt) puts("NA");
+            else printf("%d %d\n", cnt, sum);
+        }
+        else
+        {
+            unordered_map<string, int> hash;
+            for (int i = 0; i < n; i ++ )
+                if (p[i].id.substr(4, 6) == c)
+                    hash[p[i].id.substr(1, 3)] ++ ;
+
+            vector<pair<int, string>> rooms;
+            for (auto item : hash) rooms.push_back({-item.second, item.first});  // 根据考场人数排降序
+
+            sort(rooms.begin(), rooms.end());
+            if (rooms.empty()) puts("NA");
+            else
+                for (auto room : rooms)
+                    printf("%s %d\n", room.second.c_str(), -room.first);
+        }
+    }
+
+    return 0;
+}
 ```
