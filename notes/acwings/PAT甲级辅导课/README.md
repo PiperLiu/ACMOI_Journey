@@ -112,6 +112,7 @@
 
 - [霍格沃茨的 A + B 1058 A+B in Hogwarts (20 point(s))](./drafts/pat.2.2.md#霍格沃茨的-a-b-1058-ab-in-hogwarts-20-points)
 - [延迟的回文数 1136 A Delayed Palindrome (20 point(s))](./drafts/pat.2.2.md#延迟的回文数-1136-a-delayed-palindrome-20-points)
+
 ## 第三章 进位制
 
 ### 第三章第一讲

@@ -14,7 +14,6 @@
 
 正如海格对哈利解释的那样：“$17$ 个银镰刀（Sickle）可以换 $1$ 个帆船（Galleon），$29$ 个克努特（Knut）可以换 $1$ 个银镰刀。”
 
-
 你的工作是编写一个计算 $A+B$ 的程序，其中 $A$ 和 $B$ 以 <code>Galleon.Sickle.Knut</code> 的标准形式给出（<code>Galleon</code> 是一个范围在 $[0,10^7]$ 的整数，<code>Sickle</code> 是一个范围在 $[0,17)$ 的整数，<code>Knut</code> 是一个范围在 $[0,29)$ 的整数）。
 
 <h4>输入格式</h4>
@@ -47,6 +46,23 @@ Each input file contains one test case which occupies a line with A and B in the
 For each test case you should output the sum of A and B in one line, with the same format as the input.
 
 ```cpp
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    int a, b, c, d, e, f;
+    scanf("%d.%d.%d %d.%d.%d", &a, &b, &c, &d, &e, &f);
+    a += d, b += e, c += f;
+
+    b += c / 29, c %= 29;  // 先进低位
+    a += b / 17, b %= 17;
+
+    printf("%d.%d.%d\n", a, b, c);
+
+    return 0;
+}
 ```
 
 ### 延迟的回文数 1136 A Delayed Palindrome (20 point(s))
@@ -136,8 +152,64 @@ For each test case, print line by line the process of finding the palindromic nu
 ```
 A + B = C
 ```
-where A is the original number, B is the reversed A, and C is their sum. A starts being the input number, and this process ends until C becomes a palindromic number -- in this case we print in the last line C is a palindromic number.; or if a palindromic number cannot be found in 10 iterations, print Not found in 10 iterations. instead.
+where A is the original number, B is the reversed A, and C is their sum. A starts being the input number, and this process ends until C becomes a palindromic number -- in this case we print in the last line C is a palindromic number.; or if a palindromic number cannot be found in 10 iterations, print `Not found in 10 iterations.` instead.
 
 ```cpp
+#include <iostream>
+#include <cstring>
+#include <vector>
 
+using namespace std;
+
+bool check(vector<int> A)
+{
+    for (int i = 0, j = A.size() - 1; i < j; i ++, j -- )
+        if (A[i] != A[j])
+            return false;
+    return true;
+}
+
+void print(vector<int> A)
+{
+    for (int i = A.size() - 1; i >= 0; i -- ) cout << A[i];
+}
+
+vector<int> add(vector<int> A, vector<int> B)
+{
+    vector<int> C;
+    for (int i = 0, t = 0; i < A.size() || i < B.size() || t; i ++ )
+    {
+        if (i < A.size()) t += A[i];
+        if (i < B.size()) t += B[i];
+        C.push_back(t % 10);
+        t /= 10;
+    }
+
+    return C;
+}
+
+int main()
+{
+    string a;
+    cin >> a;
+
+    vector<int> A;
+    for (int i = 0; i < a.size(); i ++ ) A.push_back(a[a.size() - 1 - i] - '0');  // 从低位开始存
+
+    for (int i = 0; i < 10; i ++ )
+    {
+        if (check(A)) break;
+        vector<int> B(A.rbegin(), A.rend());  // 翻转 vector 可以用 `vector<int> B(A.rbegin(), A.rend());`
+
+        print(A), cout << " + ", print(B), cout << " = ";
+        A = add(A, B);
+
+        print(A), cout << endl;
+    }
+
+    if (check(A)) print(A), cout << " is a palindromic number." << endl;
+    else puts("Not found in 10 iterations.");
+
+    return 0;
+}
 ```
