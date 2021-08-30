@@ -48,6 +48,7 @@
   - [第十章第一讲](#第十章第一讲)
   - [第十章第二讲](#第十章第二讲)
 - [第十一章 模拟](#第十一章-模拟)
+  - [第十一章第一讲](#第十一章第一讲)
 - [第十二章 贪心](#第十二章-贪心)
 - [第十三章 链表](#第十三章-链表)
 - [第十四章 基础算法与数据结构](#第十四章-基础算法与数据结构)
@@ -293,6 +294,18 @@
 - [社会集群 1107 Social Clusters (30 point(s))](./drafts/pat.10.2.md#社会集群-1107-social-clusters-30-points)
 
 ## 第十一章 模拟
+
+### 第十一章第一讲
+[./drafts/pat.11.1.md](./drafts/pat.11.1.md)
+
+- [电梯 1008 Elevator (20 point(s))](./drafts/pat.11.1.md#电梯-1008-elevator-20-points)
+- [世界杯投注 1011 World Cup Betting (20 point(s))](./drafts/pat.11.1.md#世界杯投注-1011-world-cup-betting-20-points)
+- [排队等候 1014 Waiting in Line (30 point(s))](./drafts/pat.11.1.md#排队等候-1014-waiting-in-line-30-points)
+- [U 形 Hello World 1031 Hello World for U (20 point(s))](./drafts/pat.11.1.md#u-形-hello-world-1031-hello-world-for-u-20-points)
+- [独一无二 1041 Be Unique (20 point(s))](./drafts/pat.11.1.md#独一无二-1041-be-unique-20-points)
+- [洗牌机 1042 Shuffling Machine (20 point(s))](./drafts/pat.11.1.md#洗牌机-1042-shuffling-machine-20-points)
+- [课程学生列表 1047 Student List for Course (25 point(s))](./drafts/pat.11.1.md#课程学生列表-1047-student-list-for-course-25-points)
+- [主导颜色 1054 The Dominant Color (20 point(s))](./drafts/pat.11.1.md#主导颜色-1054-the-dominant-color-20-points)
 
 ## 第十二章 贪心
 
