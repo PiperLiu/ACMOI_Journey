@@ -329,6 +329,8 @@ For each test case, print in a line the first K-digit prime in consecutive digit
 
 
 ```cpp
+// 筛法判断质数的方法没法接受（时间限制）
+// 因此我们先求 sqrt(N) 个质数，然后用试除法
 #include <iostream>
 #include <cstring>
 
@@ -351,6 +353,7 @@ void init()
         }
 }
 
+// 试除法判断是不是质数
 bool check(int x)
 {
     for (int i = 0; primes[i] <= x / primes[i]; i ++ )
