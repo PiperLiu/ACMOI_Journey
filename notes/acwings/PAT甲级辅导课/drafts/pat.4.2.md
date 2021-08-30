@@ -85,5 +85,74 @@ Each input file contains one test case. For each case, the first line gives a po
 For each test case, print in the first line either "Insertion Sort" or "Merge Sort" to indicate the method used to obtain the partial result. Then run this method for one more iteration and output in the second line the resuling sequence. It is guaranteed that the answer is unique for each test case. All the numbers in a line must be separated by a space, and there must be no extra space at the end of the line.
 
 ```cpp
+// 先判断是否为插排
 
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+const int N = 110;
+
+int n;
+int a[N], b[N];
+
+bool check()
+{
+    for (int i = 0; i < n; i ++ )
+        if (a[i] != b[i])
+            return false;
+    return true;
+}
+
+int main()
+{
+    cin >> n;
+    for (int i = 0; i < n; i ++ ) cin >> a[i];
+    for (int i = 0; i < n; i ++ ) cin >> b[i];
+
+    int k = 0;
+    while (b[k + 1] >= b[k]) k ++ ;
+
+    bool match = true;
+    for (int i = k + 1; i < n; i ++ )
+        if (a[i] != b[i])
+        {
+            match = false;
+            break;
+        }
+
+    if (match)  // 是插排
+    {
+        puts("Insertion Sort");
+        sort(b, b + k + 2);  // 我们要排 0~k+1 但是sort(arg1, arg2) arg2 要求最后的位置的下一个位置
+        cout << b[0];
+        for (int i = 1; i < n; i ++ ) cout << ' ' << b[i];
+        cout << endl;
+    }
+    else
+    {
+        puts("Merge Sort");
+
+        int k = 1;
+        while (true)
+        {
+            bool match = check();
+
+            int len = 1 << k;  // 2 的 k 次方
+            for (int i = 0; i < n; i += len)
+                sort(a + i, a + min(n, i + len));
+
+            if (match) break;  // 上次排序有效，说明迭代了
+            k ++ ;
+        }
+
+        cout << a[0];
+        for (int i = 1; i < n; i ++ ) cout << ' '<< a[i];
+        cout << endl;
+    }
+
+    return 0;
+}
 ```

@@ -1407,7 +1407,7 @@ For each test case, print in the first line either "Insertion Sort" or "Heap Sor
 ![](./images/2021081601.png)
 
 - 前半部分有序，后半部分保持原序，一定是插排；否则是堆排序
-- 堆排序后半部分是最大的k个，且已经拍好
+- 堆排序后半部分是最大的k个，且已经排好
 
 ```cpp
 #include <iostream>
@@ -1451,7 +1451,7 @@ int main()
     {
         puts("Heap Sort");
         p = n;
-        // 最大堆，，堆顶是最大值
+        // 最大堆，堆顶是最大值
         while (b[1] <= b[p]) p -- ;
         // 把最后一个元素和堆顶交换
         swap(b[1], b[p]);
