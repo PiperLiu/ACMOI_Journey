@@ -49,6 +49,7 @@
   - [第十章第二讲](#第十章第二讲)
 - [第十一章 模拟](#第十一章-模拟)
   - [第十一章第一讲](#第十一章第一讲)
+  - [第十一章第二讲](#第十一章第二讲)
 - [第十二章 贪心](#第十二章-贪心)
 - [第十三章 链表](#第十三章-链表)
 - [第十四章 基础算法与数据结构](#第十四章-基础算法与数据结构)
@@ -306,6 +307,19 @@
 - [洗牌机 1042 Shuffling Machine (20 point(s))](./drafts/pat.11.1.md#洗牌机-1042-shuffling-machine-20-points)
 - [课程学生列表 1047 Student List for Course (25 point(s))](./drafts/pat.11.1.md#课程学生列表-1047-student-list-for-course-25-points)
 - [主导颜色 1054 The Dominant Color (20 point(s))](./drafts/pat.11.1.md#主导颜色-1054-the-dominant-color-20-points)
+
+### 第十一章第二讲
+[./drafts/pat.11.2.md](./drafts/pat.11.2.md)
+
+- [老鼠和大米 1056 Mice and Rice (25 point(s))](./drafts/pat.11.2.md#老鼠和大米-1056-mice-and-rice-25-points)
+- [才华与德行 1062 Talent and Virtue (25 point(s))](./drafts/pat.11.2.md#才华与德行-1062-talent-and-virtue-25-points)
+- [A + B 和 C 1065 A+B and C (64bit) (20 point(s))](./drafts/pat.11.2.md#a-b-和-c-1065-ab-and-c-64bit-20-points)
+- [数字黑洞 1069 The Black Hole of Numbers (20 point(s))](./drafts/pat.11.2.md#数字黑洞-1069-the-black-hole-of-numbers-20-points)
+- [研究生入学 1080 Graduate Admission (30 point(s))](./drafts/pat.11.2.md#研究生入学-1080-graduate-admission-30-points)
+- [成绩单 1083 List Grades (25 point(s))](./drafts/pat.11.2.md#成绩单-1083-list-grades-25-points)
+- [买还是不买 1092 To Buy or Not to Buy (20 point(s))](./drafts/pat.11.2.md#买还是不买-1092-to-buy-or-not-to-buy-20-points)
+- [校园内的汽车 1095 Cars on Campus (30 point(s))](./drafts/pat.11.2.md#校园内的汽车-1095-cars-on-campus-30-points)
+- [螺旋矩阵 1105 Spiral Matrix (25 point(s))](./drafts/pat.11.2.md#螺旋矩阵-1105-spiral-matrix-25-points)
 
 ## 第十二章 贪心
 
