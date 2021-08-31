@@ -38,7 +38,7 @@ $K_i$ 表示爱好数量，$h_i[j]$ 表示第 $j$ 个爱好的编号。
 <h4>数据范围</h4>
 
 - $1 \le N \le 1000$,
-- $K_i &gt; 0$,
+- $K_i > 0$,
 - 爱好种类最多 $1000$ 种，编号范围 $[1,1000]$。
 
 <h4>输入样例：</h4>
@@ -83,5 +83,62 @@ where $K_i (>0)$ is the number of hobbies, and $h_i$ [j] is the index of the j-t
 For each case, print in one line the total number of clusters in the network. Then in the second line, print the numbers of people in the clusters in non-increasing order. The numbers must be separated by exactly one space, and there must be no extra space at the end of the line.
 
 ```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+#include <vector>
 
+using namespace std;
+
+const int N = 1010;
+
+int n;
+vector<int> hobby[N];  // hobby[i] i 爱好的人列表
+int p[N];
+int cnt[N];
+
+int find(int x)
+{
+    if (p[x] != x) p[x] = find(p[x]);
+    return p[x];
+}
+
+int main()
+{
+    cin >> n;
+    for (int i = 0; i < n; i ++ )
+    {
+        int cnt;
+        scanf("%d:", &cnt);
+        while (cnt -- )
+        {
+            int h;
+            cin >> h;
+            hobby[h].push_back(i);
+        }
+    }
+
+    for (int i = 0; i < n; i ++ ) p[i] = i;  // 人的并查集
+
+    for (int i = 1; i <= 1000; i ++ )  // 遍历所有爱好
+        for (int j = 1; j < hobby[i].size(); j ++ )
+        {
+            int a = hobby[i][0], b = hobby[i][j];  // 把所有相同爱好的人合并
+            p[find(a)] = find(b);  // 把先枚举到的人作为根节点
+        }
+
+    for (int i = 0; i < n; i ++ ) cnt[find(i)] ++ ;  // 不同的集群对应人数
+
+    sort(cnt, cnt + n, greater<int>());  // 从大到小排序
+
+    int k = 0;
+    while (cnt[k]) k ++ ;  // 有多少个集群
+
+    cout << k << endl;  // 有多少个集群
+    cout << cnt[0];
+    for (int i = 1; i < k; i ++ ) cout << ' ' << cnt[i];
+    cout << endl;
+
+    return 0;
+}
 ```
