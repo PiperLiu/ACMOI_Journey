@@ -81,6 +81,57 @@ Each input file contains one test case. For each case, the first line contains 2
 For each test case, print the final ranks in a line. The i-th number is the rank of the i-th programmer, and all the numbers must be separated by a space, with no extra space at the end of the line.
 
 ```cpp
+#include <iostream>
+#include <cstring>
+#include <vector>
+
+using namespace std;
+
+const int N = 1010;
+
+int n, m;
+int w[N], ans[N];
+
+int main()
+{
+    cin >> n >> m;
+    for (int i = 0; i < n; i ++ ) cin >> w[i];  // 读入老鼠能力
+    vector<int> cur(n);
+
+    for (int i = 0; i < n; i ++ ) cin >> cur[i];  // 初始比赛顺序
+
+    while (cur.size() > 1)
+    {
+        vector<int> next;
+        int remain = (cur.size() + m - 1) / m;  // 本轮分成 remain 组（也是本轮比赛后剩余老鼠的数量）
+
+        for (int i = 0; i < cur.size();)
+        {
+            int j = min((int)cur.size(), i + m);  // 本组玩家 [ cur(i) ~ cur(j) )
+
+            int t = i;
+            for (int k = i; k < j; k ++ )
+                if (w[cur[k]] > w[cur[t]])
+                     t = k;  // 找老鼠能力最强的
+            next.push_back(cur[t]);  // 最强的晋级
+            for (int k = i; k < j; k ++ )
+                if (k != t)
+                    ans[cur[k]] = remain + 1;  // 本组败者的名次是剩余老鼠数量+1
+
+            i = j;
+        }
+
+        cur = next;
+    }
+
+    ans[cur[0]] = 1;  // 最后剩的是 1 名次
+
+    cout << ans[0];
+    for (int i = 1; i < n; i ++ ) cout << ' ' << ans[i];
+    cout << endl;
+
+    return 0;
+}
 ```
 
 ### 才华与德行 1062 Talent and Virtue (25 point(s))
@@ -183,7 +234,61 @@ where ID_Number is an 8-digit number, and both grades are integers in [0, 100]. 
 The first line of output must give M (≤N), the total number of people that are actually ranked. Then M lines follow, each gives the information of a person in the same format as the input, according to the ranking rules. If there is a tie of the total grade, they must be ranked with respect to their virtue grades in non-increasing order. If there is still a tie, then output in increasing order of their ID's.
 
 ```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
 
+using namespace std;
+
+const int N = 100010;
+
+int n, L, H;
+struct Person
+{
+    int id, moral, talent;
+    int level;
+
+    int total() const
+    {
+        return moral + talent;
+    }
+
+    bool operator< (const Person &t) const
+    {
+        if (level != t.level) return level < t.level;  // 从小到大
+        if (total() != t.total()) return total() > t.total();  // 从大到小
+        if (moral != t.moral) return moral > t.moral;  // 总分同，看德行
+        return id < t.id;  // id 升序排名
+    }
+}p[N];
+
+int main()
+{
+    scanf("%d%d%d", &n, &L, &H);
+
+    int m = 0;
+    for (int i = 0; i < n; i ++ )
+    {
+        int id, moral, talent;
+        scanf("%d%d%d", &id, &moral, &talent);
+        if (moral < L || talent < L) continue;
+        int level;
+        if (moral >= H && talent >= H) level = 1;
+        else if (moral >= H && talent < H) level = 2;
+        else if (moral < H && talent < H && moral >= talent) level = 3;
+        else level = 4;
+
+        p[m ++ ] = {id, moral, talent, level};
+    }
+
+    sort(p, p + m);
+
+    printf("%d\n", m);
+    for (int i = 0; i < m; i ++ )
+        printf("%08d %d %d\n", p[i].id, p[i].moral, p[i].talent);
+
+    return 0;
+}
 ```
 
 ### A + B 和 C 1065 A+B and C (64bit) (20 point(s))
@@ -231,7 +336,38 @@ The first line of the input gives the positive number of test cases, T (≤10). 
 For each test case, output in one line `Case #X: true` if A+B>C, or `Case #X: false` otherwise, where X is the case number (starting from 1).
 
 ```cpp
+// C++ 里有 __int128_t ，本题可以取巧，即便两个 LL 加都不会溢出
 
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+typedef long long LL;
+
+bool check(LL a, LL b, LL c)
+{
+    LL d = a + b;  // d 可能溢出
+    if (a >= 0 && b >= 0 && d < 0) return true;  // 正数相加，溢出
+    if (a < 0 && b < 0 && d >= 0) return false;  // 负数相加，溢出
+    return a + b > c;
+}
+
+int main()
+{
+    int n;
+    cin >> n;
+
+    for (int i = 1; i <= n; i ++ )
+    {
+        LL a, b, c;
+        scanf("%lld%lld%lld", &a, &b, &c);
+        if (check(a, b, c)) printf("Case #%d: true\n", i);
+        else printf("Case #%d: false\n", i);
+    }
+
+    return 0;
+}
 ```
 
 ### 数字黑洞 1069 The Black Hole of Numbers (20 point(s))
@@ -319,7 +455,49 @@ Each input file contains one test case which gives a positive integer N in the r
 If all the 4 digits of N are the same, print in one line the equation N - N = 0000. Else print each step of calculation in a line until 6174 comes out as the difference. All the numbers must be printed as 4-digit numbers.
 
 ```cpp
+#include <iostream>
+#include <cstring>
+#include <vector>
+#include <algorithm>
 
+using namespace std;
+
+// 思路是用 vector 存数字
+vector<int> get(int n)
+{
+    int nums[4];
+    for (int i = 0; i < 4; i ++ )
+    {
+        nums[i] = n % 10;
+        n /= 10;
+    }
+
+    sort(nums, nums + 4);
+    int a = 0;
+    for (int i = 0; i < 4; i ++ ) a = a * 10 + nums[i];
+
+    reverse(nums, nums + 4);
+    int b = 0;
+    for (int i = 0; i < 4; i ++ ) b = b * 10 + nums[i];
+
+    return {b, a};  // vector<int> 可以返回 return {  } 形式
+}
+
+int main()
+{
+    int n;
+    cin >> n;
+
+    do
+    {
+        auto t = get(n);
+        printf("%04d - %04d = %04d\n", t[0], t[1], t[0] - t[1]);
+
+        n = t[0] - t[1];
+    } while (n && n != 6174);
+
+    return 0;
+}
 ```
 
 ### 研究生入学 1080 Graduate Admission (30 point(s))
@@ -336,7 +514,6 @@ If all the 4 digits of N are the same, print in one line the equation N - N = 00
 - 如果申请者的最终成绩并列，则按照 $G_E$ 成绩由高到低进行排名，如果成绩仍然并列，则并列者的排名必须相同。
 - 每个申请人可以填报 $K$ 个志愿，并且将根据他/她的志愿进行录取：如果按照排名列表，轮到某位学生被录取了，并且其第一志愿学校还未招满人，则他成功被该学校录取。如果名额已满，则按顺序考虑其他志愿，直至成功被录取为止。如果所有报名学校都无法录取该名学生，则该名学生录取失败。
 - 如果出现并列排名，并且并列申请人正在申请同一所学校，那么该学校<strong>不得</strong>只录取其中一部分申请人，即使超过招生限额，也必须全部录取。
-
 
 <h4>输入格式</h4>
 
@@ -418,7 +595,97 @@ Then N lines follow, each contains 2+K integers separated by a space. The first 
 For each test case you should output the admission results for all the graduate schools. The results of each school must occupy a line, which contains the applicants' numbers that school admits. The numbers must be in increasing order and be separated by a space. There must be no extra space at the end of each line. If no applicant is admitted by a school, you must output an empty line correspondingly.
 
 ```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+#include <vector>
 
+using namespace std;
+
+const int N = 40010, M = 110, K = 5;
+
+int n, m, k;
+int cnt[N];
+int wish[N];
+vector<int> uty[M];
+
+struct Person
+{
+    int id, ge, gi;
+    int wish[K];  // 志愿
+
+    int total() const
+    {
+        return ge + gi;
+    }
+
+    bool operator< (const Person &t) const  // 按总成绩升序，否则 ge 升序
+    {
+        if (total() != t.total()) return total() > t.total();
+        return ge > t.ge;
+    }
+
+    bool operator== (const Person &t) const
+    {
+        return ge == t.ge && gi == t.gi;  // 是否排名相等
+    }
+}p[N];
+
+int main()
+{
+    scanf("%d%d%d", &n, &m, &k);
+    for (int i = 0; i < m; i ++ ) scanf("%d", &cnt[i]);  // 每个学校招生人数
+    for (int i = 0; i < n; i ++ )
+    {
+        p[i].id = i;
+        scanf("%d%d", &p[i].ge, &p[i].gi);
+
+        for (int j = 0; j < k; j ++ )
+            scanf("%d", &p[i].wish[j]);
+    }
+
+    sort(p, p + n);
+
+    memset(wish, -1, sizeof wish);  // 初始化，-1 表示同学们没有志愿可去
+    for (int i = 0; i < n;)  // 按照排名选志愿
+    {
+        int j = i + 1;  // 找到排名相同的人
+        while (j < n && p[i] == p[j]) j ++ ;
+
+        // 对于排名相同的人，我们先看各个同学能选哪个学习
+        // 因为排名相同，就算超了限额，也会同时录取
+        for (int t = i; t < j; t ++ )
+            for (int u = 0; u < k; u ++ )  // 从第一志愿开始看
+            {
+                int w = p[t].wish[u];
+                if (cnt[w] > uty[w].size())  // 可以进这个志愿
+                {
+                    wish[t] = w;
+                    break;
+                }
+            }
+
+        for (int t = i; t < j; t ++ )
+            if (wish[t] != -1)
+                uty[wish[t]].push_back(p[t].id);  // 学校录取了哪些人
+
+        i = j;
+    }
+
+    for (int i = 0; i < m; i ++ )
+    {
+        if (uty[i].size())
+        {
+            sort(uty[i].begin(), uty[i].end());
+            printf("%d", uty[i][0]);
+            for (int j = 1; j < uty[i].size(); j ++ )
+                printf(" %d", uty[i][j]);
+        }
+        puts("");
+    }
+
+    return 0;
+}
 ```
 
 ### 成绩单 1083 List Grades (25 point(s))
@@ -510,6 +777,52 @@ where name[i] and ID[i] are strings of no more than 10 characters with no space,
 #### Output Specification:
 For each test case you should output the student records of which the grades are in the given interval [grade1, grade2] and are in non-increasing order. Each student record occupies a line with the student's name and ID, separated by one space. If there is no student's grade in that interval, output NONE instead.
 
+```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+const int N = 110;
+
+int n;
+struct Person
+{
+    string name, id;
+    int grade;
+
+    bool operator< (const Person &t) const
+    {
+        return grade > t.grade;
+    }
+}p[N];
+
+int main()
+{
+    cin >> n;
+    for (int i = 0; i < n; i ++ ) cin >> p[i].name >> p[i].id >> p[i].grade;
+
+    int g1, g2;
+    cin >> g1 >> g2;
+
+    int m = 0;
+    for (int i = 0; i < n; i ++ )
+        if (p[i].grade >= g1 && p[i].grade <= g2)
+            p[m ++ ] = p[i];  // 直接覆盖
+
+    if (!m) puts("NONE");
+    else
+    {
+        sort(p, p + m);
+        for (int i = 0; i < m; i ++ )
+            cout << p[i].name << ' ' << p[i].id << endl;
+    }
+
+    return 0;
+}
+```
+
 ### 买还是不买 1092 To Buy or Not to Buy (20 point(s))
 
 <p>伊娃需要若干颜色的若干珠子来制作一条她喜欢的手链。</p>
@@ -596,6 +909,31 @@ Each input file contains one test case. Each case gives in two lines the strings
 For each test case, print your answer in one line. If the answer is Yes, then also output the number of extra beads Eva has to buy; or if the answer is No, then also output the number of beads missing from the string. There must be exactly 1 space between the answer and the number.
 
 ```cpp
+#include <iostream>
+#include <cstring>
+#include <unordered_map>
+
+using namespace std;
+
+int main()
+{
+    string a, b;
+    cin >> a >> b;
+
+    unordered_map<char, int> S;
+    for (auto c : a) S[c] ++ ;  // S 正数代表商店盈余
+    for (auto c : b) S[c] -- ;  // S 负数代表商店缺少
+
+    int sp = 0, sn = 0;
+    for (auto item : S)
+        if (item.second > 0) sp += item.second;  // 正数，则计入伊娃多买的总和
+        else sn -= item.second;  // 负数，则计入伊娃少的总和
+
+    if (sn) printf("No %d\n", sn);  // 有负数？伊娃的要求没有全被满足
+    else printf("Yes %d\n", sp);
+
+    return 0;
+}
 ```
 
 ### 校园内的汽车 1095 Cars on Campus (30 point(s))
@@ -710,7 +1048,108 @@ Then K lines of queries follow, each gives a time point in the format hh:mm:ss. 
 For each query, output in a line the total number of cars parking on campus. The last line of output is supposed to give the plate number of the car that has parked for the longest time period, and the corresponding time length. If such a car is not unique, then output all of their plate numbers in a line in alphabetical order, separated by a space.
 
 ```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+#include <unordered_map>
+#include <vector>
 
+using namespace std;
+
+struct Event
+{
+    int tm, status;
+
+    bool operator< (const Event &t) const  // 时间是根据时间先后排序的
+    {
+        return tm < t.tm;
+    }
+};
+
+int get(vector<Event>& ets)  // 由事件列表，计算该车总停留时间
+{
+    int res = 0;
+    for (int i = 0; i < ets.size(); i += 2)
+        res += ets[i + 1].tm - ets[i].tm;
+
+    return res;
+}
+
+int main()
+{
+    int n, m;
+    scanf("%d%d", &n, &m);
+
+    unordered_map<string, vector<Event>> cars;  // 车：事件向量
+
+    char id[10], status[10];
+    for (int i = 0; i < n; i ++ )
+    {
+        int hh, mm, ss;
+        scanf("%s %d:%d:%d %s", id, &hh, &mm, &ss, status);
+        int t = hh * 3600 + mm * 60 + ss;
+        int s = 0;
+        if (status[0] == 'o') s = 1;
+        cars[id].push_back({t, s});  // 先把各个车的事件都存储起来
+    }
+
+    vector<Event> events;
+    for (auto& item : cars)  // 对于每辆车
+    {
+        auto& ets = item.second;
+        sort(ets.begin(), ets.end());
+        int k = 0;
+
+        for (int i = 0; i < ets.size(); i ++ )
+            if (ets[i].status == 0)  // 当事件是 in 时
+            {
+                if (i + 1 < ets.size() && ets[i + 1].status == 1)  // 下一个事件必须是 out ，才纳入记录
+                {
+                    ets[k ++ ] = ets[i];
+                    ets[k ++ ] = ets[i + 1];
+                    i ++ ;
+                }
+            }
+
+        ets.erase(ets.begin() + k, ets.end());  // 只保留前 k 个事件（有效的）
+        for (int i = 0; i < k; i ++ ) events.push_back(ets[i]);
+    }
+
+    sort(events.begin(), events.end());  // 总事件
+
+    int k = 0, sum = 0;
+    while (m -- )  // m 个查询
+    {
+        int hh, mm, ss;
+        scanf("%d:%d:%d", &hh, &mm, &ss);
+        int t = hh * 3600 + mm * 60 + ss;
+
+        while (k < events.size() && events[k].tm <= t)
+        {
+            if (events[k].status == 0) sum ++ ;  // 有 in 则 sum ++
+            else sum -- ;
+            k ++ ;
+        }
+
+        printf("%d\n", sum);
+    }
+
+    int maxt = 0;
+    for (auto& item : cars) maxt = max(maxt, get(item.second));
+
+    vector<string> res;
+    for (auto& item : cars)
+        if (get(item.second) == maxt)
+            res.push_back(item.first);
+
+    sort(res.begin(), res.end());  // 最长停留的车未必唯一
+
+    for (int i = 0; i < res.size(); i ++ ) printf("%s ", res[i].c_str());
+
+    printf("%02d:%02d:%02d\n", maxt / 3600, maxt % 3600 / 60, maxt % 60);
+
+    return 0;
+}
 ```
 
 ### 螺旋矩阵 1105 Spiral Matrix (25 point(s))
@@ -767,5 +1206,57 @@ Each input file contains one test case. For each case, the first line gives a po
 For each test case, output the resulting matrix in m lines, each contains n numbers. There must be exactly 1 space between two adjacent numbers, and no extra space at the end of each line.
 
 ```cpp
+// 经典蛇形矩阵问题
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+#include <vector>
 
+using namespace std;
+
+const int N = 10010;
+
+int n;
+int w[N];
+
+int main()
+{
+    cin >> n;
+    for (int i = 0; i < n; i ++ ) cin >> w[i];
+
+    sort(w, w + n, greater<int>());  // 非降排序
+
+    int r, c;
+    for (int i = 1; i <= n / i; i ++ )
+        if (n % i == 0)
+        {
+            r = n / i;  // 行数 这样保证行尽可能大
+            c = i;      // 列数
+        }
+
+    vector<vector<int>> res(r, vector<int>(c));  // 空矩阵
+
+    int dx[] = {-1, 0, 1, 0}, dy[4] = {0, 1, 0, -1};
+    for (int i = 0, x = 0, y = 0, d = 1; i < n; i ++ )
+    {
+        res[x][y] = w[i];
+        int a = x + dx[d], b = y + dy[d];
+        if (a < 0 || a >= r || b < 0 || b >= c || res[a][b])
+        {
+            d = (d + 1) % 4;  // 如果撞墙，就转向
+            a = x + dx[d], b = y + dy[d];
+        }
+        x = a, y = b;
+    }
+
+    for (int i = 0; i < r; i ++ )
+    {
+        cout << res[i][0];
+        for (int j = 1; j < c; j ++ )
+            cout << ' ' << res[i][j];
+        cout << endl;
+    }
+
+    return 0;
+}
 ```
