@@ -77,6 +77,38 @@ Each input file contains one test case. For each case, the first line contains t
 For each test case, simply print in a line the maximum amount of money you can get back.
 
 ```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+const int N = 100010;
+
+int n, m;
+int a[N], b[N];
+
+int main()
+{
+    scanf("%d", &n);
+    for (int i = 0; i < n; i ++ ) scanf("%d", &a[i]);
+    scanf("%d", &m);
+    for (int i = 0; i < n; i ++ ) scanf("%d", &b[i]);
+
+    sort(a, a + n);  // 贪心问题，排序
+    sort(b, b + m);
+
+    int res = 0;
+    for (int i = 0, j = 0; i < n && j < m && a[i] < 0 && b[j] < 0; i ++, j ++ )
+        res += a[i] * b[j];  // 负数相乘
+
+    for (int i = n - 1, j = m - 1; i >= 0 && j >= 0 && a[i] > 0 && b[j] > 0; i --, j -- )
+        res += a[i] * b[j];  // 正数相乘
+
+    printf("%d\n", res);
+
+    return 0;
+}
 ```
 
 ### 排成最小的数字 1038 Recover the Smallest Number (30 point(s))
@@ -121,6 +153,41 @@ Each input file contains one test case. Each case gives a positive integer $N (�
 
 #### Output Specification:
 For each test case, print the smallest number in one line. Notice that the first digit must not be zero.
+
+```cpp
+// 定义了 a + b < b + a 比较字典序这种比较方法
+// 对于字符串数字 a[i] > a[i+1] 充分必要条件为 a[i]a[i+1] > a[i+1]a[i]
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+const int N = 10010;
+
+int n;
+string str[N];
+
+int main()
+{
+    cin >> n;
+    for (int i = 0; i < n; i ++ ) cin >> str[i];
+
+    sort(str, str + n, [](string a, string b) {
+        return a + b < b + a;  // b 比 a 大
+    });
+
+    string res;
+    for (int i = 0; i < n; i ++ ) res += str[i];
+
+    int k = 0;
+    while (k + 1 < res.size() && res[k] == '0') k ++ ;  // 删掉前导零，此外，k+1为了保存0
+
+    cout << res.substr(k) << endl;
+
+    return 0;
+}
+```
 
 ### 用 Swap(0, i) 操作进行排序 1067 Sort with Swap(0, i) (25 point(s))
 
@@ -180,5 +247,52 @@ Each input file contains one test case, which gives a positive $N (≤10^5)$ fol
 #### Output Specification:
 For each case, simply print in a line the minimum number of swaps need to sort the given permutation.
 
+![](./images/2021090103.png)
+
+如上，本题可以构建图。该图出度入度都一定为 1 。
+
+![](./images/2021090104.png)
+
+如上，性质为：
+- 0 和 环内点交换，分为 2 个环
+- 0 和 环外点交换，合并为 1 个环
+
+则：
+- 把 0 与其下一节点交换，由此全都把环变为自环 （`i=p[i]` ，数字 `i` 处于 `p[i]`）
+- 然后 0 再去找其他不是自环的环，再把其点都变为自环
+
 ```cpp
+// 转换为图论问题，如图， i 在 p[i] 位置上，则 i 指向 p[i]
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+const int N = 100010;
+
+int n;
+int p[N];
+
+int main()
+{
+    scanf("%d", &n);
+    for (int i = 0; i < n; i ++ )
+    {
+        int id;
+        scanf("%d", &id);
+        p[id] = i;
+    }
+
+    int res = 0;
+    for (int i = 1; i < n;)
+    {
+        while (p[0]) swap(p[0], p[p[0]]), res ++ ;  // p[0] 不指向 0 ，把环上点变为自环
+        while (i < n && p[i] == i) i ++ ;  // 找下一个不是自环的环
+        if (i < n) swap(p[0], p[i]), res ++ ;  // 让 0 进入该环
+    }
+
+    printf("%d\n", res);
+
+    return 0;
+}
 ```
