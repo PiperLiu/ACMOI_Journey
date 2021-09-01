@@ -50,7 +50,9 @@
 - [第十一章 模拟](#第十一章-模拟)
   - [第十一章第一讲](#第十一章第一讲)
   - [第十一章第二讲](#第十一章第二讲)
+  - [第十一章第三讲](#第十一章第三讲)
 - [第十二章 贪心](#第十二章-贪心)
+  - [第十二章第一讲](#第十二章第一讲)
 - [第十三章 链表](#第十三章-链表)
 - [第十四章 基础算法与数据结构](#第十四章-基础算法与数据结构)
 
@@ -321,7 +323,25 @@
 - [校园内的汽车 1095 Cars on Campus (30 point(s))](./drafts/pat.11.2.md#校园内的汽车-1095-cars-on-campus-30-points)
 - [螺旋矩阵 1105 Spiral Matrix (25 point(s))](./drafts/pat.11.2.md#螺旋矩阵-1105-spiral-matrix-25-points)
 
+### 第十一章第三讲
+[./drafts/pat.11.3.md](./drafts/pat.11.3.md)
+
+- [合影 1109 Group Photo (25 point(s))](./drafts/pat.11.3.md#合影-1109-group-photo-25-points)
+- [单身狗 1121 Damn Single (25 point(s))](./drafts/pat.11.3.md#单身狗-1121-damn-single-25-points)
+- [N 皇后问题 1128 N Queens Puzzle (20 point(s))](./drafts/pat.11.3.md#n-皇后问题-1128-n-queens-puzzle-20-points)
+- [推荐系统 1129 Recommendation System (25 point(s))](./drafts/pat.11.3.md#推荐系统-1129-recommendation-system-25-points)
+- [切整数 1132 Cut Integer (20 point(s))](./drafts/pat.11.3.md#切整数-1132-cut-integer-20-points)
+- [外观数列 1140 Look-and-say Sequence (20 point(s))](./drafts/pat.11.3.md#外观数列-1140-look-and-say-sequence-20-points)
+- [堆 1147 Heaps (30 point(s))](./drafts/pat.11.3.md#堆-1147-heaps-30-points)
+
 ## 第十二章 贪心
+
+### 第十二章第一讲
+[./drafts/pat.12.1.md](./drafts/pat.12.1.md)
+
+- [魔术卷 1037 Magic Coupon (25 point(s))](./drafts/pat.12.1.md#魔术卷-1037-magic-coupon-25-points)
+- [排成最小的数字 1038 Recover the Smallest Number (30 point(s))](./drafts/pat.12.1.md#排成最小的数字-1038-recover-the-smallest-number-30-points)
+- [用 Swap(0, i) 操作进行排序 1067 Sort with Swap(0, i) (25 point(s))](./drafts/pat.12.1.md#用-swap0-i-操作进行排序-1067-sort-with-swap0-i-25-points)
 
 ## 第十三章 链表
 
