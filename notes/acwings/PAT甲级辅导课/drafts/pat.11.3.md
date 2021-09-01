@@ -92,7 +92,51 @@ Each input file contains one test case. For each test case, the first line conta
 For each case, print the formation -- that is, print the names of people in K lines. The names must be separated by exactly one space, but there must be no extra space at the end of each line. Note: since you are facing the group, people in the rear rows must be printed above the people in the front rows.
 
 ```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
 
+using namespace std;
+
+const int N = 10010;
+
+int n, m;
+struct Person
+{
+    string name;
+    int h;
+    bool operator< (const Person &t) const
+    {   // 高的在前
+        if (h != t.h) return h > t.h;
+        return name < t.name;
+    }
+}p[N];
+string line[N];
+
+int main()
+{
+    cin >> n >> m;
+
+    for (int i = 0; i < n; i ++ ) cin >> p[i].name >> p[i].h;
+    sort(p, p + n);
+
+    for (int i = 0, j = 0; i < m; i ++ )
+    {
+        int len = n / m;
+        if (!i) len += n % m;  // 特判最后一排
+        for (int r = len / 2 + 1, l = r - 1; l > 0 || r <= len; l --, r ++ )
+        {  // 左边填一个，右边填一个
+            if (r <= len) line[r] = p[j ++ ].name;
+            if (l > 0) line[l] = p[j ++ ].name;
+        }
+
+        cout << line[1];
+        for (int k = 2; k <= len; k ++ ) cout << ' ' << line[k];
+        cout << endl;
+    }
+
+    return 0;
+}
 ```
 
 ### 单身狗 1121 Damn Single (25 point(s))
@@ -154,6 +198,61 @@ Each input file contains one test case. For each case, the first line gives a po
 First print in a line the total number of lonely guests. Then in the next line, print their ID's in increasing order. The numbers must be separated by exactly 1 space, and there must be no extra space at the end of the line.
 
 ```cpp
+// 有伴侣，但是伴侣没来也要找出来
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+#include <unordered_set>
+
+using namespace std;
+
+const int N = 50010, M = 10010;
+
+struct Couple
+{
+    int a, b;
+}c[N];
+int ans[M];
+
+int main()
+{
+    int n, m;
+    scanf("%d", &n);
+    for (int i = 0; i < n; i ++ ) scanf("%d%d", &c[i].a, &c[i].b);
+
+    scanf("%d", &m);
+    unordered_set<int> S;
+    for (int i = 0; i < m; i ++ )  // 把所有参加派对的人存下来
+    {
+        int id;
+        scanf("%d", &id);
+        S.insert(id);
+    }
+
+    for (int i = 0; i < n; i ++ )
+    {   // 遍历伴侣，如果二人都来了，就不算
+        int a = c[i].a, b = c[i].b;
+        if (S.count(a) && S.count(b))
+        {
+            S.erase(a);
+            S.erase(b);
+        }
+    }
+
+    int k = 0;  // 把哈希表里人取出来
+    for (auto id : S) ans[k ++ ] = id;
+    sort(ans, ans + k);
+
+    printf("%d\n", k);
+
+    if (k)
+    {
+        printf("%05d", ans[0]);
+        for (int i = 1; i < k; i ++ ) printf(" %05d", ans[i]);
+    }
+
+    return 0;
+}
 ```
 
 ### N 皇后问题 1128 N Queens Puzzle (20 point(s))
@@ -225,6 +324,43 @@ Each input file contains several test cases. The first line gives an integer K (
 For each configuration, if it is a solution to the N queens problem, print YES in a line; or NO if not.
 
 ```cpp
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+const int N = 1010;
+
+int n;
+bool row[N], dg[N * 2], udg[N * 2];  // 行，对角线和反对角线
+
+int main()
+{
+    int T;
+    scanf("%d", &T);
+
+    while (T -- )
+    {
+        scanf("%d", &n);
+
+        memset(row, 0, sizeof row);
+        memset(dg, 0, sizeof dg);
+        memset(udg, 0, sizeof udg);
+        bool success = true;
+        for (int y = 1; y <= n; y ++ )
+        {
+            int x;
+            scanf("%d", &x);
+            if (row[x] || dg[x + y] || udg[y - x + n]) success = false;
+            row[x] = dg[x + y] = udg[y - x + n] = true;
+        }
+
+        if (success) puts("YES");
+        else puts("NO");
+    }
+
+    return 0;
+}
 ```
 
 ### 推荐系统 1129 Recommendation System (25 point(s))
@@ -309,6 +445,58 @@ where query is the item that the user is accessing, and `rec[i] (i=1, ... K)` is
 
 Note: there is no output for the first item since it is impossible to give any recommendation at the time. It is guaranteed to have the output for at least one query.
 
+```cpp
+// k 比较小，没必要用堆
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+const int N = 50010;
+
+int n, m;
+int cnt[N];
+int top_k[11];
+
+int main()
+{
+    scanf("%d%d", &n, &m);
+
+    int k = 0;
+    for (int i = 0; i < n; i ++ )
+    {
+        int id;
+        scanf("%d", &id);
+        if (i)  // 如果不是访问的第一个商品
+        {
+            printf("%d:", id);
+            for (int j = 0; j < k; j ++ ) printf(" %d", top_k[j]);
+            puts("");
+        }
+
+        cnt[id] ++ ;
+
+        bool exists = false;  // 本次访问商品是否存在
+        for (int j = 0; j < k; j ++ )
+            if (top_k[j] == id)
+            {
+                exists = true;
+                break;
+            }
+        if (!exists) top_k[k ++ ] = id;  // 不存在，则把 id 放进 top_k
+        sort(top_k, top_k + k, [](int x, int y){  // 插入一次就排序一下，重载 sort 函数
+            if (cnt[x] != cnt[y]) return cnt[x] > cnt[y];
+            return x < y;
+        });
+
+        k = min(k, m);  // 保证 top_k 最大是 m 个
+    }
+
+    return 0;
+}
+```
+
 ### 切整数 1132 Cut Integer (20 point(s))
 
 切整数就是将一个有 $K$ 位数字的整数 $Z$ 从中间切成两个 $K/2$ 位的整数 $A$ 和 $B$。
@@ -362,7 +550,32 @@ Each input file contains one test case. For each case, the first line gives a po
 For each case, print a single line Yes if it is such a number, or No if not.
 
 ```cpp
+#include <iostream>
+#include <cstring>
 
+using namespace std;
+
+int main()
+{
+    int T;
+    cin >> T;
+
+    while (T -- )
+    {
+        string number;  // 用 string 读
+        cin >> number;
+
+        int len = number.size() / 2;
+        int left = stoi(number.substr(0, len));
+        int right = stoi(number.substr(len));
+        int n = stoi(number);
+
+        if (left * right && n % (left * right) == 0) puts("Yes");
+        else puts("No");
+    }
+
+    return 0;
+}
 ```
 
 ### 外观数列 1140 Look-and-say Sequence (20 point(s))
@@ -426,7 +639,34 @@ Each input file contains one test case, which gives D (in [0, 9]) and a positive
 Print in a line the Nth number in a look-and-say sequence of D.
 
 ```cpp
+#include <iostream>
+#include <cstring>
 
+using namespace std;
+
+int main()
+{
+    int d, n;
+    cin >> d >> n;
+
+    string cur = to_string(d);
+    for (int k = 0; k < n - 1; k ++ )
+    {
+        string next;
+        for (int i = 0; i < cur.size();)
+        {
+            int j = i + 1;
+            while (j < cur.size() && cur[i] == cur[j]) j ++ ;  // 找连续相同的一段
+            next += cur[i] + to_string(j - i);  // to_string(j - i) 个 cur[i]
+            i = j;
+        }
+        cur = next;
+    }
+
+    cout << cur << endl;
+
+    return 0;
+}
 ```
 
 ### 堆 1147 Heaps (30 point(s))
@@ -492,5 +732,52 @@ Each input file contains one test case. For each case, the first line gives two 
 For each given tree, print in a line Max Heap if it is a max heap, or Min Heap for a min heap, or Not Heap if it is not a heap at all. Then in the next line print the tree's postorder traversal sequence. All the numbers are separated by a space, and there must no extra space at the beginning or the end of the line.
 
 ```cpp
+#include <iostream>
+#include <cstring>
 
+using namespace std;
+
+const int N = 1010;
+
+int n;
+int h[N];
+
+void dfs(int u)
+{
+    if (u * 2 <= n) dfs(u * 2);
+    if (u * 2 + 1 <= n) dfs(u * 2 + 1);
+
+    printf("%d", h[u]);
+    if (u != 1) printf(" ");
+}
+
+int main()
+{
+    int T;
+    scanf("%d%d", &T, &n);
+
+    while (T -- )
+    {
+        for (int i = 1; i <= n; i ++ ) scanf("%d", &h[i]);
+
+        bool lt = false, gt = false;
+        for (int i = 1; i <= n; i ++ )
+            for (int j = 0; j < 2; j ++ )
+                if (i * 2 + j <= n)
+                {
+                    int a = h[i], b = h[i * 2 + j];
+                    if (a < b) lt = true;  // 子节点大于本节点
+                    else gt = true;
+                }
+
+        if (lt && gt) puts("Not Heap");
+        else if (lt) puts("Min Heap");
+        else puts("Max Heap");
+
+        dfs(1);
+        puts("");
+    }
+
+    return 0;
+}
 ```
