@@ -53,8 +53,12 @@
   - [第十一章第三讲](#第十一章第三讲)
 - [第十二章 贪心](#第十二章-贪心)
   - [第十二章第一讲](#第十二章第一讲)
+  - [第十二章第二讲](#第十二章第二讲)
 - [第十三章 链表](#第十三章-链表)
+  - [第十三章第一讲](#第十三章第一讲)
 - [第十四章 基础算法与数据结构](#第十四章-基础算法与数据结构)
+  - [第十四章第一讲](#第十四章第一讲)
+  - [第十四章第二讲](#第十四章第二讲)
 
 <!-- /code_chunk_output -->
 
@@ -343,6 +347,31 @@
 - [排成最小的数字 1038 Recover the Smallest Number (30 point(s))](./drafts/pat.12.1.md#排成最小的数字-1038-recover-the-smallest-number-30-points)
 - [用 Swap(0, i) 操作进行排序 1067 Sort with Swap(0, i) (25 point(s))](./drafts/pat.12.1.md#用-swap0-i-操作进行排序-1067-sort-with-swap0-i-25-points)
 
+### 第十二章第二讲
+[./drafts/pat.12.2.md](./drafts/pat.12.2.md)
+
+- [月饼 1070 Mooncake (25 point(s))](./drafts/pat.12.2.md#月饼-1070-mooncake-25-points)
+- [整数集合划分 1113 Integer Set Partition (25 point(s))](./drafts/pat.12.2.md#整数集合划分-1113-integer-set-partition-25-points)
+- [结绳 1125 Chain the Ropes (25 point(s))](./drafts/pat.12.2.md#结绳-1125-chain-the-ropes-25-points)
+- [是否加满油 1033 To Fill or Not to Fill (25 point(s))](./drafts/pat.12.2.md#是否加满油-1033-to-fill-or-not-to-fill-25-points)
+
 ## 第十三章 链表
 
+### 第十三章第一讲
+[./drafts/pat.13.1.md](./drafts/pat.13.1.md)
+
+- [共享 1032 Sharing (25 point(s))](./drafts/pat.13.1.md#共享-1032-sharing-25-points)
+- [反转链表 1074 Reversing Linked List (25 point(s))](./drafts/pat.13.1.md#反转链表-1074-reversing-linked-list-25-points)
+- [链表重复数据删除 1097 Deduplication on a Linked List (25 point(s))](./drafts/pat.13.1.md#链表重复数据删除-1097-deduplication-on-a-linked-list-25-points)
+- [链表元素分类 1133 Splitting A Linked List (25 point(s))](./drafts/pat.13.1.md#链表元素分类-1133-splitting-a-linked-list-25-points)
+
 ## 第十四章 基础算法与数据结构
+
+### 第十四章第一讲
+[./drafts/pat.14.1.md](./drafts/pat.14.1.md)
+
+- [中位数 1029 Median (25 point(s))](./drafts/pat.14.1.md#中位数-1029-median-25-points)
+- [最短距离 1046 Shortest Distance (20 point(s))](./drafts/pat.14.1.md#最短距离-1046-shortest-distance-20-points)
+- [完美序列 1085 Perfect Sequence (25 point(s))](./drafts/pat.14.1.md#完美序列-1085-perfect-sequence-25-points)
+
+### 第十四章第二讲
