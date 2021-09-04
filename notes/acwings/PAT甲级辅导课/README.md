@@ -375,3 +375,13 @@
 - [完美序列 1085 Perfect Sequence (25 point(s))](./drafts/pat.14.1.md#完美序列-1085-perfect-sequence-25-points)
 
 ### 第十四章第二讲
+[./drafts/pat.14.2.md](./drafts/pat.14.2.md)
+
+- [急性中风 1091 Acute Stroke (30 point(s))](./drafts/pat.14.2.md#急性中风-1091-acute-stroke-30-points)
+- [狼人杀-简单版 1148 Werewolf - Simple Version (20 point(s))](./drafts/pat.14.2.md#狼人杀-简单版-1148-werewolf-simple-version-20-points)
+- [弹出序列 1051 Pop Sequence (25 point(s))](./drafts/pat.14.2.md#弹出序列-1051-pop-sequence-25-points)
+- [世界首富 1055 The World's Richest (25 point(s))](./drafts/pat.14.2.md#世界首富-1055-the-worlds-richest-25-points)
+- [栈 1057 Stack (30 point(s))](./drafts/pat.14.2.md#栈-1057-stack-30-points)
+- [爱丁顿数 1117 Eddington Number (25 point(s))](./drafts/pat.14.2.md#爱丁顿数-1117-eddington-number-25-points)
+- [火星购物 1044 Shopping in Mars (25 point(s))](./drafts/pat.14.2.md#火星购物-1044-shopping-in-mars-25-points)
+- [最长回文子串 1040 Longest Symmetric String (25 point(s))](./drafts/pat.14.2.md#最长回文子串-1040-longest-symmetric-string-25-points)
