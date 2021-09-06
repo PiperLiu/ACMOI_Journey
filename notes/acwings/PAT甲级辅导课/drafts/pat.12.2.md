@@ -64,7 +64,45 @@ Each input file contains one test case. For each case, the first line contains 2
 For each test case, print the maximum profit (in billion yuans) in one line, accurate up to 2 decimal places.
 
 ```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
 
+using namespace std;
+
+const int N = 1010;
+
+int n;
+double m;
+struct Cake
+{
+    double p, w;
+    bool operator< (const Cake &t) const
+    {
+        return p / w > t.p / t.w;  // 比较单价
+    }
+}c[N];
+
+int main()
+{
+    cin >> n >> m;
+    for (int i = 0; i < n; i ++ ) cin >> c[i].w;
+    for (int i = 0; i < n; i ++ ) cin >> c[i].p;
+
+    sort(c, c + n);
+
+    double res = 0;
+    for (int i = 0; i < n && m > 0; i ++ )
+    {
+        double r = min(m, c[i].w);  // 当前月饼选的重量
+        m -= r;
+        res += c[i].p / c[i].w * r;
+    }
+
+    printf("%.2lf\n", res);
+
+    return 0;
+}
 ```
 
 ### 整数集合划分 1113 Integer Set Partition (25 point(s))
@@ -128,7 +166,32 @@ Each input file contains one test case. For each case, the first line gives an i
 For each case, print in a line two numbers: $∣n_1 − n_2∣$ and $|S_1 − S_2|$, separated by exactly one space.
 
 ```cpp
+// 元素个数差距最小，元素总和差距最大
+#include <iostream>
+#include <cstring>
+#include <algorithm>
 
+using namespace std;
+
+const int N = 100010;
+
+int n;
+int a[N];
+
+int main()
+{
+    scanf("%d", &n);
+    for (int i = 0; i < n; i ++ ) scanf("%d", &a[i]);
+    sort(a, a + n);
+
+    int s1 = 0, s2 = 0;
+    for (int i = 0; i < n / 2; i ++ ) s1 += a[i];
+    for (int i = n / 2; i < n; i ++ ) s2 += a[i];
+
+    printf("%d %d\n", n % 2, s2 - s1);
+
+    return 0;
+}
 ```
 
 ### 结绳 1125 Chain the Ropes (25 point(s))
@@ -184,8 +247,37 @@ Each input file contains one test case. For each case, the first line gives a po
 #### Output Specification:
 For each case, print in a line the length of the longest possible rope that can be made by the given segments. The result must be rounded to the nearest integer that is no greater than the maximum length.
 
-```cpp
+![](./images/2021090601.png)
 
+如上，先合并小绳子，这样会让长绳子尽可能对折次数变少。
+
+这题其实还是哈夫曼树。
+
+```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+const int N = 10010;
+
+int n;
+double a[N];
+
+int main()
+{
+    cin >> n;
+    for (int i = 0; i < n; i ++ ) cin >> a[i];
+    sort(a, a + n);
+
+    // 优美的代码
+    for (int i = 1; i < n; i ++ ) a[0] = (a[0] + a[i]) / 2;
+
+    printf("%d\n", (int)a[0]);
+
+    return 0;
+}
 ```
 
 ### 是否加满油 1033 To Fill or Not to Fill (25 point(s))
@@ -260,5 +352,74 @@ Each input file contains one test case. For each case, the first line contains 4
 For each test case, print the cheapest price in a line, accurate up to 2 decimal places. It is assumed that the tank is empty at the beginning. If it is impossible to reach the destination, print The maximum travel distance = X where X is the maximum possible distance the car can run, accurate up to 2 decimal places.
 
 ```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
 
+using namespace std;
+
+const int N = 510;
+
+int c_max, d, d_avg, n;
+struct Stop
+{
+    double p, d;  // 加油站价格，与起点距离
+
+    bool operator< (const Stop& t) const
+    {
+        return d < t.d;
+    }
+}s[N];
+
+int main()
+{
+    cin >> c_max >> d >> d_avg >> n;
+    for (int i = 0; i < n; i ++ ) cin >> s[i].p >> s[i].d;
+    s[n] = {0, (double)d};  // 目的地也是为一个加油站，只不过油价为 0 ，这样一定能选择停在那里
+
+    sort(s, s + n + 1);
+
+    if (s[0].d)  // 如果起点没有加油站
+    {
+        puts("The maximum travel distance = 0.00");
+        return 0;
+    }
+
+    double res = 0, oil = 0;
+    for (int i = 0; i < n;)
+    {
+        int k = -1;  // 在本加油站 i 加油，加多少？取决于后面的加油站
+        for (int j = i + 1; j <= n && s[j].d - s[i].d <= c_max * d_avg; j ++ )
+            if (s[j].p < s[i].p)
+            {  // 如果后面有加油站我在本地加满油就能抵达，且油价还比当前加油站低，那我就下一站去那
+                k = j;
+                break;
+            }
+            else if (k == -1 || s[j].p < s[k].p)
+                k = j;  // 否则，没有比我这站油费还低的加油站的话，找我能抵达的最低的油价的加油站
+
+        if (k == -1)  // 没找到能抵达的加油站，加满油，然后走到停
+        {
+            printf("The maximum travel distance = %.2lf\n", s[i].d + (double)c_max * d_avg);
+            return 0;
+        }
+
+        if (s[k].p <= s[i].p)  // 我将抵达离我最近的油价最低的加油站，那我本站不用加满油
+        {
+            res += ((s[k].d - s[i].d) / d_avg - oil) * s[i].p;  // 本站花费 (所需油 - 还剩油) * 本站油价
+            i = k;
+            oil = 0;
+        }
+        else
+        {
+            res += (c_max - oil) * s[i].p;  // 本站加满油
+            oil = c_max - (s[k].d - s[i].d) / d_avg;  // 到下一站还剩油
+            i = k;
+        }
+    }
+
+    printf("%.2lf\n", res);
+
+    return 0;
+}
 ```
