@@ -64,6 +64,36 @@ Each input file contains one test case. Each case occupies 2 lines, each gives t
 For each test case you should output the median of the two given sequences in a line.
 
 ```cpp
+// 合并两个有序序列，然后取中位数
+// 归并排序中经典的 二路归并
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+const int N = 200010;
+
+int n, m;
+int a[N], b[N], c[N * 2];
+
+int main()
+{
+    scanf("%d", &n);
+    for (int i = 0; i < n; i ++ ) scanf("%d", &a[i]);
+    scanf("%d", &m);
+    for (int i = 0; i < m; i ++ ) scanf("%d", &b[i]);
+
+    int k = 0, i = 0, j = 0;  // k 是新数组的下标
+    while (i < n && j < m)
+        if (a[i] <= b[j]) c[k ++ ] = a[i ++ ];
+        else c[k ++ ] = b[j ++ ];
+    while (i < n) c[k ++ ] = a[i ++ ];
+    while (j < m) c[k ++ ] = b[j ++ ];
+
+    printf("%d\n", c[(n + m - 1) / 2]);
+
+    return 0;
+}
 ```
 
 ### 最短距离 1046 Shortest Distance (20 point(s))
@@ -116,7 +146,38 @@ Each input file contains one test case. For each case, the first line contains a
 For each test case, print your results in M lines, each contains the shortest distance between the corresponding given pair of exits.
 
 ```cpp
+// 累计距离用前缀和
+// 环形则斩成一条链
+#include <iostream>
+#include <cstring>
 
+using namespace std;
+
+const int N = 100010;
+
+int n, m;
+int s[N];
+
+int main()
+{
+    scanf("%d", &n);
+    for (int i = 1; i <= n; i ++ )
+    {
+        scanf("%d", &s[i]);
+        s[i] += s[i - 1];
+    }
+
+    scanf("%d", &m);
+    while (m -- )
+    {
+        int l, r;
+        scanf("%d%d", &l, &r);
+        if (l > r) swap(l, r);
+        printf("%d\n", min(s[r - 1] - s[l - 1], s[n] - s[r - 1] + s[l - 1]));  // 正向和反向
+    }
+
+    return 0;
+}
 ```
 
 ### 完美序列 1085 Perfect Sequence (25 point(s))
@@ -167,5 +228,34 @@ Each input file contains one test case. For each case, the first line contains t
 For each test case, print in one line the maximum number of integers that can be chosen to form a perfect subsequence.
 
 ```cpp
+// 本来有 2^n 个情况要枚举
+// 但是，我们可以把这题转换为排序后取区间，情况变为 n^2 / 2
+#include <iostream>
+#include <cstring>
+#include <algorithm>
 
+using namespace std;
+
+const int N = 100010;
+
+int n, p;
+int a[N];
+
+int main()
+{
+    scanf("%d%d", &n, &p);
+    for (int i = 0; i < n; i ++ ) scanf("%d", &a[i]);
+
+    sort(a, a + n);
+
+    int res = 0;
+    for (int i = 0, j = 0; i < n; i ++ )
+    {
+        while ((long long)a[j] * p < a[i]) j ++ ;  // M 定了，找最小的 m
+        res = max(res, i - j + 1);
+    }
+
+    printf("%d\n", res);
+    return 0;
+}
 ```
