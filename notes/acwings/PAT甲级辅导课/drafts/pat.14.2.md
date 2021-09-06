@@ -85,6 +85,81 @@ Then L slices are given. Each slice is represented by an M×N matrix of 0's and 
 For each case, output in a line the total volume of the stroke core.
 
 ```cpp
+// bfs 遍历 flood fill
+#include <iostream>
+#include <cstring>
+#include <queue>
+
+using namespace std;
+
+const int M = 1286, N = 128, L = 60;
+
+int m, n, l, T;
+int g[L][M][N];
+struct Node
+{
+    int x, y, z;
+};
+
+int d[][3] = {
+    {1, 0, 0},
+    {-1, 0, 0},
+    {0, 1, 0},
+    {0, -1, 0},
+    {0, 0, 1},
+    {0, 0, -1},
+};
+
+int bfs(int x, int y, int z)
+{
+    queue<Node> q;
+    q.push({x, y, z});
+    g[x][y][z] = 0;  // 置为 0 ，表示遍历过 / 不可走
+
+    int cnt = 1;
+    while (q.size())
+    {
+        auto t = q.front();
+        q.pop();
+
+        for (int i = 0; i < 6; i ++ )
+        {
+            int a = t.x + d[i][0], b = t.y + d[i][1], c = t.z + d[i][2];
+            if (a >= 0 && a < l && b >= 0 && b < m && c >= 0 && c < n && g[a][b][c])
+            {
+                g[a][b][c] = 0;
+                q.push({a, b, c});
+                cnt ++ ;
+            }
+        }
+    }
+
+    return cnt;
+}
+
+int main()
+{
+    scanf("%d%d%d%d", &m, &n, &l, &T);
+
+    for (int i = 0; i < l; i ++ )
+        for (int j = 0; j < m; j ++ )
+            for (int k = 0; k < n; k ++ )
+                scanf("%d", &g[i][j][k]);
+
+    int res = 0;
+    for (int i = 0; i < l; i ++ )
+        for (int j = 0; j < m; j ++ )
+            for (int k = 0; k < n; k ++ )
+                if (g[i][j][k])
+                {
+                    int t = bfs(i, j, k);
+                    if (t >= T) res += t;  // 把连通块累计
+                }
+
+    printf("%d\n", res);
+
+    return 0;
+}
 ```
 
 ### 狼人杀-简单版 1148 Werewolf - Simple Version (20 point(s))
@@ -199,6 +274,56 @@ Each input file contains one test case. For each case, the first line gives a po
 If a solution exists, print in a line in ascending order the indices of the two werewolves. The numbers must be separated by exactly one space with no extra spaces at the beginning or the end of the line. If there are more than one solution, you must output the smallest solution sequence -- that is, for two sequences `A=a[1],...,a[M]` and `B=b[1],...,b[M]`, if there exists $0≤k<M$ such that `a[i]=b[i] (i≤k)` and `a[k+1]<b[k+1]`, then A is said to be smaller than B. In case there is no solution, simply print No Solution.
 
 ```cpp
+// 绝大部分推理题都是枚举题
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+const int N = 110;
+
+int n;
+int q[N];
+
+int judge(int k, int i, int j)  // 如果是假话，返回1；如果是真话，返回0
+{  // 看第 k 个人有没有说话，目前已知狼人分别是 i j
+    int t = q[k];
+    if (t > 0)  // k 认为 t 是好人
+    {
+        if (t == i || t == j) return 1;
+        return 0;
+    }
+
+    t = -t;  // k 认为 t 是狼人
+    if (t == i || t == j) return 0;
+    return 1;
+}
+
+int main()
+{
+    cin >> n;
+    for (int i = 1; i <= n; i ++ ) cin >> q[i];
+
+    for (int i = 1; i <= n; i ++ )
+        for (int j = i + 1; j <= n; j ++ )
+        {
+            int s = judge(i, i, j) + judge(j, i, j);
+            if (s != 1) continue;  // 狼人应该有且只有一人说谎
+
+            s = 0;
+            for (int k = 1; k <= n; k ++ )
+                s += judge(k, i, j);
+
+            if (s != 2) continue;  // 总数上，应该有且只有 2 人说谎
+
+            cout << i << ' ' << j << endl;
+            return 0;
+        }
+
+    puts("No Solution");
+
+    return 0;
+}
 ```
 
 ### 弹出序列 1051 Pop Sequence (25 point(s))
@@ -256,7 +381,50 @@ Each input file contains one test case. For each case, the first line contains 3
 For each pop sequence, print in one line "YES" if it is indeed a possible pop sequence of the stack, or "NO" if not.
 
 ```cpp
+// 比如 1 2 3
+// 能得到 1 2 3 ，因为得到序列第一个数是 1 ，因此压入 1 后要弹出 1 ... 以此类推，能行
+// 不能得到 3 1 2 ，因为得到序列第一个数是 3 ，因此要等到压入 3 后才第一次弹出，是 3 ，接下来只能弹 2 ...
+#include <iostream>
+#include <cstring>
+#include <stack>
 
+using namespace std;
+
+const int N = 1010;
+
+int m, n, k;
+int a[N];
+
+bool check()
+{
+    stack<int> stk;
+    for (int i = 1, j = 0; i <= n; i ++ )
+    {
+        stk.push(i);
+        if (stk.size() > m) return false;
+
+        while (stk.size() && stk.top() == a[j])
+        {
+            stk.pop();
+            j ++ ;
+        }
+    }
+
+    return stk.empty();  // 如果是正确序列，最终一定是弹空的
+}
+
+int main()
+{
+    scanf("%d%d%d", &m, &n, &k);
+    while (k -- )
+    {
+        for (int i = 0; i < n; i ++ ) scanf("%d", &a[i]);
+        if (check()) puts("YES");
+        else puts("NO");
+    }
+
+    return 0;
+}
 ```
 
 ### 世界首富 1055 The World's Richest (25 point(s))
@@ -356,7 +524,80 @@ Name Age Net_Worth
 The outputs must be in non-increasing order of the net worths. In case there are equal worths, it must be in non-decreasing order of the ages. If both worths and ages are the same, then the output must be in non-decreasing alphabetical order of the names. It is guaranteed that there is no two persons share all the same of the three pieces of information. In case no one is found, output None.
 
 ```cpp
+// 标准做法应该是各个年龄段维护一个链表，即 200 个链表
+// 然后用一个堆去维护  K M log_2{200}
+// 我们这里不用堆，用遍历，这样好写一点 K M 200
+#include <iostream>
+#include <cstring>
+#include <vector>
+#include <algorithm>
 
+using namespace std;
+
+const int N = 210;
+
+int n, m;
+struct Person
+{
+    string name;
+    int age, w;
+
+    bool operator< (const Person& t) const
+    {
+        if (w != t.w) return w > t.w;
+        if (age != t.age) return age < t.age;
+        return name < t.name;
+    }
+};
+
+vector<Person> ages[N];  // ages[i] 第 i 个年龄段富人
+int idx[N];
+
+int main()
+{
+    scanf("%d%d", &n, &m);
+
+    char name[10];
+    for (int i = 0; i < n; i ++ )
+    {
+        int age, w;
+        scanf("%s%d%d", name, &age, &w);
+        ages[age].push_back({name, age, w});
+    }
+
+    for (auto& age : ages) sort(age.begin(), age.end());
+
+    for (int C = 1; C <= m; C ++ )
+    {
+        printf("Case #%d:\n", C);
+        int cnt, a, b;
+        scanf("%d%d%d", &cnt, &a, &b);
+
+        memset(idx, 0, sizeof idx);
+        bool exists = false;
+        while (cnt -- )
+        {
+            int t = -1;  // 找最大的值
+            for (int i = a; i <= b; i ++ )
+                if (idx[i] < ages[i].size())  // 如果 i 序列还没有用完
+                {
+                    if (t == -1 || ages[i][idx[i]] < ages[t][idx[t]])
+                        t = i;
+                }
+
+            if (t == -1) break;  // 区间里没人
+            auto& p = ages[t][idx[t]];
+            idx[t] ++ ;
+
+            printf("%s %d %d\n", p.name.c_str(), p.age, p.w);
+            exists = true;
+        }
+
+        if (!exists) puts("None");
+    }
+
+    return 0;
+}
 ```
 
 ### 栈 1057 Stack (30 point(s))
@@ -450,6 +691,92 @@ where key is a positive integer no more than $10^5$.
 #### Output Specification:
 For each Push command, insert key into the stack and output nothing. For each Pop or PeekMedian command, print in a line the corresponding returned value. If the command is invalid, print Invalid instead.
 
+```cpp
+// 动态维护上半部分与下半部分，保证下半部分size等于上半部分size 或者 上半部分size +1
+// 每次 PeekMedian 缺下半部分最大值就行
+#include <iostream>
+#include <cstring>
+#include <set>
+#include <stack>
+
+using namespace std;
+
+stack<int> stk;
+multiset<int> up, down;  // multiset 内元素有序，且允许重复元素
+
+void adjust()
+{
+    while (up.size() > down.size())
+    {
+        down.insert(*up.begin());  // 把上半部分的最小值加到下半部分里
+        up.erase(up.begin());
+    }
+
+    while (down.size() > up.size() + 1)
+    {
+        auto it = down.end();
+        it -- ;  // end()这个迭代器存储的是最后一个元素的下一个位置
+        up.insert(*it);
+        down.erase(it);
+    }
+}
+
+int main()
+{
+    int n;
+    scanf("%d", &n);
+    char op[20];
+    while (n -- )
+    {
+        scanf("%s", op);
+        if (strcmp(op, "Push") == 0)
+        {
+            int x;
+            scanf("%d", &x);
+            stk.push(x);
+            if (up.empty() || x < *up.begin()) down.insert(x);  // 如果上半部分空，或者 x 比上半部分最小值小，则插入下半部分
+            else up.insert(x);  // 否则插入上半部分
+            adjust();
+        }
+        else if (strcmp(op, "Pop") == 0)
+        {
+            if (stk.empty()) puts("Invalid");
+            else
+            {
+                int x = stk.top();
+                stk.pop();
+                printf("%d\n", x);
+                auto it = down.end();
+                it -- ;  // end()这个迭代器存储的是最后一个元素的下一个位置
+                // 如果 x 小于等于下半部分最大值，则删除下半部分的 x
+                if (x <= *it) down.erase(down.find(x));  // 用指针删除一个 x ，否则可能会多删除元素
+                else up.erase(up.find(x));
+
+                adjust();
+            }
+        }
+        else
+        {
+            if (stk.empty()) puts("Invalid");
+            else
+            {
+                auto it = down.end();
+                it -- ;
+                printf("%d\n", *it);
+            }
+        }
+    }
+
+    return 0;
+}
+```
+
+**经验：**
+- C++ 关于 `multiset` ： `multiset` 内元素有序，且允许重复元素
+- C++ 关于 `multiset` 删除
+  - `down.erase(down.find(x));` 用指针删除一个 x ，否则可能会多删除元素
+  - `auto it = down.end(); it -- ;` `end()` 这个迭代器存储的是最后一个元素的下一个位置
+
 ### 爱丁顿数 1117 Eddington Number (25 point(s))
 
 <p>英国天文学家爱丁顿很喜欢骑车。</p>
@@ -500,7 +827,34 @@ Each input file contains one test case. For each case, the first line gives a po
 For each case, print in a line the Eddington number for these N days.
 
 ```cpp
+// 知识点：H指数
+#include <iostream>
+#include <cstring>
+#include <algorithm>
 
+using namespace std;
+
+const int N = 100010;
+
+int n;
+int a[N];
+
+int main()
+{
+    scanf("%d", &n);
+    for (int i = 0; i < n; i ++ ) scanf("%d", &a[i]);
+    sort(a, a + n);
+
+    for (int i = n; i; i -- )
+        if (a[n - i] > i)  // 从最大的开始找
+        {
+            printf("%d\n", i);
+            return 0;
+        }
+
+    puts("0");
+    return 0;
+}
 ```
 
 ### 火星购物 1044 Shopping in Mars (25 point(s))
@@ -599,7 +953,40 @@ If there is no solution, output i-j for pairs of i ≤ j such that `Di + ... + D
 It is guaranteed that the total value of diamonds is sufficient to pay the given amount.
 
 ```cpp
+#include <iostream>
+#include <cstring>
 
+using namespace std;
+
+const int N = 100010, INF = 1e9;
+
+int n, m;
+int s[N];
+
+int main()
+{
+    scanf("%d%d", &n, &m);
+    for (int i = 1; i <= n; i ++ )
+    {
+        scanf("%d", &s[i]);
+        s[i] += s[i - 1];  // 前缀和
+    }
+
+    int res = INF;  // 很妙啊！先把答案找到，然后再输出！
+    for (int i = 1, j = 0; i <= n; i ++ )
+    {
+        while (s[i] - s[j + 1] >= m) j ++ ;  // 当 i 向后移动， j 一定至少不能往前走（双指针，可以反证法证）
+        if (s[i] - s[j] >= m) res = min(res, s[i] - s[j]);
+    }
+
+    for (int i = 1, j = 0; i <= n; i ++ )
+    {  // 然后再来次循环，输出答案
+        while (s[i] - s[j + 1] >= m) j ++ ;
+        if (s[i] - s[j] == res) printf("%d-%d\n", j + 1, i);
+    }
+
+    return 0;
+}
 ```
 
 ### 最长回文子串 1040 Longest Symmetric String (25 point(s))
@@ -633,7 +1020,7 @@ Is PAT&TAP symmetric?
 </code></pre>
 
 #### 1040 Longest Symmetric String (25 point(s))
-Given a string, you are supposed to output the length of the longest symmetric sub-string. For example, given Is PAT&TAP symmetric?, the longest symmetric sub-string is s PAT&TAP s, hence you must output 11.
+Given a string, you are supposed to output the length of the longest symmetric sub-string. For example, given `Is PAT&TAP symmetric?`, the longest symmetric sub-string is `s PAT&TAP s`, hence you must output 11.
 
 #### Input Specification:
 Each input file contains one test case which gives a non-empty string of length no more than 1000.
@@ -642,5 +1029,31 @@ Each input file contains one test case which gives a non-empty string of length 
 For each test case, simply print the maximum length in a line.
 
 ```cpp
+#include <iostream>
+#include <cstring>
 
+using namespace std;
+
+int main()
+{
+    string str;
+    getline(cin, str);  // 为了读入空格
+
+    int res = 0;
+    for (int i = 0; i < str.size(); i ++ )
+    {  // 枚举中心点，然后把端点往两段挪
+       // 一共两种情况：奇数个数字符
+        int l = i - 1, r = i + 1;
+        while (l >= 0 && r < str.size() && str[l] == str[r]) l --, r ++ ;
+        res = max(res, r - l - 1);
+       // 第二种情况：偶数个数字符
+        l = i, r = i + 1;
+        while (l >= 0 && r < str.size() && str[l] == str[r]) l --, r ++ ;
+        res = max(res, r - l - 1);
+    }
+
+    cout << res << endl;
+
+    return 0;
+}
 ```
