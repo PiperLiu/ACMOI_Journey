@@ -515,3 +515,6 @@ int main()
     return 0;
 }
 ```
+
+**经验：**
+- C++ 中 `a.insert(a.end(), b.begin(), b.end());` 可以把 `b` 加到 `a` 后
