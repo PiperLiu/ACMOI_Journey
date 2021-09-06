@@ -109,7 +109,47 @@ whereAddress is the position of the node, Data is the letter contained by this n
 For each case, simply output the 5-digit starting position of the common suffix. If the two words have no common suffix, output -1 instead.
 
 ```cpp
+// 首先把第一个单词顺下来
+// 然后顺第二个单词，如果有第一个单词的指针，就返回这个指针
+#include <iostream>
+#include <cstring>
 
+using namespace std;
+
+const int N = 100010;
+
+int n;
+int h1, h2, ne[N];
+char e[N];
+bool st[N];
+
+int main()
+{
+    scanf("%d%d%d", &h1, &h2, &n);
+    for (int i = 0; i < n; i ++ )
+    {
+        int address, next;
+        char data;
+        scanf("%d %c %d", &address, &data, &next);
+        e[address] = data, ne[address] = next;
+    }
+
+    // 遍历第一个链表
+    for (int i = h1; i != -1; i = ne[i])
+        st[i] = true;
+
+    // 遍历第二个链表
+    for (int i = h2; i != -1; i = ne[i])
+        if (st[i])
+        {
+            printf("%05d\n", i);
+            return 0;
+        }
+
+    puts("-1");
+
+    return 0;
+}
 ```
 
 ### 反转链表 1074 Reversing Linked List (25 point(s))
@@ -186,6 +226,46 @@ where Address is the position of the node, Data is an integer, and Next is the p
 For each case, output the resulting ordered linked list. Each node occupies a line, and is printed in the same format as in the input.
 
 ```cpp
+// y 总建议：“别难为自己，用数组做” 本题用 vector 做
+
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+#include <vector>
+
+using namespace std;
+
+const int N = 100010;
+
+int n, m;
+int h, e[N], ne[N];
+
+int main()
+{
+    scanf("%d%d%d", &h, &n, &m);
+
+    for (int i = 0; i < n; i ++ )
+    {
+        int address, data, next;
+        scanf("%d%d%d", &address, &data, &next);
+        e[address] = data, ne[address] = next;
+    }
+
+    vector<int> q;  // 把地址推入链表
+    for (int i = h; i != -1; i = ne[i]) q.push_back(i);
+
+    for (int i = 0; i + m - 1 < q.size(); i += m)  // 每 m 段翻转一下
+        reverse(q.begin() + i, q.begin() + i + m);
+
+    for (int i = 0; i < q.size(); i ++ )
+    {
+        printf("%05d %d ", q[i], e[q[i]]);
+        if (i + 1 == q.size()) puts("-1");
+        else printf("%05d\n", q[i + 1]);
+    }
+
+    return 0;
+}
 ```
 
 ### 链表重复数据删除 1097 Deduplication on a Linked List (25 point(s))
@@ -260,7 +340,56 @@ where Address is the position of the node, Key is an integer of which absolute v
 For each case, output the resulting linked list first, then the removed list. Each node occupies a line, and is printed in the same format as in the input.
 
 ```cpp
+// 本题还是利用了数组
+#include <iostream>
+#include <cstring>
+#include <vector>
 
+using namespace std;
+
+const int N = 100010;
+
+int n;
+int h, e[N], ne[N];
+bool st[N];
+
+int main()
+{
+    scanf("%d%d", &h, &n);
+    for (int i = 0; i < n; i ++ )
+    {
+        int address, key, next;
+        scanf("%d%d%d", &address, &key, &next);
+        e[address] = key, ne[address] = next;
+    }
+
+    vector<int> a, b;  // 出现过的放在 b 里，否则放在 a 里
+    for (int i = h; i != -1; i = ne[i])
+    {
+        int v = abs(e[i]);
+        if (st[v]) b.push_back(i);
+        else
+        {
+            st[v] = true;
+            a.push_back(i);
+        }
+    }
+
+    for (int i = 0; i < a.size(); i ++ )
+    {
+        printf("%05d %d ", a[i], e[a[i]]);
+        if (i + 1 == a.size()) puts("-1");
+        else printf("%05d\n", a[i + 1]);
+    }
+    for (int i = 0; i < b.size(); i ++ )
+    {
+        printf("%05d %d ", b[i], e[b[i]]);
+        if (i + 1 == b.size()) puts("-1");
+        else printf("%05d\n", b[i + 1]);
+    }
+
+    return 0;
+}
 ```
 
 ### 链表元素分类 1133 Splitting A Linked List (25 point(s))
@@ -341,5 +470,48 @@ where Address is the position of the node, Data is an integer in $[−10^5,10^5]
 For each case, output in order (from beginning to the end of the list) the resulting linked list. Each node occupies a line, and is printed in the same format as in the input.
 
 ```cpp
+// 还是用数组
 
+#include <iostream>
+#include <cstring>
+#include <vector>
+
+using namespace std;
+
+const int N = 100010;
+
+int n, k;
+int h, e[N], ne[N];
+
+int main()
+{
+    scanf("%d%d%d", &h, &n, &k);
+    for (int i = 0; i < n; i ++ )
+    {
+        int address, key, next;
+        scanf("%d%d%d", &address, &key, &next);
+        e[address] = key, ne[address] = next;
+    }
+
+    vector<int> a, b, c;
+    for (int i = h; i != -1; i = ne[i])
+    {
+        int v = e[i];
+        if (v < 0) a.push_back(i);
+        else if (v <= k) b.push_back(i);
+        else c.push_back(i);
+    }
+
+    a.insert(a.end(), b.begin(), b.end());  // **经验：** C++ 中 `a.insert(a.end(), b.begin(), b.end());` 可以把 `b` 加到 `a` 后
+    a.insert(a.end(), c.begin(), c.end());
+
+    for (int i = 0; i < a.size(); i ++ )
+    {
+        printf("%05d %d ", a[i], e[a[i]]);
+        if (i + 1 == a.size()) puts("-1");
+        else printf("%05d\n", a[i + 1]);
+    }
+
+    return 0;
+}
 ```
