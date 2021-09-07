@@ -3,7 +3,7 @@
 
 购买于2021年8月9日。
 
-于2021年X月X日结课。
+于2021年9月6日结课。
 
 <!-- @import "[TOC]" {cmd="toc" depthFrom=2 depthTo=6 orderedList=false} -->
 
