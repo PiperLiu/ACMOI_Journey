@@ -14,6 +14,7 @@
   - [2.1.2 BFS中的多源BFS-双端队列BFS](#212-bfs中的多源bfs-双端队列bfs)
   - [2.1.3 BFS中的双向广搜和A-star](#213-bfs中的双向广搜和a-star)
   - [2.2.1 DFS中的连通性和搜索顺序](#221-dfs中的连通性和搜索顺序)
+  - [2.2.2 DFS之剪枝](#222-dfs之剪枝)
 
 <!-- /code_chunk_output -->
 
@@ -30,3 +31,6 @@
 
 ### 2.2.1 DFS中的连通性和搜索顺序
 [./drafts/ypro.2.2.1.md](./drafts/ypro.2.2.1.md)
+
+### 2.2.2 DFS之剪枝
+[./drafts/ypro.2.2.2.md](./drafts/ypro.2.2.2.md)
