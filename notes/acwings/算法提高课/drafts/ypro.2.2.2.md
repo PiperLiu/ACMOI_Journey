@@ -326,8 +326,91 @@ int main()
 5
 </code></pre>
 
-```cpp
+DFS 首先考虑正确性：是否可以枚举到所有方案，然后再想着怎么优化。
 
+先枚举木棒的可能长度，然后再看看木棒能不能拼接成该长度的若干根。
+
+可以进行很多优化：
+- 1 只枚举木棍长度的约数
+- 2 优化搜索顺序（从大到小枚举木棒）
+- 排除等效冗余
+  - 3.1一个木棍内部按照组合数方式枚举（因为 `1+2+3` 和 `1+3+2` 等等是一样的），
+  - 3.2 `3`和`4`两根木棍长度相同，`3`在某处枚举失败了，而`4`也会在该处枚举失败；如果当前木棍加到当前棒中失败了，则直接略过后面所有长度相等木棍（反证法）
+  - 3.3 如果在新开某个木棒时，放入木棍失败了，则这个方案一定会失败的（反证法）
+  - 3.4 如果该木棍是木棒的最后一段，放入失败了，则这个方案一定会失败（反证法）
+
+```cpp
+#include <cstring>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+const int N = 70;
+
+int n;
+int w[N];
+int sum, length;
+bool st[N];
+
+bool dfs(int u, int cur, int start)  // 已有 u 个大棍，当前大棍长度 cur ，小棍从 start 编号开始枚举
+{
+    if (u * length == sum) return true;  // 枚举 OK 了
+    if (cur == length) return dfs(u + 1, 0, 0);  // 本大棍满了，进入下一大棍，注意 start 也从 0 开始
+
+    // 剪枝3-1：i从start开始枚举（组合数）
+    for (int i = start; i < n; i ++ )
+    {
+        if (st[i] || cur + w[i] > length) continue;  // 可行性剪枝：用过了或者超出当前大棍长度不行
+
+        st[i] = true;
+        if (dfs(u, cur + w[i], i + 1)) return true;  // 把小棍 i 放入当前大棍，接下来只考虑该小棍之后的棍棍填满本大棍（组合数）
+        st[i] = false;
+        
+        // !cur 是剪枝 3-4 ，当前小棍是新开大棍的第一个，但是失败了
+        if (!cur || cur + w[i] == length) return false;  // 当前小棍是新开大棍的最后一个，但是失败了
+        
+        // 当前长度 w[i] 枚举失败了，咱们找下一个长度
+        int j = i;
+        while (j < n && w[j] == w[i]) j ++ ;
+        i = j - 1;
+    }
+
+    return false;
+}
+
+int main()
+{
+    while (cin >> n, n)
+    {
+        memset(st, 0, sizeof st);
+        sum = 0;
+
+        for (int i = 0; i < n; i ++ )
+        {
+            cin >> w[i];
+            sum += w[i];
+        }
+
+        // 剪枝2：优化搜索顺序
+        sort(w, w + n);
+        reverse(w, w + n);
+
+        length = 1;
+        while (true)
+        {
+            // 剪枝1
+            if (sum % length == 0 && dfs(0, 0, 0))
+            {
+                cout << length << endl;
+                break;
+            }
+            length ++ ;
+        }
+    }
+
+    return 0;
+}
 ```
 
 #### 生日蛋糕
@@ -372,6 +455,129 @@ $7$ 月 $17$ 日是 Mr.W 的生日，ACM-THU 为此要制作一个体积为 $Nπ
 68
 </code></pre>
 
-```cpp
+![](./images/2021090804.png)
 
+$$\pi R_m^2 + $$
+
+$$2 \pi R_m h_m + 2 \pi R_{m-1} h_{m-1} + ... + 2 \pi R_1 h_1$$
+
+题解转自[抽象带师](https://www.acwing.com/solution/content/31876/)：
+
+记最底层为$m$，很容易观察得出，表面积的公式为：
+
+$$S_总 = S_{m上} + \sum_{i=1}^{m}2\pi R_iH_i$$
+
+而体积为
+
+$$V_总= \sum_{i=1}^{m}\pi R_i^2H_i$$
+
+有了两个公式，还有题目给出的每层最小高度和最小半径，就知道可以用剪枝+暴搜来做这个题
+
+![](./images/2021090805.png)
+
+**剪枝优化**
+
+1.优化搜索顺序
+
+- 层间：从下到上
+- 层内：先枚举半径再枚举高（半径相对于高来说对体积的影响较大），半径由大到小，高度由大到小
+
+2. 可行性剪枝
+
+记总体积为`n`，当前层位`u`, 第`u`层的高度为$H_u$, 半径为$R_u$， 体积为$V_u$, 第$m$层到第u层体积的累计值$V$
+- 对于`R`, 当前为第`u`层, 第`u`层的体积为$V_u$。R最小的取值应该是当前的层号`u` ，`R`的最大值应该由两部分决定：
+    - `u+1`层的半径减`1`, 记$R_{u+1}-1$ （肯定比下一层的半径小）
+    - 第`u`层体积的最大值刨去第`u`层高度的最小值`u`
+- 这两者的最小值, 故有以下等式成立
+
+$$ u \leq R_u \leq min \lbrace R_{u+1}-1, \sqrt{\frac{n-min\sum_{i=1}^{u-1}V_i - V}{u}} \rbrace$$
+
+（大于等于 `u` 是怎么回事？因为对于第 `u` 层来说，接下来上面的层半径都得严格递减，因此你不能让上面的层没有减的空间）
+
+- 对于第`u`层高度`h`的推导同理，高度`h`的取值的最小值应该大于等于层号`u`，高度的最小值由两部分决定
+    - $H_{u+1}-1$
+    - 第`u`层体积的最大值除第`u`层的底面积最小值
+- 故同理可得出下列等式
+
+$$ u \leq H_u \leq min \lbrace H_{u+1}-1, \frac {{n-min\sum_{i=1}^{u-1}V_i - V}}{R_u^2} \rbrace$$
+
+考虑体积的剪枝：预处理前`u`层的体积最小值$min\sum_{i=1}^{u-1}V_i$, 会有$V + min\sum_{i=1}^{u-1}V_i \leq n$
+
+推表面积公式和体积公式的关系：
+- 第一层到第`u`层的表面积有（不考虑$\pi$）
+
+$$S_{1-u} = 2\sum_{i=1}^{u}R_iH_i = \frac{2}{R_{u+1}} \sum_{i=1}^{u}R_{u+1}R_iH_i >  \frac{2}{R_{u+1}}\sum_{i=1}^{u}R_i^2H_i$$
+
+- 第一层到第`u`层的体积有
+
+$$n - V = \sum_{i=1}^{u}R_i^2H_i$$
+
+- 所以惊奇地发现：
+
+$$S_{1-u} >\frac{2(n-V)}{R_{u+1}}$$
+
+因此如果有$S_{1-u} \leq \frac{2(n-V)}{R_{u+1}}$那么就可以剪枝掉。
+
+3.最优性剪枝
+
+记第$m$层到第`u`层表面积的累计值$S$, 第1到第$u-1$层表面积的最小值为 $min\sum_{i=1}^{u-1}S_i$
+则应该有$S + min\sum_{i=1}^{u-1}S_i < res$
+
+```cpp
+#include <cstring>
+#include <iostream>
+#include <algorithm>
+#include <cmath>
+
+using namespace std;
+
+const int N = 25, INF = 1e9;
+
+int n, m;
+int minv[N], mins[N];
+int R[N], H[N];
+int ans = INF;
+
+void dfs(int u, int v, int s)
+{   // u 是当前层， v 是已有体积， s 是已有表面积
+    if (v + minv[u] > n) return;  // 可行性剪枝
+    if (s + mins[u] >= ans) return;  // 最优化剪枝
+    if (s + 2 * (n - v) / R[u + 1] >= ans) return;  // 递推式剪枝
+
+    if (!u)
+    {   // 如果 m~1 层都填满了，且 v == n ，则更新最优值
+        if (v == n) ans = s;
+        return;
+    }
+
+    // 先枚举本层 r 再枚举本层 h
+    for (int r = min(R[u + 1] - 1, (int)sqrt(n - v)); r >= u; r -- )
+        for (int h = min(H[u + 1] - 1, (n - v) / r / r); h >= u; h -- )
+        {
+            int t = 0;
+            if (u == m) t = r * r;  // 如果是最低层，别忘了加上 ΠR^2
+            R[u] = r, H[u] = h;  // 更新本层 R H
+            dfs(u - 1, v + r * r * h, s + 2 * r * h + t);  // 往上走一层，已处理体积增加，已处理表面积增加
+        }
+}
+
+int main()
+{
+    cin >> n >> m;
+
+    for (int i = 1; i <= m; i ++ )
+    {   // 预处理每层 v s 最小值
+        minv[i] = minv[i - 1] + i * i * i;
+        mins[i] = mins[i - 1] + 2 * i * i;
+    }
+
+    R[m + 1] = H[m + 1] = INF;  // 不存在 m+1 层，这两个数是哨兵
+
+    dfs(m, 0, 0);  // 从最下层开始搜索
+
+    if (ans == INF) ans = 0;
+    cout << ans << endl;
+
+    return 0;
+}
 ```
