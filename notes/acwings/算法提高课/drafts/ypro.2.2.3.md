@@ -257,6 +257,16 @@ int main()
 
 ### IDA*
 
+IDA* 比 A* 好理解，两者相似。
+
+IDA* 往往配合迭代加深。
+
+![](./images/2021090806.png)
+
+预估一下，如果当前点至迭代完成的步数大于 `max_depth` ，则没必要接着探索了。
+
+说白了就是一种启发式剪枝。其要求也很明了：估价函数的值必须小于等于真实步数。
+
 #### 排书
 
 给定 $n$ 本书，编号为 $1 \sim n$。
@@ -311,6 +321,102 @@ $1 \le n \le 15$
 5 or more
 </code></pre>
 
+![](./images/2021090807.png)
+
+如上，我们取长度 `i` 的段，则一共有 `1~n-i+1` 个段可选，现在一共还剩 `n-i` 个数，则有 `n-i+1` 个空缺可以给我们取出的段插入，由于不能插入其原本所在的位置，因此，有 `n-i` 个空缺插入。
+
+此外，对于段`ABCD`，我们把`B`插到`C`后，和把`C`插到`B`前是一样的。因此最终插入的动作数量要除以2。
+
+每次我们的可选方案数量最坏为：
+
+$$\frac{15\times 14 + 14 \times 13 + ... + 2 \times 1}{2} = \frac{14\times 15 \times 16}{3 \times 2} = 560$$
+
+因此如果暴搜，本题时间复杂度 $560^4$ 。
+
+![](./images/2021090808.png)
+
+如何求估计函数？
+
+我们最终的目的为：让每个数的后继关系都是正确的。比如`1`后面要是`2`，`2`后面要是`3`以此类推。
+
+一个长度为`n`序列排好序，其正确后继数量应该是`n-1`。
+
+如上图，我们移动某一段，顶多改变3个数的后继关系。假设我们当前有`tot`个后继是不正确的，则我们最少需要操作 `tot/3` 上取整次（即`(tot+2)/3`下取整次）：
+
+$$\lceil \frac{tot}{3} \rceil=\lfloor \frac{tot+2}{3} \rfloor$$
+
+```cpp
+#include <cstring>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+const int N = 15;
+
+int n;
+int q[N];     // 
+int w[5][N];  // 把每一层都备份，方便恢复现场
+
+int f()  // 估价函数
+{
+    int cnt = 0;
+    for (int i = 0; i + 1 < n; i ++ )
+        if (q[i + 1] != q[i] + 1)
+            cnt ++ ;
+    return (cnt + 2) / 3;
+}
+
+bool check()
+{
+    for (int i = 0; i + 1 < n; i ++ )
+        if (q[i + 1] != q[i] + 1)
+            return false;
+    return true;
+}
+
+bool dfs(int depth, int max_depth)
+{
+    if (depth + f() > max_depth) return false;  // IDA* 剪枝
+    if (check()) return true;
+
+    for (int len = 1; len <= n; len ++ )
+        for (int l = 0; l + len - 1 < n; l ++ )
+        {
+            int r = l + len - 1;                // 0000 l 1111 r 2222 k 3333
+            for (int k = r + 1; k < n; k ++ )   // 0000 2222 k l 1111 r 3333
+            {
+                memcpy(w[depth], q, sizeof q);
+                int x, y;
+                for (x = r + 1, y = l; x <= k; x ++, y ++ ) q[y] = w[depth][x];
+                for (x = l; x <= r; x ++, y ++ ) q[y] = w[depth][x];
+                if (dfs(depth + 1, max_depth)) return true;
+                memcpy(q, w[depth], sizeof q);
+            }
+        }
+
+    return false;
+}
+
+int main()
+{
+    int T;
+    cin >> T;
+    while (T -- )
+    {
+        cin >> n;
+        for (int i = 0; i < n; i ++ ) cin >> q[i];
+
+        int depth = 0;
+        while (depth < 5 && !dfs(0, depth)) depth ++ ;
+        if (depth >= 5) puts("5 or more");
+        else cout << depth << endl;
+    }
+
+    return 0;
+}
+```
+
 #### 回转游戏
 
 如下图所示，有一个 <code>#</code> 形的棋盘，上面有 $1,2,3$ 三种数字各 $8$ 个。
@@ -362,6 +468,103 @@ DDHH
 2
 </code></pre>
 
-```cpp
+按照字典序顺序枚举，则一定可以得到字典序最小的序列。
 
+估价函数：当前中心区域最多的数字的个数为 `cnt` ，则还需要的最少步骤为 `8 - cnt` 。
+
+还有些其他优化：
+- 人工打表：给 24 个格子标号
+- 冗余操作：我们操作了 `A` ，则下一步一定不会是 `F`
+
+```cpp
+/*
+      0     1
+      2     3
+4  5  6  7  8  9  10
+      11    12
+13 14 15 16 17 18 19
+      20    21
+      22    23
+*/
+
+#include <cstring>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+const int N = 24;
+
+int op[8][7] = {
+    {0, 2, 6, 11, 15, 20, 22},
+    {1, 3, 8, 12, 17, 21, 23},
+    {10, 9, 8, 7, 6, 5, 4},
+    {19, 18, 17, 16, 15, 14, 13},
+    {23, 21, 17, 12, 8, 3, 1},
+    {22, 20, 15, 11, 6, 2, 0},
+    {13, 14, 15, 16, 17, 18, 19},
+    {4, 5, 6, 7, 8, 9, 10}
+};
+
+int opposite[8] = {5, 4, 7, 6, 1, 0, 3, 2};  // 给操作编号 ABCDEFGH
+int center[8] = {6, 7, 8, 11, 12, 15, 16, 17};
+
+int q[N];
+int path[100];
+
+int f()
+{
+    static int sum[4];  // static 不用每次都分配空间，可能会快一些
+    memset(sum, 0, sizeof sum);
+    for (int i = 0; i < 8; i ++ ) sum[q[center[i]]] ++ ;
+
+    int maxv = 0;
+    for (int i = 1; i <= 3; i ++ ) maxv = max(maxv, sum[i]);
+
+    return 8 - maxv;
+}
+
+void operate(int x)
+{
+    int t = q[op[x][0]];
+    for (int i = 0; i < 6; i ++ ) q[op[x][i]] = q[op[x][i + 1]];
+    q[op[x][6]] = t;
+}
+
+bool dfs(int depth, int max_depth, int last)
+{
+    if (depth + f() > max_depth) return false;
+    if (f() == 0) return true;
+
+    for (int i = 0; i < 8; i ++ )
+        if (last != opposite[i])
+        {
+            operate(i);
+            path[depth] = i;
+            if (dfs(depth + 1, max_depth, i)) return true;
+            operate(opposite[i]);
+        }
+
+    return false;
+}
+
+int main()
+{
+    while (cin >> q[0], q[0])
+    {
+        for (int i = 1; i < 24; i ++ ) cin >> q[i];
+
+        int depth = 0;
+        while (!dfs(0, depth, -1)) depth ++ ;  // - 1 表示上一步没有操作
+
+        if (!depth) printf("No moves needed");
+        else
+        {
+            for (int i = 0; i < depth; i ++ ) printf("%c", 'A' + path[i]);
+        }
+        printf("\n%d\n", q[6]);
+    }
+
+    return 0;
+}
 ```
