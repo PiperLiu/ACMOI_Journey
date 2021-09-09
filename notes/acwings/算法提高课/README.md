@@ -15,6 +15,7 @@
   - [2.1.3 BFS中的双向广搜和A-star](#213-bfs中的双向广搜和a-star)
   - [2.2.1 DFS中的连通性和搜索顺序](#221-dfs中的连通性和搜索顺序)
   - [2.2.2 DFS之剪枝](#222-dfs之剪枝)
+  - [2.2.3 DFS之迭代加深、双向DFS、IDA*](#223-dfs之迭代加深-双向dfs-ida)
 
 <!-- /code_chunk_output -->
 
@@ -34,3 +35,6 @@
 
 ### 2.2.2 DFS之剪枝
 [./drafts/ypro.2.2.2.md](./drafts/ypro.2.2.2.md)
+
+### 2.2.3 DFS之迭代加深、双向DFS、IDA*
+[./drafts/ypro.2.2.3.md](./drafts/ypro.2.2.3.md)
