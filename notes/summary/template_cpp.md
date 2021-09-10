@@ -6,8 +6,10 @@
 - [算法API](#算法api)
   - [数与字符串转换](#数与字符串转换)
   - [排序](#排序)
+    - [重载排序规则](#重载排序规则)
     - [排序返回索引](#排序返回索引)
 - [数据结构](#数据结构)
+  - [自定义结构体](#自定义结构体)
   - [定长数组](#定长数组)
     - [数组](#数组)
   - [变长数组](#变长数组)
@@ -69,7 +71,23 @@ long double  num7 = stold(b);
 - 重载排序规则
 - 排序返回索引
 
+#### 重载排序规则
+
 ```cpp
+// 重载函数
+bool cmp1(Person p1, Person p2)
+{
+    if (p1.time != p2.time) return p1.time < p2.time;
+    return p1.id < p2.id;
+}
+
+// lambda
+auto cmp2 = [&](Person p1, Person p2) -> bool
+{
+    if (p1.time != p2.time) return p1.time < p2.time;
+    return p1.id < p2.id;
+}
+
 vector<int> ans;
 sort(ans.begin(), ans.end());  // 默认从小到大
 
@@ -98,6 +116,34 @@ for (int i = 0 ; i != index.size() ; i++) {
 ```
 
 ## 数据结构
+
+### 自定义结构体
+
+要求：
+- 自定义包含变量
+- 重载比较函数
+
+```cpp
+struct Player
+{
+    int arrive_time, serve_time;
+    int start_time, waiting_time;
+    
+    // 给 sort 排
+    const bool operator< (const Player& t) const
+    {
+        if (start_time != t.start_time) return start_time < t.start_time;
+        return arrive_time < t.arrive_time;
+    }
+    
+    // 给 priority_queue 最大堆排（最大堆用<less>）
+    const bool operator> (const Player& t) const
+    {
+        return arrive_time > t.arrive_time;
+    }
+};
+```
+
 ### 定长数组
 
 要求：
