@@ -458,6 +458,75 @@ where Rank is the rank (start from 1) of the institution; School is the institut
 
 The institutions are ranked according to their TWS. If there is a tie, the institutions are supposed to have the same rank, and they shall be printed in ascending order of Ns. If there is still a tie, they shall be printed in alphabetical order of their codes.
 
+```cpp
+#include <iostream>
+#include <cstring>
+#include <unordered_map>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+struct School
+{
+    string name;
+    int cnt;
+    double sum;
+
+    School(): cnt(0), sum(0) {}  // 构造函数
+
+    bool operator< (const School &t) const
+    {
+        if (sum != t.sum) return sum > t.sum;  // 分高在前
+        if (cnt != t.cnt) return cnt < t.cnt;  // 人少在前
+        return name < t.name;  // 字典序升序
+    }
+};
+
+int main()
+{
+    int n;
+    cin >> n;
+
+    unordered_map<string, School> hash;
+    while (n -- )
+    {
+        string id, sch;
+        double grade;
+        cin >> id >> grade >> sch;
+
+        for (auto& c : sch) c = tolower(c);  // 对每个字符修改
+
+        if (id[0] == 'B') grade /= 1.5;
+        else if (id[0] == 'T') grade *= 1.5;
+
+        hash[sch].sum += grade;
+        hash[sch].cnt ++ ;
+        hash[sch].name = sch;
+    }
+
+    vector<School> schools;
+    for (auto item : hash)  // auto 遍历 map
+    {
+        item.second.sum = (int)(item.second.sum + 1e-8);
+        schools.push_back(item.second);
+    }
+
+    sort(schools.begin(), schools.end());
+    cout << schools.size() << endl;
+
+    int rank = 1;
+    for (int i = 0; i < schools.size(); i ++ )
+    {
+        auto s = schools[i];
+        if (i && s.sum != schools[i - 1].sum) rank = i + 1;  // 对于 i > 0 ，如果和前一个分数不同，则更新 rank
+        printf("%d %s %d %d\n", rank, s.name.c_str(), (int)s.sum, s.cnt);
+    }
+
+    return 0;
+}
+```
+
 ### 解码PAT准考证 1153 Decode Registration Card of PAT (25 point(s))
 
 PAT 准考证号由 $4$ 部分组成：
