@@ -155,50 +155,43 @@ For each test case you should output the product of A and B in one line, with th
 #include <iostream>
 #include <cstring>
 #include <algorithm>
-#include <unordered_map>
-#include <queue>
 using namespace std;
 
 const int N = 1010;
 
-double a[N], b[N], c[N];
+double a[N], b[N], c[N * 2];
 
-int main()
+void input(double a[])
 {
     int k;
-
     cin >> k;
-    for (int i = 0; i < k; ++ i)
+    while(k --)
     {
         int n;
         double p;
         cin >> n >> p;
         a[n] = p;
     }
+}
+
+int main()
+{
+    input(a);
+    input(b);
     
-    cin >> k;
-    for (int i = 0; i < k; ++ i)
-    {
-        int n;
-        double p;
-        cin >> n >> p;
-        b[n] = p;
-    }
-    
-    for (int i = 0; i < N; ++ i) c[i] = a[i] + b[i];
-    
-    k = 0;
     for (int i = 0; i < N; ++ i)
-    {
-        if (c[i]) k++;
-    }
+        for (int j = 0; j < N; ++ j)
+            c[i + j] += a[i] * b[j];
+    
+    int k = 0;
+    for (int i = 0; i < N * 2; ++ i)
+        if (c[i])
+            k ++;
     
     cout << k;
-    for (int i = N - 1; i >= 0; -- i)
-    {
+    for (int i = N * 2 - 1; i >= 0; -- i)
         if (c[i])
             printf(" %d %.1lf", i, c[i]);
-    }
     
     puts("");
 }
