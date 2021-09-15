@@ -51,3 +51,9 @@
 
 ### 20210911LCCUP 力扣杯 2021 秋季编程大赛
 [./drafts/LCCUP.2021.1.md](./drafts/LCCUP.2021.1.md)
+
+- [无人机方阵](./drafts/LCCUP.2021.1.md#无人机方阵)
+- [心算挑战](./drafts/LCCUP.2021.1.md#心算挑战)
+- [黑白翻转棋（经典bfs）](./drafts/LCCUP.2021.1.md#黑白翻转棋经典bfs)
+- [玩具套圈（智力题分析）](./drafts/LCCUP.2021.1.md#玩具套圈智力题分析)
+- [十字路口的交通（暴力dp+预处理动作组合）](./drafts/LCCUP.2021.1.md#十字路口的交通暴力dp预处理动作组合)
