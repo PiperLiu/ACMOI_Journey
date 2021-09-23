@@ -9,6 +9,8 @@
 
 <!-- code_chunk_output -->
 
+- [第一章 动态规划](#第一章-动态规划)
+  - [1.1 数字三角模型](#11-数字三角模型)
 - [第二章 搜索](#第二章-搜索)
   - [2.1.1 BFS中的Flood-Fill和最短路模型](#211-bfs中的flood-fill和最短路模型)
   - [2.1.2 BFS中的多源BFS-双端队列BFS](#212-bfs中的多源bfs-双端队列bfs)
@@ -18,6 +20,11 @@
   - [2.2.3 DFS之迭代加深、双向DFS、IDA*](#223-dfs之迭代加深-双向dfs-ida)
 
 <!-- /code_chunk_output -->
+
+## 第一章 动态规划
+
+### 1.1 数字三角模型
+[./drafts/ypro.1.1.md](./drafts/ypro.1.1.md)
 
 ## 第二章 搜索
 
