@@ -28,7 +28,7 @@ Journey of fun, pain & gain.
 
 🥗 基础课系列课程：🌯PAT甲级辅导课（[完结34讲](./notes/acwings/PAT甲级辅导课/README.md)）；
 
- 🤸‍ 周赛笔记：🚵‍力扣周赛（[2021年7月11日起每周一期](./notes/leetcode/README.md)）；🤾‍力扣双周赛（[2021年7月24日起两周一期](./notes/leetcode_double/README.md)）；🤹‍AcWing周赛（[2021年7月11日起每周一期](./notes/acwings/acwing/README.md)）；
+🤸‍ 周赛笔记：🚵‍力扣周赛（[2021年7月11日起每周一期](./notes/leetcode/README.md)）；🤾‍力扣双周赛（[2021年7月24日起两周一期](./notes/leetcode_double/README.md)）；🤹‍AcWing周赛（[2021年7月11日起每周一期](./notes/acwings/acwing/README.md)）；
 
 ### Index
 
