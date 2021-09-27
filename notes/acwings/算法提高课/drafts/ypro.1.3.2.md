@@ -179,7 +179,7 @@ using namespace std;
 const int N = 22, M = 80;
 
 int n, m, K;
-int f[N][M];
+int f[N][M];  // 也可以理解为 f[i][j] 至少为 i j 时
 
 int main()
 {
