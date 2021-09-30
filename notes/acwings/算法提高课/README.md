@@ -60,6 +60,9 @@
 ### 1.5 状态压缩DP
 [./drafts/ypro.1.5.md](./drafts/ypro.1.5.md)
 
+### 1.6 区间DP
+[./drafts/ypro.1.6.md](./drafts/ypro.1.6.md)
+
 ## 第二章 搜索
 
 ### 2.1.1 BFS中的Flood-Fill和最短路模型
