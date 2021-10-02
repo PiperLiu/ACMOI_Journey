@@ -10,6 +10,7 @@
   - [数字转换](#数字转换)
   - [二叉苹果树（有依赖背包问题）](#二叉苹果树有依赖背包问题)
   - [战略游戏](#战略游戏)
+  - [皇宫看守](#皇宫看守)
 
 <!-- /code_chunk_output -->
 
@@ -499,3 +500,199 @@ $0 < N \le 1500$
 
 ![](./images/2021100109.png)
 
+```cpp
+#include <cstring>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+const int N = 1510;
+
+int n;
+int h[N], e[N], ne[N], idx;
+int f[N][2];
+bool st[N];
+
+void add(int a, int b)
+{
+    e[idx] = b, ne[idx] = h[a], h[a] = idx ++ ;
+}
+
+void dfs(int u)
+{
+    f[u][0] = 0, f[u][1] = 1;  // 在 u 点状态，是 0 的话 0 个士兵，是 1 的话 1 个士兵
+    for (int i = h[u]; ~i; i = ne[i])
+    {
+        int j = e[i];
+        dfs(j);  // dfs 的位置，先更新最尾部的节点
+        f[u][0] += f[j][1];  // 当前这点不选的话，必须选择我的子节点
+        f[u][1] += min(f[j][0], f[j][1]);  // 当前这点选的话，子节点可选可不选
+    }
+}
+
+int main()
+{
+    while (cin >> n)
+    {
+        memset(h, -1, sizeof h);
+        idx = 0;  // 多组测试数据，因此要清零 idx
+
+        memset(st, 0, sizeof st);
+        for (int i = 0; i < n; i ++ )
+        {
+            int id, cnt;
+            scanf("%d:(%d)", &id, &cnt);
+            while (cnt -- )
+            {
+                int ver;
+                cin >> ver;
+                add(id, ver);
+                st[ver] = true;
+            }
+        }
+
+        int root = 0;
+        while (st[root]) root ++ ;
+        dfs(root);
+
+        printf("%d\n", min(f[root][0], f[root][1]));
+    }
+
+    return 0;
+}
+```
+
+**经验：**
+- C++ 中 `scanf` 读入一个数就返回 1
+
+#### 皇宫看守
+
+太平王世子事件后，陆小凤成了皇上特聘的御前一品侍卫。
+
+皇宫各个宫殿的分布，呈一棵树的形状，宫殿可视为树中结点，两个宫殿之间如果存在道路直接相连，则该道路视为树中的一条边。
+
+已知，在一个宫殿镇守的守卫不仅能够观察到本宫殿的状况，还能观察到与该宫殿直接存在道路相连的其他宫殿的状况。
+
+大内保卫森严，三步一岗，五步一哨，每个宫殿都要有人全天候看守，在不同的宫殿安排看守所需的费用不同。
+
+可是陆小凤手上的经费不足，无论如何也没法在每个宫殿都安置留守侍卫。
+
+帮助陆小凤布置侍卫，在看守全部宫殿的前提下，使得花费的经费最少。
+
+<h4>输入格式</h4>
+
+输入中数据描述一棵树，描述如下：
+
+第一行 $n$，表示树中结点的数目。
+
+第二行至第 $n+1$ 行，每行描述每个宫殿结点信息，依次为：该宫殿结点标号 $i$，在该宫殿安置侍卫所需的经费 $k$，该结点的子结点数 $m$，接下来 $m$ 个数，分别是这个结点的 $m$ 个子结点的标号 $r_1,r_2,...,r_m$。
+
+对于一个 $n$ 个结点的树，结点标号在 $1$ 到 $n$ 之间，且标号不重复。
+
+<h4>输出格式</h4>
+
+输出一个整数，表示最少的经费。
+
+<h4>数据范围</h4>
+
+$1 \le n \le 1500$
+
+<h4>输入样例：</h4>
+
+```
+6
+1 30 3 2 3 4
+2 16 2 5 6
+3 5 0
+4 4 0
+5 11 0
+6 5 0
+```
+
+<h4>输出样例：</h4>
+
+```
+25
+```
+
+<h4>样例解释：</h4>
+
+<p>在2、3、4结点安排护卫，可以观察到全部宫殿，所需经费最少，为 16 + 5 + 4 = 25。</p>
+
+![](./images/2021100201.png)
+
+解释一下 `f(i, 0)` 更新公式：因为 `i` 此时没有放警卫，因此，子节点要么被自己看到，要么被子节点看到，因此，所以是 $\sum (min\{ f(j,1), f(j,2) \})$ 。
+
+`f(i, 1)` 更新则是在枚举哪一个子节点看到了他。
+
+```cpp
+#include <cstring>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+const int N = 1510;
+
+int n;
+int h[N], w[N], e[N], ne[N], idx;
+int f[N][3];
+bool st[N];
+
+void add(int a, int b)
+{
+    e[idx] = b, ne[idx] = h[a], h[a] = idx ++ ;
+}
+
+void dfs(int u)
+{
+    f[u][2] = w[u];
+
+    int sum = 0;
+    for (int i = h[u]; ~i; i = ne[i])
+    {
+        int j = e[i];
+        dfs(j);  // 递归到叶子
+        f[u][0] += min(f[j][1], f[j][2]);
+        f[u][2] += min(min(f[j][0], f[j][1]), f[j][2]);
+        sum += min(f[j][1], f[j][2]);
+    }
+
+    f[u][1] = 1e9;
+    for (int i = h[u]; ~i; i = ne[i])
+    {
+        int j = e[i];
+        f[u][1] = min(f[u][1], sum - min(f[j][1], f[j][2]) + f[j][2]);
+    }
+}
+
+int main()
+{
+    cin >> n;
+
+    memset(h, -1, sizeof h);
+    for (int i = 1; i <= n; i ++ )
+    {
+        int id, cost, cnt;
+        cin >> id >> cost >> cnt;
+        w[id] = cost;
+        while (cnt -- )
+        {
+            int ver;
+            cin >> ver;
+            add(id, ver);
+            st[ver] = true;
+        }
+    }
+
+    int root = 1;
+    while (st[root]) root ++ ;
+
+    dfs(root);
+
+    cout << min(f[root][1], f[root][2]) << endl;
+
+    return 0;
+}
+```
