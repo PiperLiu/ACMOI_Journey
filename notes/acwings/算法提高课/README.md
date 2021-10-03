@@ -21,6 +21,7 @@
   - [1.5 状态压缩DP](#15-状态压缩dp)
   - [1.6 区间DP](#16-区间dp)
   - [1.7 树形DP](#17-树形dp)
+  - [1.8 数位DP](#18-数位dp)
 - [第二章 搜索](#第二章-搜索)
   - [2.1.1 BFS中的Flood-Fill和最短路模型](#211-bfs中的flood-fill和最短路模型)
   - [2.1.2 BFS中的多源BFS-双端队列BFS](#212-bfs中的多源bfs-双端队列bfs)
@@ -67,6 +68,9 @@
 
 ### 1.7 树形DP
 [./drafts/ypro.1.7.md](./drafts/ypro.1.7.md)
+
+### 1.8 数位DP
+[./drafts/ypro.1.8.md](./drafts/ypro.1.8.md)
 
 ## 第二章 搜索
 
