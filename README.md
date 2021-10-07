@@ -15,8 +15,8 @@
 
 <p align="center">
   <a href="https://blog.csdn.net/weixin_42815609"><img src="https://img.shields.io/badge/博客-CSDN-red.svg" alt="https://www.csdn.net/"></a>
-  <a href="./doc/images/扫码_搜索联合传播样式-微信标准绿版.png"><img src="https://img.shields.io/badge/微信公众号-github-verdigris.svg" alt="weixin"></a>
-  <a href="https://www.zhihu.com/people/zai-deng-yici-ji-hui"><img src="https://img.shields.io/badge/知乎-github-blue.svg" alt="https://www.zhihu.com/"></a>
+  <a href="./doc/images/扫码_搜索联合传播样式-微信标准绿版.png"><img src="https://img.shields.io/badge/微信公众号-WeiXin-verdigris.svg" alt="weixin"></a>
+  <a href="https://www.zhihu.com/people/zai-deng-yici-ji-hui"><img src="https://img.shields.io/badge/知乎-ZhiHu-blue.svg" alt="https://www.zhihu.com/"></a>
 </p>
 
 # Journey for Programming Algorithm
@@ -51,7 +51,7 @@ Journey of fun, pain & gain.
 ### My Account
 - LeetCode: [PiperLiu](https://leetcode-cn.com/u/piper-2/)
 - AcWing: [Piper](https://www.acwing.com/user/myspace/index/93106/)
-- 洛谷: [PiperLiu](https://www.luogu.com.cn/user/349452)
+- Codeforces: [PiperLiu](https://codeforces.com/profile/PiperLiu)
 
 ### Resources
 #### Platforms
@@ -61,11 +61,6 @@ Journey of fun, pain & gain.
 - codewars: https://www.codewars.com/
 - codeforces: https://codeforces.com/
 - pta: https://pintia.cn/
-
-#### Examination
-- CCF CSP：每年3、9、12月份，6月也可能有
-- PAT：每年春、秋、冬
-- 蓝桥杯：上半年比赛12月到3月报名
 
 #### Wikis
 - OI Wiki: https://oi-wiki.org/
