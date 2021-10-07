@@ -26,7 +26,7 @@ Journey of fun, pain & gain.
 
 🍟 ACM/OI竞赛系统课程：🍖算法基础课（[完结19讲](./notes/acwings/算法基础课/README.md)）；🍩算法提高课（[未完结](./notes/acwings/算法提高课/README.md)）；🎂《算法竞赛进阶指南》（[未完结](./notes/acwings/《算法竞赛进阶指南》/README.md)）；
 
-🥗 基础课系列课程：🌯PAT甲级辅导课（[完结34讲](./notes/acwings/PAT甲级辅导课/README.md)）；
+🥗 其他内容集合：🌯PAT甲级辅导课（[完结34讲](./notes/acwings/PAT甲级辅导课/README.md)）；🥪Codeforces刷题杂记（[持续收集中](./notes/codeforces/README.md)）
 
 🤸‍ 周赛笔记：🚵‍力扣周赛（[2021年7月11日起每周一期](./notes/leetcode/README.md)）；🤾‍力扣双周赛（[2021年7月24日起两周一期](./notes/leetcode_double/README.md)）；🤹‍AcWing周赛（[2021年7月11日起每周一期](./notes/acwings/acwing/README.md)）；
 
@@ -41,7 +41,6 @@ Journey of fun, pain & gain.
 - [My Account](#my-account)
 - [Resources](#resources)
   - [Platforms](#platforms)
-  - [Examination](#examination)
   - [Wikis](#wikis)
 - [Notes](#notes)
 
