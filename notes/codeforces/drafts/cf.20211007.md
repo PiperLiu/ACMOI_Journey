@@ -36,3 +36,4 @@ $$(-n+1) + (-n+2) + ... + (n-2) + (n-1)$$
 - [B. Queue at the School](https://codeforces.com/problemset/problem/266/B) 题目很简单但是 WA 了一次，我是傻逼
 - [A. Insomnia cures](https://codeforces.com/problemset/problem/148/A)
 - [A. Anton and Letters](https://codeforces.com/problemset/problem/443/A)
+- [B. Special Numbers](https://codeforces.com/contest/1594/problem/B)
