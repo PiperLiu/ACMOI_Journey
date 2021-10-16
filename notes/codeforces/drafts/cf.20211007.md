@@ -4,6 +4,7 @@
 <!-- code_chunk_output -->
 
 - [A. Consecutive Sum Riddle（观察+智商）](#a-consecutive-sum-riddle观察智商)
+- [C. Make Them Equal（智商+逻辑）](#c-make-them-equal智商逻辑)
 - [简单题不详记](#简单题不详记)
 
 <!-- /code_chunk_output -->
