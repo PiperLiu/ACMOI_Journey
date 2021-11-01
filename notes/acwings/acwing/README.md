@@ -134,3 +134,6 @@
 ### 20211030周赛23
 [./drafts/23.md](./drafts/23.md)
 
+- [完全平方数](./drafts/23.md#完全平方数)
+- [传送阵（flood filled）](./drafts/23.md#传送阵flood-filled)
+- [取石子游戏（博弈+找规律/证明/打表）](./drafts/23.md#取石子游戏博弈找规律证明打表)
