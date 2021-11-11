@@ -62,6 +62,8 @@ Journey of fun, pain & gain.
 - pta: https://pintia.cn/
 
 #### Wikis
+- 收录一下巨佬的笔记
+  - https://cp-wiki.vercel.app/
 - OI Wiki: https://oi-wiki.org/
 - 信息学奥赛一本通（C++版）在线评测系统: http://ybt.ssoier.cn:8088/index.php
 - Algorithm Archive: https://www.algorithm-archive.org/
