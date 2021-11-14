@@ -3,6 +3,7 @@
 
 <!-- code_chunk_output -->
 
+- [小结](#小结)
 - [算法API](#算法api)
   - [数与字符串转换](#数与字符串转换)
   - [排序](#排序)
@@ -18,8 +19,15 @@
     - [有序字典](#有序字典)
   - [优先队列](#优先队列)
     - [优先队列重载](#优先队列重载)
+  - [集合](#集合)
+    - [有序集合与二分查找](#有序集合与二分查找)
 
 <!-- /code_chunk_output -->
+
+## 小结
+
+`C++ STL` 牛逼，我于 2021 年 11 月 14 日做完 [leetcode 双周赛 65 T4](../leetcode_double/drafts/65.md#你可以安排的最多任务数目二分套二分贪心) 决定以后能有 STL 则用 STL ，不再手写二分。有这么两点需
+要理解记忆：一是 `s.find()` 返回一个 `iterator` ；二是 `*s.rbegin()` 取最后一个数而非 `end()` 因为 `end()` 是最后一个数指针 `+ 1`  。
 
 ## 算法API
 ### 数与字符串转换
@@ -257,4 +265,61 @@ int main() {
 
 // 版权声明：本文为CSDN博主「leagalhigh」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
 // 原文链接：https://blog.csdn.net/u014257954/article/details/78623215
+```
+
+### 集合
+
+要求：
+- 初尺看存弹
+- 有序集合与二分查找
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <set>
+using namespace std;
+
+int main()
+{
+    vector<int> a = {1, 2, 3};
+    // 初
+    set<int> s(a.begin(), a.end());
+    // 尺
+    s.size();
+    // 看
+    auto it = s.find(2);
+    if (it == s.end()) printf("not in\n"); else printf("in\n");
+    // 存
+    s.insert(4);
+    // 弹
+    s.erase(s.find(2));
+}
+```
+
+#### 有序集合与二分查找
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <set>
+using namespace std;
+
+int main()
+{
+    vector<int> a = {1, 2, 3};
+    // 初
+    multiset<int> s(a.begin(), a.end());
+    // 尺
+    s.size();
+    // 看
+    auto it = s.find(2);
+    if (it == s.end()) printf("not in\n"); else printf("in\n");
+    int last = *s.rbegin();
+    auto it2 = s.lower_bound(2);
+    auto it3 = s.upper_bound(1);
+    // 存
+    s.insert(4);
+    // 弹
+    s.erase(s.find(2));
+}
 ```
