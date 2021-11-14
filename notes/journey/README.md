@@ -6,6 +6,8 @@
 <!-- code_chunk_output -->
 
 - [20210912 PAT考试总结](#20210912-pat考试总结)
+- [20211007 注册 Codeforces](#20211007-注册-codeforces)
+- [20211114 决定用STL以及补链表的题](#20211114-决定用stl以及补链表的题)
 
 <!-- /code_chunk_output -->
 
@@ -20,3 +22,8 @@
 [./drafts/20211007CF.md](./drafts/20211007CF.md)
 
 以后可以更多地刷 CF 。
+
+### 20211114 决定用STL以及补链表的题
+[./drafts/20211114LinkedList.md](./drafts/20211114LinkedList.md)
+
+遇到盲区，之前一直没补，幸好及时让我摔了一跤，要不以后摔更大的。
