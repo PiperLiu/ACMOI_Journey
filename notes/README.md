@@ -44,10 +44,3 @@
 
 #### 力扣双周赛
 [./leetcode_double/README.md](./leetcode_double/README.md)
-
-```cpp
-set<int> s;
-
-s.empty();
-
-```
