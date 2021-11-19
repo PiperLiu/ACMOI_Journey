@@ -98,3 +98,7 @@ public:
 - 21. 合并两个有序链表 https://leetcode-cn.com/problems/merge-two-sorted-lists/ 哑节点
 - 23. 合并K个升序链表 https://leetcode-cn.com/problems/merge-k-sorted-lists/ 优先队列辅助
 - 24. 两两交换链表中的节点 https://leetcode-cn.com/problems/swap-nodes-in-pairs/ 严谨一些，注意记录可能变化的量，比如使用 `q->next` 前，要确认 `q` 这个节点没被改变过，是你想要的节点，否则，你就要将 `q->next` 记录下来再使用
+- 61. 旋转链表 https://leetcode-cn.com/problems/rotate-list/ 建立一个环，找到地方断开
+- 82. 删除排序链表中的重复元素 II https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/ 善于使用 `dummy` 和 `while (p->next)` ，检查 `p` 后面的元素是否重复，不重复再后移 `p`
+- 83. 删除排序链表中的重复元素 https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/ 和上一道题同一个模子，只不过每次必须移动一次 `p` 以保留元素
+- 86. 分隔链表 https://leetcode-cn.com/problems/partition-list/ 建立两条链，一边遍历一边建
