@@ -6,6 +6,7 @@ https://leetcode-cn.com/problemset/all/?topicSlugs=linked-list&page=1
 <!-- code_chunk_output -->
 
 - [25. K 个一组翻转链表（自己总结的翻转部分链表模板）](#25-k-个一组翻转链表自己总结的翻转部分链表模板)
+- [109. 有序链表转换二叉搜索树](#109-有序链表转换二叉搜索树)
 - [简单题不详记](#简单题不详记)
 
 <!-- /code_chunk_output -->
@@ -91,6 +92,63 @@ public:
 };
 ```
 
+### 109. 有序链表转换二叉搜索树
+
+https://leetcode-cn.com/problems/convert-sorted-list-to-binary-search-tree/
+
+算是 [49. 二叉搜索树与双向链表（递归/不能创建新节点）](../../acwings/offers/drafts/20211115.md#49-二叉搜索树与双向链表递归不能创建新节点) 的兄弟题。并不是很难，就是边界条件自己得捋清楚，尤其是 `center` 有没有可能是空节点。
+
+```cpp
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+
+ // 如何转换平衡二叉树？选最中间的点作为根节点
+class Solution {
+public:
+    TreeNode* sortedListToBST(ListNode* head) {
+        int n = 0;
+        for (auto p = head; p; p = p->next) ++ n;
+
+        function<TreeNode*(ListNode*, int)> dfs = [&](ListNode* u, int cnt) -> TreeNode*
+        {
+            if (cnt == 0) return nullptr;
+            int v = cnt / 2;
+
+            ListNode* center = u;
+            for (int i = 0; i < v; ++ i) center = center->next;
+
+            TreeNode* treeNode = new TreeNode(center->val);
+
+            treeNode->left  = dfs(u, v);
+            treeNode->right = dfs(center->next, cnt - v - 1);
+            return treeNode;
+        };
+
+        TreeNode* root = dfs(head, n);
+        return root;
+    }
+};
+```
+
 ### 简单题不详记
 
 - 2. 两数相加 https://leetcode-cn.com/problems/add-two-numbers/ 高精度加法+遍历两个链表
@@ -102,3 +160,4 @@ public:
 - 82. 删除排序链表中的重复元素 II https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/ 善于使用 `dummy` 和 `while (p->next)` ，检查 `p` 后面的元素是否重复，不重复再后移 `p`
 - 83. 删除排序链表中的重复元素 https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/ 和上一道题同一个模子，只不过每次必须移动一次 `p` 以保留元素
 - 86. 分隔链表 https://leetcode-cn.com/problems/partition-list/ 建立两条链，一边遍历一边建
+- 92. 反转链表 II https://leetcode-cn.com/problems/reverse-linked-list-ii/ 注意别用 `while (curr != q->next)` 判断，因为 `q->next` 会变化的，应该用 `auto end = q->next; while (curr != end)` 判断
