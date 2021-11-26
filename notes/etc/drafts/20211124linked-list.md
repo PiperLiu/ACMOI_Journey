@@ -69,12 +69,12 @@ public:
 **经验：**
 - C++ 中如果类似 `treeNode->left` 的指针最终没用了，需要赋值 `nullptr` ，否则报错 `AddressSanitizer: heap-use-after-free on address`
 
-![pic.leetcode-cn.com/1637721123-KbDcQQ-image.png](https://pic.leetcode-cn.com/1637721123-KbDcQQ-image.png)
+![pic.leetcode-cn.com/1637721123-KbDcQQ-image.png](./images/1637721123-KbDcQQ-image.png)
 
 执行用时：
-- `0 ms`, 在所有 C++ 提交中击败了 $100.00%$的用户
+- `0 ms`, 在所有 C++ 提交中击败了 $100.00\%$的用户
 
 内存消耗：
-- `12.2 MB`, 在所有 C++ 提交中击败了 $98.35%$ 的用户
+- `12.2 MB`, 在所有 C++ 提交中击败了 $98.35\%$ 的用户
 
 ### 简单题不详记
