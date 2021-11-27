@@ -19,4 +19,4 @@
 - [./drafts/20211118linked-list.md](./drafts/20211118linked-list.md)
   - [25. K 个一组翻转链表（自己总结的翻转部分链表模板）](./drafts/20211118linked-list.md#25-k-个一组翻转链表自己总结的翻转部分链表模板)
   - [109. 有序链表转换二叉搜索树](./drafts/20211118linked-list.md#109-有序链表转换二叉搜索树)
-- 
+- [./drafts/20211124linked-list.md](./drafts/20211124linked-list.md)

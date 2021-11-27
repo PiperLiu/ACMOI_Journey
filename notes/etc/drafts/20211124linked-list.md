@@ -78,3 +78,4 @@ public:
 - `12.2 MB`, 在所有 C++ 提交中击败了 $98.35\%$ 的用户
 
 ### 简单题不详记
+- 138. 复制带随机指针的链表 https://leetcode-cn.com/problems/copy-list-with-random-pointer/ 和 [48. 复杂链表的复刻（不用哈希表可以节省空间）](../../acwings/offers/drafts/20211115.md#48-复杂链表的复刻不用哈希表可以节省空间) 一样的
