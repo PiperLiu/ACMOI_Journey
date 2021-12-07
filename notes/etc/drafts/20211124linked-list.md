@@ -79,3 +79,5 @@ public:
 
 ### 简单题不详记
 - 138. 复制带随机指针的链表 https://leetcode-cn.com/problems/copy-list-with-random-pointer/ 和 [48. 复杂链表的复刻（不用哈希表可以节省空间）](../../acwings/offers/drafts/20211115.md#48-复杂链表的复刻不用哈希表可以节省空间) 一样的
+- 141. 环形链表 https://leetcode-cn.com/problems/linked-list-cycle/ 注意只有在跳出循环后还能保证快慢指针相同的，才是有环
+- 142. 环形链表 II https://leetcode-cn.com/problems/linked-list-cycle-ii/ 同 [剑指 offer 的 34. 链表中环的入口结点（快慢指针）](../../acwings/offers/drafts/20211114.md#34-链表中环的入口结点快慢指针)
