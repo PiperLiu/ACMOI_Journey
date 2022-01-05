@@ -11,6 +11,7 @@
   - [算法提高课](#算法提高课)
   - [《算法竞赛进阶指南》打卡活动](#算法竞赛进阶指南打卡活动)
   - [PAT甲级辅导课](#pat甲级辅导课)
+  - [剑指offer七周打卡](#剑指offer七周打卡)
   - [AcWing 周赛](#acwing-周赛)
 - [力扣周赛](#力扣周赛)
   - [力扣双周赛](#力扣双周赛)
@@ -35,6 +36,9 @@
 
 #### PAT甲级辅导课
 [./acwings/PAT甲级辅导课/README.md](./acwings/PAT甲级辅导课/README.md)
+
+#### 剑指offer七周打卡
+[./acwings/offers/README.md](./acwings/offers/README.md)
 
 #### AcWing 周赛
 [./acwings/acwing/README.md](./acwings/acwing/README.md)
