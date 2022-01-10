@@ -27,8 +27,15 @@
 
 笔记：
 - [./drafts/20220105acwing2022winter.md](./drafts/20220105acwing2022winter.md)
+  - [2058. 笨拙的手指（秦九韶）](./drafts/20220105acwing2022winter.md#2058-笨拙的手指秦九韶)
+  - [2041. 干草堆（差分与`nth_element`）](./drafts/20220105acwing2022winter.md#2041-干草堆差分与nth_element)
+  - [2060. 奶牛选美（两个连通块）](./drafts/20220105acwing2022winter.md#2060-奶牛选美两个连通块)
+  - [2019. 拖拉机（双端队列广搜）](./drafts/20220105acwing2022winter.md#2019-拖拉机双端队列广搜)
+  - [2014. 岛（优化分析/unique）](./drafts/20220105acwing2022winter.md#2014-岛优化分析unique)
+  - [2005. 马蹄铁（状态机DFS）](./drafts/20220105acwing2022winter.md#2005-马蹄铁状态机dfs)
+  - [1996. 打乱字母（分析+二分）](./drafts/20220105acwing2022winter.md#1996-打乱字母分析二分)
 
 ### 20220108力扣杂题
 
 笔记：
-- []
+- [./drafts/20220108lc.md](./drafts/20220108lc.md)
