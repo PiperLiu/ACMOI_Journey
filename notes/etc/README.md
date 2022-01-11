@@ -34,6 +34,7 @@
   - [2014. 岛（优化分析/unique）](./drafts/20220105acwing2022winter.md#2014-岛优化分析unique)
   - [2005. 马蹄铁（状态机DFS）](./drafts/20220105acwing2022winter.md#2005-马蹄铁状态机dfs)
   - [1996. 打乱字母（分析+二分）](./drafts/20220105acwing2022winter.md#1996-打乱字母分析二分)
+- [./drafts/20220111acwing2022winter.md](./drafts/20220111acwing2022winter.md)
 
 ### 20220108力扣杂题
 
