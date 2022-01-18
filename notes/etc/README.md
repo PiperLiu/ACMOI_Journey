@@ -41,6 +41,7 @@
   - [1960. 闪烁（状态压缩/找规律/陷入循环/抽屉原理）](./drafts/20220111acwing2022winter.md#1960-闪烁状态压缩找规律陷入循环抽屉原理)
   - [AcWing 1952. 金发姑娘和 N 头牛（差分）](./drafts/20220111acwing2022winter.md#acwing-1952-金发姑娘和-n-头牛差分)
   - [1945. 奶牛棒球（简单推导/双指针/二分）](./drafts/20220111acwing2022winter.md#1945-奶牛棒球简单推导双指针二分)
+- [./drafts/20220118acwing2022winter.md](./drafts/20220118acwing2022winter.md)
 
 ### 20220108力扣杂题
 
