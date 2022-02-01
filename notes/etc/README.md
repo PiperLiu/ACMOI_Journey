@@ -54,6 +54,7 @@
   - [1826. 农田缩减（枚举）](./drafts/20220122acwing2022winter.md#1826-农田缩减枚举)
   - [1813. 方块游戏（枚举）](./drafts/20220122acwing2022winter.md#1813-方块游戏枚举)
   - [1801. 蹄子剪刀布（枚举+归纳）](./drafts/20220122acwing2022winter.md#1801-蹄子剪刀布枚举归纳)
+- [./drafts/20220201acwing2022winter.md](./drafts/20220201acwing2022winter.md)
 
 ### 20220108力扣杂题
 
