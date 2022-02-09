@@ -58,6 +58,7 @@
   - [1789. 牛为什么过马路 II（枚举在圈的同一侧）](./drafts/20220201acwing2022winter.md#1789-牛为什么过马路-ii枚举在圈的同一侧)
   - [1738. 蹄球（基环图+思维题）](./drafts/20220201acwing2022winter.md#1738-蹄球基环图思维题)
   - [简单题不详记](./drafts/20220201acwing2022winter.md#简单题不详记)
+- [./drafts/20220208acwing2022winter.md](./drafts/20220208acwing2022winter.md)
 
 ### 20220108力扣杂题
 
