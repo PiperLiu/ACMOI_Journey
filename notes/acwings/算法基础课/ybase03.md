@@ -165,7 +165,7 @@ int main()
     for (int i = 0; i < m; i ++) scanf("%d", &b[i]);
     
     int i = 0, j = 0;
-    while (j < m)
+    while (i < n && j < m)
     {
         if (a[i] == b[j]) i ++;
         j ++;
