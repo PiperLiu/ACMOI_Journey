@@ -143,7 +143,7 @@ public:
         sort(idx.begin(), idx.end(), [&](const int& a, const int& b) {
             return skills[a].size() > skills[b].size();
         });
-        map<long, long> cnt;
+        unordered_map<long, long> cnt;  // 用 unordered_map 代替 map 就不 TLE 了
         for (auto&& id: idx)
         {
             auto skill = skills[id];
