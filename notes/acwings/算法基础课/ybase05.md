@@ -415,7 +415,7 @@ int main()
             }
             else if (t == 2)
             {
-                if (px == py && (d[x] - d[y] - 1) % 3) res ++;  // x y 都归入了集合但是 y 吃 x，假话
+                if (px == py && (d[x] - d[y] - 1) % 3) res ++;  // x y 都归入了集合但是 x 不吃 y，假话
                 else if (px != py)
                 {
                     p[px] = py;
@@ -428,8 +428,6 @@ int main()
     return 0;
 }
 ```
-
-> 上述代码可能存在错误！
 
 **分析：** 关于上面两个计算 `p[x]` 的式子，可以考虑方程式如下两张图。
 
