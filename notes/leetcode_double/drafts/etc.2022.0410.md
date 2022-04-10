@@ -105,6 +105,8 @@ public:
 
 ### 招商银行-04. 商店促销活动（复杂的dp）
 
+![](./images/leetcode-cn.com_contest_cmbchina-2022spring_problems_OK3hsO_.png)
+
 **Hint1**
 
 每三个数里最小的那个数可能到这三个数之和的33%，也可能远小于30%，而A的选法相当于免去30%，好像贪心不大可做的样子。
