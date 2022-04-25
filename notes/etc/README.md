@@ -103,6 +103,12 @@
 
 笔记：
 - [./drafts/20220318acwing2022spring.md](./drafts/20220318acwing2022spring.md)
+  - [3745. 牛的学术圈 I（双指针）](./drafts/20220318acwing2022spring.md#3745-牛的学术圈-i双指针)
+  - [1683. 困牛放牧（思维题+分类讨论）](./drafts/20220318acwing2022spring.md#1683-困牛放牧思维题分类讨论)
+  - [1749. 阻挡广告牌 II（模拟）](./drafts/20220318acwing2022spring.md#1749-阻挡广告牌-ii模拟)
+  - [1921. 重新排列奶牛（好题，数组循环排序/1到N排列，环图模型）](./drafts/20220318acwing2022spring.md#1921-重新排列奶牛好题数组循环排序1到n排列环图模型)
+  - [1912. 里程表（逆向思维枚举）](./drafts/20220318acwing2022spring.md#1912-里程表逆向思维枚举)
+- [./drafts/20220425acwing2022spring.md](./drafts/20220425acwing2022spring.md)
 
 ### 20220326 NOI ONLINE 2022
 
