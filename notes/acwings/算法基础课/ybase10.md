@@ -166,7 +166,7 @@ int main()
 
 时间复杂度：
 - 删除倍数过程求和 $\frac{n}{2} + \frac{n}{3} + ... \frac{n}{n}$
-  - 调和级数：$\lim_{n \to \infty}(\frac{n}{2} + \frac{n}{3} + ... \frac{n}{n}) = \ln{n} + c \approx \ln{n} + 0.57$
+  - 调和级数：$\lim_{n \to \infty}(\frac{1}{2} + \frac{1}{3} + ... \frac{1}{n}) = \ln{n} + c \approx \ln{n} + 0.57$
 - 因此，$\frac{n}{2} + \frac{n}{3} + ... \frac{n}{n} = n(\frac{1}{2} + \frac{1}{3} + ... \frac{1}{n})$ 可看成 $n \ln{n}$
 
 #### 朴素法筛质数（埃氏筛法）
@@ -212,7 +212,7 @@ int main()
 ```
 
 时间复杂度：
-- 数学定理（质数定理）：$1~n$中有$\frac{n}{\ln{n}}$个质数
+- 数学定理（质数定理）：$1\sim n$中有$\frac{n}{\ln{n}}$个质数
 - 所以就有 $\frac{n}{2} + \frac{n}{3} + ... \frac{n}{n} = n(\frac{1}{2} + \frac{1}{3} + ... \frac{1}{n})$ 基础上除以 $n$ 乘上 $\frac{n}{\ln{n}}$ 约等于 $n$
 - 而实际上，其严格时间复杂度是 $O(n\log{n}\log{n})$
 
