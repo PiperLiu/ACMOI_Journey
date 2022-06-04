@@ -122,7 +122,6 @@
   - [2032. 过度种植（容斥原理/区间求交）](./drafts/20220425acwing2022spring.md#2032-过度种植容斥原理区间求交)
   - [2023. 连接奶牛（全排列/状态压缩DP）](./drafts/20220425acwing2022spring.md#2023-连接奶牛全排列状态压缩dp)
   - [2013. 三条线（思维题，逆向思维/类似最小圆覆盖）](./drafts/20220425acwing2022spring.md#2013-三条线思维题逆向思维类似最小圆覆盖)
-- [./drafts/20220521acwing2022spring.md](./drafts/20220521acwing2022spring.md)
 
 ### 20220326 NOI ONLINE 2022
 
