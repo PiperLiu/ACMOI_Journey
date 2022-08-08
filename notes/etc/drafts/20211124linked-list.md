@@ -177,6 +177,59 @@ public:
  */
 ```
 
+使用 STL list 如下。
+
+```cpp
+class LRUCache {
+private:
+  list<pair<int, int>> cache;   ////< @note pair[key]=value
+  unordered_map<int, list<pair<int, int>>::iterator> key2node;
+  int cap;                      ////< @note 最大容量
+
+public:
+  LRUCache(int capacity) : cap(capacity) {}
+
+  int get(int key) {
+    if (key2node.find(key) == key2node.end()) {
+      return -1;
+    }
+    pair<int, int> node = *key2node[key];
+    cache.erase(key2node[key]); ////< @note 将节点移到链表头部并更新map
+    cache.push_front(node);
+    key2node[key] = cache.begin();
+    return node.second;
+  }
+
+  void put(int key, int val) {
+    auto newNode = std::make_pair(key, val);
+
+    if (key2node.count(key)) {  ////< @note 若该节点已存在，则删除旧的节点
+      cache.erase(key2node[key]);
+    } else {
+      if (cap == cache.size()) {
+        key2node.erase(cache.back().first);
+        cache.pop_back();       ////< @note 删除链表最后一个数据
+      }
+    }
+
+    cache.push_front(newNode);  ////< @node 插入新的节点到头部
+    key2node[key] = cache.begin();
+  }
+};
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache* obj = new LRUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
+
+// 作者：zhu-que-3
+// 链接：https://leetcode.cn/problems/lru-cache/solution/cshuang-xiang-lian-biao-he-ha-xi-biao-by-l476/
+// 来源：力扣（LeetCode）
+// 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
 ### 简单题不详记
 - 138. 复制带随机指针的链表 https://leetcode-cn.com/problems/copy-list-with-random-pointer/ 和 [48. 复杂链表的复刻（不用哈希表可以节省空间）](../../acwings/offers/drafts/20211115.md#48-复杂链表的复刻不用哈希表可以节省空间) 一样的
 - 141. 环形链表 https://leetcode-cn.com/problems/linked-list-cycle/ 注意只有在跳出循环后还能保证快慢指针相同的，才是有环
