@@ -274,3 +274,6 @@
 
 ### 20220924LCCUP 力扣杯 2022 秋季编程大赛
 [./drafts/LCCUP.2022.2.md](./drafts/LCCUP.2022.2.md)
+
+- [LCP 64. 二叉树灯饰（奇偶状态压缩+记忆化搜索+树形DP）](./drafts/LCCUP.2022.2.md#lcp-64-二叉树灯饰奇偶状态压缩记忆化搜索树形dp)
+- [LCP 65. 舒适的湿度（思维题+DP）](./drafts/LCCUP.2022.2.md#lcp-65-舒适的湿度思维题dp)
