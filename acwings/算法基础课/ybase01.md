@@ -54,7 +54,7 @@ void quick_sort(int q[], int l, int r)
     // 没数就不用排序了
     if (l >= r) return;
 
-    // 先把指针向中间移动一次，因此定义分界点时时有偏移量
+    // 先把指针向两侧移动，因此定义分界点时有偏移量
     int i = l - 1, j = r + 1, x = q[l + r >> 1];
     while (i < j)
     {

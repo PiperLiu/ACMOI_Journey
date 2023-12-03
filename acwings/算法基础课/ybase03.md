@@ -320,7 +320,7 @@ int find(int x)
         if (alls[mid] >= x) r = mid;
         else l = mid + 1;
     }
-    return l + 1;  // 这里！离散化后下表从 1 开始，而非 0
+    return l + 1;  // 这里！离散化后下标从 1 开始，而非 0
 }
 
 int main()
