@@ -413,7 +413,7 @@ int main()
 ```
 
 ### 队列
-现金先出。
+先进先出。
 
 #### 数组实现队列模板
 - 实现一个队列，队列初始为空，支持四种操作：
@@ -616,6 +616,42 @@ int main()
 }
 ```
 
+这里其实用到了双端队列，如果是最朴素的队列的话，是没办法同时观测队头和队尾的。
+
+```cpp
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+#include <queue>
+using namespace std;
+
+const int N = 1e6 + 10;
+int a[N];
+
+int main()
+{
+    deque<int> qmax, qmin;
+    int n, k;
+    cin >> n >> k;
+    for (int i = 0; i < n; i ++ )
+    {
+        cin >> a[i];
+        if (i - qmin.front() >= k) qmin.pop_front();
+        while (!qmin.empty() && a[qmin.back()] >= a[i]) qmin.pop_back();
+        qmin.push_back(i);
+        if (i + 1 >= k) cout << a[qmin.front()] << " ";
+    }
+    cout << endl;
+    for (int i = 0; i < n; i ++ )
+    {
+        if (i - qmax.front() >= k) qmax.pop_front();
+        while (!qmax.empty() && a[qmax.back()] <= a[i]) qmax.pop_back();
+        qmax.push_back(i);
+        if (i + 1 >= k) cout << a[qmax.front()] << " ";
+    }
+}
+```
+
 ### KMP：字符串匹配
 
 - 给定一个模式串 S，以及一个模板串 P，所有字符串中只包含大小写英文字母以及阿拉伯数字。
@@ -685,3 +721,17 @@ int main()
 ![](./images/20210516kmp4.png)
 
 第四张是说，我们匹配成功后，同样，要 `j = ne[j]` ，而非 `j = j - 1` 。
+
+其实用如下的例子更好说明：
+```
+P abcabcx
+M abcabcabcx
+
+P  abcabcx
+ne 0001230
+
+try to match:
+M abcabcabcx
+P ^^^^^^!
+     ^^^^^^^  # 直接根据 ne 平移到这里
+```
