@@ -18,8 +18,8 @@
 
 现在，要给 CS 专业一年级的学生进行成绩评估。
 
-我们只考虑他们的三门成绩：<code>C</code>&ndash;c语言，<code>M</code>&ndash;数学，<code>E</code>&ndash;英语，除此之外，我们还会考虑 <code>A</code> &ndash;三门成绩平均值。</p>
-<p><strong>注意</strong>：平均成绩为三科成绩平均值四舍五入取整的结果。
+我们只考虑他们的三门成绩：<code>C</code>&ndash;c语言，<code>M</code>&ndash;数学，<code>E</code>&ndash;英语，除此之外，我们还会考虑 <code>A</code> &ndash;三门成绩平均值。
+<strong>注意</strong>：平均成绩为三科成绩平均值四舍五入取整的结果。
 
 <p>例如，四个学生的成绩单如下：</p>
 
@@ -350,8 +350,8 @@ int main()
 接下来 $M$ 行，每行包含一个查询，具体格式如下：
 
 - <code>1: a book title</code>，查询书名。
-- <code>2: name of an author</code>，查询作者名。</li>
-- <code>3: a key word</code>，查询关键词。</li>
+- <code>2: name of an author</code>，查询作者名。
+- <code>3: a key word</code>，查询关键词。
 - <code>4: name of a publisher</code>，查询出版商。
 - <code>5: a 4-digit number representing the year</code>，查询出版年限。注意，这个年限可能包含前导 $0$。
 

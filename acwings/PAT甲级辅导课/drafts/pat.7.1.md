@@ -92,7 +92,7 @@ int main()
 
 $N = p_1^{k_1} \times p_2^{k_2} \times ... \times p_m^{k_m}$
 
-<p><strong>注意</strong>: 如果 $N = 1$ 则输出 <code>1=1</code>。
+<strong>注意</strong>: 如果 $N = 1$ 则输出 <code>1=1</code>。
 
 <h4>输入格式</h4>
 
