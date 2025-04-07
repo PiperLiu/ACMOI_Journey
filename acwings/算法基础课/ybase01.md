@@ -83,6 +83,86 @@ int main()
 - swap 是交换两个数，如果用的语言没有 swap 可以手写
 - **！！写成 `do while` 形式而非 `while do` 形式！！** 否则陷入死循环
 
+
+```go
+package main
+
+import (
+    "bufio"
+    "fmt"
+    "os"
+    "strconv"
+)
+
+func main() {
+    in := bufio.NewReader(os.Stdin)
+    out := bufio.NewWriter(os.Stdout)
+    defer out.Flush()
+
+    var n int
+    fmt.Fscan(in, &n)
+    a := make([]int, n)
+    for i := 0; i < n; i++ {
+        fmt.Fscan(in, &a[i])
+    }
+
+    quick_sort(a, 0, n-1)
+
+    for i := 0; i < n; i++ {
+        if i > 0 {
+            fmt.Fprint(out, " ")
+        }
+        fmt.Fprint(out, a[i])
+    }
+    fmt.Fprintln(out)
+}
+
+// faster
+func main() {
+    scanner := bufio.NewScanner(os.Stdin)
+    scanner.Split(bufio.ScanWords)
+    out := bufio.NewWriter(os.Stdout)
+    defer out.Flush()
+
+    scanner.Scan()
+    n, _ := strconv.Atoi(scanner.Text())
+
+    a := make([]int, n)
+    for i := 0; i < n; i++ {
+        scanner.Scan()
+        a[i], _ = strconv.Atoi(scanner.Text())
+    }
+
+    quick_sort(a, 0, n-1)
+
+    for i := 0; i < n; i++ {
+        if i > 0 {
+            out.WriteByte(' ')
+        }
+        out.WriteString(strconv.Itoa(a[i]))
+    }
+    out.WriteByte('\n')
+}
+
+func quick_sort(a []int, l, r int) {
+    if l >= r {
+        return
+    }
+    x := a[(l+r)/2]
+    i := l - 1
+    j := r + 1
+    for i < j {
+        for i++; a[i] < x; i++ {}
+        for j--; a[j] > x; j-- {}
+        if i < j {
+            a[i], a[j] = a[j], a[i]
+        }
+    }
+    quick_sort(a, l, j)
+    quick_sort(a, j+1, r)
+}
+```
+
 如下是错误示例：
 ```cpp
 #include <iostream>
