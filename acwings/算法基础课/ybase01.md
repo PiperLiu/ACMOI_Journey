@@ -84,82 +84,110 @@ int main()
 - **！！写成 `do while` 形式而非 `while do` 形式！！** 否则陷入死循环
 
 
+go 版本如下。
+
+
 ```go
 package main
 
 import (
-    "bufio"
-    "fmt"
-    "os"
-    "strconv"
+	"bufio"
+	"fmt"
+	"os"
+	"strconv"
 )
 
+/** https://www.acwing.com/problem/content/787/
+ | read | write | time |
+ |:---:|:---:|:---:|
+ | 1 | 1 | 5265ms |
+ | 2 | 1 | 1435ms |
+ | 3 | 1 | 976ms |
+ | 1 | 2 | 5156ms |
+ | 2 | 2 | 452ms |
+ | 3 | 2 | 145ms |
+ */
+
 func main() {
-    in := bufio.NewReader(os.Stdin)
-    out := bufio.NewWriter(os.Stdout)
-    defer out.Flush()
-
-    var n int
-    fmt.Fscan(in, &n)
-    a := make([]int, n)
-    for i := 0; i < n; i++ {
-        fmt.Fscan(in, &a[i])
-    }
-
-    quick_sort(a, 0, n-1)
-
-    for i := 0; i < n; i++ {
-        if i > 0 {
-            fmt.Fprint(out, " ")
-        }
-        fmt.Fprint(out, a[i])
-    }
-    fmt.Fprintln(out)
+    // n, a := read_stdin_1()
+    // n, a := read_stdin_2()
+    n, a := read_stdin_3()
+	quick_sort(a, 0, n-1)
+	// write_stdout_1(n, a)
+	write_stdout_2(n, a)
 }
 
-// faster
-func main() {
-    scanner := bufio.NewScanner(os.Stdin)
-    scanner.Split(bufio.ScanWords)
-    out := bufio.NewWriter(os.Stdout)
-    defer out.Flush()
+func read_stdin_1() (int, []int) {
+	var n int
+	fmt.Scanf("%d", &n)
+	a := make([]int, n)
+	for i := 0; i < n; i++ {
+		fmt.Scanf("%d", &a[i])
+	}
+	return n, a
+}
 
-    scanner.Scan()
-    n, _ := strconv.Atoi(scanner.Text())
+func read_stdin_2() (int, []int) {
+	in := bufio.NewReader(os.Stdin)
 
-    a := make([]int, n)
-    for i := 0; i < n; i++ {
-        scanner.Scan()
-        a[i], _ = strconv.Atoi(scanner.Text())
-    }
+	var n int
+	fmt.Fscan(in, &n)
+	a := make([]int, n)
+	for i := 0; i < n; i++ {
+		fmt.Fscan(in, &a[i])
+	}
+	return n, a
+}
 
-    quick_sort(a, 0, n-1)
+func read_stdin_3() (int, []int) {
+	scanner := bufio.NewScanner(os.Stdin)
+	scanner.Split(bufio.ScanWords)
 
-    for i := 0; i < n; i++ {
-        if i > 0 {
-            out.WriteByte(' ')
-        }
-        out.WriteString(strconv.Itoa(a[i]))
-    }
-    out.WriteByte('\n')
+	var n int
+	scanner.Scan()
+	n, _ = strconv.Atoi(scanner.Text())
+	a := make([]int, n)
+	for i := 0; i < n; i++ {
+		scanner.Scan()
+		a[i], _ = strconv.Atoi(scanner.Text())
+	}
+	return n, a
+}
+
+func write_stdout_1(n int, a []int) {
+	for i := 0; i < n; i++ {
+		fmt.Printf("%d ", a[i])
+	}
+}
+
+func write_stdout_2(n int, a []int) {
+	out := bufio.NewWriter(os.Stdout)
+	defer out.Flush()
+
+	for i := 0; i < n; i++ {
+		if i > 0 {
+			out.WriteByte(' ')
+		}
+		out.WriteString(strconv.Itoa(a[i]))
+	}
 }
 
 func quick_sort(a []int, l, r int) {
-    if l >= r {
-        return
-    }
-    x := a[(l+r)/2]
-    i := l - 1
-    j := r + 1
-    for i < j {
-        for i++; a[i] < x; i++ {}
-        for j--; a[j] > x; j-- {}
-        if i < j {
-            a[i], a[j] = a[j], a[i]
-        }
-    }
-    quick_sort(a, l, j)
-    quick_sort(a, j+1, r)
+	if l >= r {
+		return
+	}
+	x, i, j := a[(l+r)/2], l-1, r+1
+	for i < j {
+		for i++; a[i] < x; i++ {
+		}
+		for j--; a[j] > x; j-- {
+		}
+		if i < j {
+			a[i], a[j] = a[j], a[i]
+		}
+	}
+	quick_sort(a, l, j)
+	quick_sort(a, j+1, r)
 }
 ```
 
