@@ -293,7 +293,7 @@ int quick_sort(int l, int r, int k)
     int i = l - 1, j = r + 1, x = q[l+r>>1];
     while (i < j)
     {
-        while (q[ ++ i] < x);  // 等效于 do i --; while (q[i] < x);
+        while (q[ ++ i] < x);  // 等效于 do i ++; while (q[i] < x);
         while (q[ -- j] > x);
 
         if (i < j) swap(q[i], q[j]);
@@ -310,6 +310,62 @@ int main()
 
     cout << quick_sort(0, n-1, k);
     return 0;
+}
+```
+
+Go 实现：
+
+```go
+package main
+
+import (
+    "fmt"
+    "bufio"
+    "os"
+    "strconv"
+)
+
+var n int
+var k_o int
+var a []int
+
+func main() {
+    scanner := bufio.NewScanner(os.Stdin)
+    scanner.Split(bufio.ScanWords)
+    
+    scanner.Scan()
+    n, _ = strconv.Atoi(scanner.Text())
+    scanner.Scan()
+    k_o, _ = strconv.Atoi(scanner.Text())
+    a = make([]int, n)
+    for i := 0; i < n; i ++ {
+        scanner.Scan()
+        a[i], _ = strconv.Atoi(scanner.Text())
+    }
+
+    quick_find(0, n - 1, k_o)
+}
+
+func quick_find(l, r, k int) {
+    if (l == r) {
+        fmt.Println(a[l])
+        return
+    }
+    i, j, x := l - 1, r + 1, a[(l + r) / 2]
+    for i < j {
+        for i ++ ; a[i] < x ; i ++ {}
+        for j -- ; a[j] > x ; j -- {}
+        
+        if (i < j) {
+            a[i], a[j] = a[j], a[i]
+        }
+    }
+
+    if (j - l + 1 >= k) {
+        quick_find(l, j, k)
+    } else {
+        quick_find(j + 1, r, k - (j - l + 1))
+    }
 }
 ```
 
@@ -368,6 +424,81 @@ void merge_sort(int q[], int l, int r)
 }
 ```
 
+```go
+package main
+
+import (
+    "fmt"
+    "os"
+    "bufio"
+    "strconv"
+)
+
+var (
+    n int
+    a []int
+    b []int
+)
+
+func merge_sort(l, r int) {
+    if (l >= r) {
+        return ;
+    }
+    
+    mid := (l + r) / 2;
+    merge_sort(l, mid)
+    merge_sort(mid + 1, r)
+    
+    i, j, k := l, mid + 1, l
+    for (i <= mid && j <= r) {
+        if (a[i] < a[j]) {
+            b[k] = a[i]
+            k ++
+            i ++
+        } else {
+            b[k] = a[j]
+            k ++
+            j ++
+        }
+    }
+    
+    for i <= mid {
+        b[k] = a[i]
+        k ++
+        i ++
+    }
+    for j <= r {
+        b[k] = a[j]
+        k ++ 
+        j ++
+    }
+    
+    for i = l; i <= r; i ++ {
+        a[i] = b[i];
+    }
+}
+
+func main() {
+    scanner := bufio.NewScanner(os.Stdin)
+    scanner.Split(bufio.ScanWords)
+    
+    scanner.Scan()
+    n, _ = strconv.Atoi(scanner.Text())
+    
+    a = make([]int, n)
+    b = make([]int, n)
+    for i := 0; i < n; i ++ {
+        scanner.Scan()
+        a[i], _ = strconv.Atoi(scanner.Text())
+    }
+    
+    merge_sort(0, n - 1)
+    for i := 0; i < n; i ++ {
+        fmt.Printf("%d ", a[i])
+    }
+}
+```
+
 ### 逆序对的数量
 给定一个长度为n的整数数列，请你计算数列中的逆序对的数量。
 
@@ -422,6 +553,82 @@ int main()
 }
 ```
 
+```go
+package main
+
+import (
+    "fmt"
+    "bufio"
+    "strconv"
+    "os"
+)
+
+var (
+    n int
+    a []int
+    b []int
+    ans int = 0
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    
+    sc.Scan()
+    n, _ = strconv.Atoi(sc.Text())
+    
+    a = make([]int, n)
+    b = make([]int, n)
+    for i := 0; i < n; i ++ {
+        sc.Scan()
+        a[i], _ = strconv.Atoi(sc.Text())
+    }
+    
+    merge_find(0, n - 1)
+    
+    fmt.Println(ans)
+}
+
+func merge_find(l, r int) {
+    if (l >= r) {
+        return 
+    }
+    
+    mid := (l + r) / 2
+    merge_find(l, mid)
+    merge_find(mid + 1, r)
+
+    i, j, k := l, mid + 1, l
+    for i <= mid && j <= r {
+        if (a[i] > a[j]) {
+            b[k] = a[j]
+            j ++
+            k ++
+            ans += mid - i + 1
+        } else {
+            b[k] = a[i]
+            i ++
+            k ++
+        }
+    }
+    
+    for i <= mid {
+        b[k] = a[i]
+        i ++
+        k ++
+    }
+    for j <= r {
+        b[k] = a[j]
+        j ++
+        k ++
+    }
+    
+    for i := l; i <= r; i ++ {
+        a[i] = b[i]
+    }
+}
+```
+
 ### 整数二分（很多边界问题）
 #### 整数二分模板
 ```cpp
@@ -449,6 +656,80 @@ int bsearch_2(int l, int r)
         else r = mid - 1;
     }
     return l;
+}
+```
+
+```go
+package main
+
+import (
+    "fmt"
+    "os"
+    "bufio"
+    "strconv"
+)
+
+var (
+    n int
+    q int
+    a []int
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    
+    sc.Scan()
+    n, _ = strconv.Atoi(sc.Text())
+    sc.Scan()
+    q, _ = strconv.Atoi(sc.Text())
+    
+    a = make([]int, n)
+    for i := 0; i < n; i ++ {
+        sc.Scan()
+        a[i], _ = strconv.Atoi(sc.Text())
+    }
+    for i := 0; i < q; i ++ {
+        sc.Scan()
+        qes, _ := strconv.Atoi(sc.Text())
+        bin_left(qes)
+        bin_right(qes)
+    }
+}
+
+func bin_left(qes int) {
+    l, r, mid := 0, n - 1, 0
+    for l < r {
+        mid = (l + r) / 2
+        if a[mid] < qes {
+            l = mid + 1
+        } else {
+            r = mid
+        }
+    }
+    if a[l] != qes {
+        fmt.Print("-1 ")
+        return
+    }
+    fmt.Print(l)
+    fmt.Print(" ")
+}
+
+func bin_right(qes int) {
+    l, r, mid := 0, n - 1, 0
+    for l < r {
+        mid = (l + r + 1) / 2
+        if a[mid] <= qes {
+            l = mid
+        } else {
+            r = mid - 1
+        }
+    }
+    if a[l] != qes {
+        fmt.Println("-1")
+        return
+    }
+    fmt.Println(l)
 }
 ```
 
@@ -644,3 +925,23 @@ int main()
 - C++ printf()的用法 http://blog.sina.com.cn/s/blog_9f0dcc370101as1o.html
 - `printf("%.3f", num)` 表示保留三位小数，`f`默认六位小数
 - `printf("%lf", num)` 表示 `long + float` 是 `double`
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    var l, r, x float64 = -10000, 10000, 0
+    fmt.Scanf("%f", &x)
+    for r - l >= 0.0000001 {
+        mid := (l + r) / 2
+        if x > mid * mid * mid {
+            l = mid
+        } else {
+            r = mid
+        }
+    }
+    fmt.Printf("%.6f", l)
+}
+```
