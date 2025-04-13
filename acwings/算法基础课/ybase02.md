@@ -72,6 +72,57 @@ int main()
 - `a - '0'`是将数字字符串转为数值
 - 定义 `vector<int> add(vector<int> &A, ...)`加上引用，是为了提高效率
 
+```go
+package main
+
+import (
+    "fmt"
+    "bufio"
+    "os"
+)
+
+func main() {
+    var a, b string
+    fmt.Scanf("%s", &a)
+    fmt.Scanf("%s", &b)
+    
+    aa, bb := []int{}, []int{}
+    for i := len(a) - 1; i >= 0; i -- {
+        aa = append(aa, int(a[i] - '0'))
+    }
+    for i := len(b) - 1; i >= 0; i -- {
+        bb = append(bb, int(b[i] - '0'))
+    }
+
+    add(aa, bb)
+}
+
+func add(aa, bb []int) {
+    cc := []int{}
+    
+    t := 0
+    for i := 0; i < len(aa) || i < len(bb); i ++ {
+        if i < len(aa) {
+            t += aa[i]
+        }
+        if i < len(bb) {
+            t += bb[i]
+        }
+        cc = append(cc, t % 10)
+        t /= 10
+    }
+    if t > 0 {
+        cc = append(cc, t)
+    }
+
+    wr := bufio.NewWriter(os.Stdout)
+    defer wr.Flush()
+    for i := len(cc) - 1; i >= 0; i -- {
+        fmt.Fprint(wr, cc[i])
+    }
+}
+```
+
 #### 高精度减法与模板
 ![](./images/20210510高精度减法.png)
 
@@ -135,6 +186,86 @@ int main()
 - 这道题里有很多前提条件，比如所有参与运算的数都是正整数
 - 别忘了“扫尾”，比如把 `001` 变为 `1`
 
+```go
+package main
+
+import (
+    "fmt"
+    "bufio"
+    "os"
+)
+
+func main() {
+    var s1, s2 string
+    fmt.Scanf("%s", &s1)
+    fmt.Scanf("%s", &s2)
+    
+    a, b := []int{}, []int{}
+    for i := len(s1) - 1; i >= 0; i -- {
+        a = append(a, int(s1[i] - '0'))
+    }
+    for i := len(s2) - 1; i >= 0; i -- {
+        b = append(b, int(s2[i] - '0'))
+    }
+    
+    var c []int
+    if (cmp(a, b)) {
+        c = sub(a, b)
+    } else {
+        c = sub(b, a)
+        fmt.Print("-")
+    }
+    
+    out := bufio.NewWriter(os.Stdout)
+    defer out.Flush()
+    for i := len(c) - 1; i >= 0; i -- {
+        fmt.Fprint(out, c[i])
+    }
+}
+
+func cmp(a, b []int) bool {
+    if len(a) > len(b) {
+        return true
+    } else if len(a) < len(b) {
+        return false
+    }
+    for i := len(a) - 1; i >= 0; i -- {
+        if a[i] > b[i] {
+            return true
+        } else if a[i] < b[i] {
+            return false
+        }
+    }
+    return true
+}
+
+func sub(a, b []int) []int {
+    c := []int{}
+    
+    t := 0
+    for i := 0; i < len(a); i ++ {
+        t += a[i];
+        if i < len(b) {
+            t -= b[i]
+        }
+        c = append(c, (t + 10) % 10)
+        if t < 0 {
+            t = -1
+        } else {
+            t = 0
+        }
+    }
+
+    var zeroIdx int
+    for zeroIdx = len(c) - 1; zeroIdx >= 1; zeroIdx -- {
+        if c[zeroIdx] != 0 {
+            break
+        }
+    }
+    return c[:zeroIdx + 1]
+}
+```
+
 #### 高精度乘法与模板
 这里是大数乘上小数。
 
@@ -178,6 +309,57 @@ int main()
     for (int i = C.size() - 1; i >= 0; i --) printf("%d", C[i]);
 
     return 0;
+}
+```
+
+```go
+package main
+
+import (
+    "fmt"
+    "bufio"
+    "os"
+)
+
+func main() {
+    var s string
+    var b int
+    fmt.Scanf("%s", &s)
+    fmt.Scanf("%d", &b)
+    
+    a := []int{}
+    for i := len(s) - 1; i >= 0; i -- {
+        a = append(a, int(s[i] - '0'))
+    }
+    
+    c := mul(a, b)
+    out := bufio.NewWriter(os.Stdout)
+    defer out.Flush()
+    for i := len(c) - 1; i >= 0; i -- {
+        fmt.Fprint(out, c[i])
+    }
+}
+
+func mul(a []int, b int) []int {
+    c := []int{}
+    
+    t := 0
+    for i := 0; i < len(a) || t > 0; i ++ {
+        if i < len(a) {
+            t += a[i] * b
+        }
+        c = append(c, t % 10)
+        t /= 10
+    }
+    
+    var zIdx int
+    for zIdx = len(c) - 1; zIdx >= 1; zIdx -- {
+        if c[zIdx] != 0 {
+            break
+        }
+    }
+
+    return c[:zIdx + 1]
 }
 ```
 
@@ -225,6 +407,55 @@ int main()
     auto C = div(A, b, r);
     for (int i = C.size() - 1; i >= 0; i --) printf("%d", C[i]);
     cout << endl << r << endl;
+}
+```
+
+```go
+package main
+
+import (
+    "os"
+    "bufio"
+    "fmt"
+)
+
+func main() {
+    var s string
+    var b int
+    fmt.Scanf("%s", &s)
+    fmt.Scanf("%d", &b)
+    
+    a := []int{}
+    for i := 0; i < len(s); i ++ {
+        a = append(a, int(s[i] - '0'))
+    }
+    
+    c, t := div(a, b)
+    out := bufio.NewWriter(os.Stdout)
+    defer out.Flush()
+    for i := 0; i < len(c); i ++ {
+        fmt.Fprint(out, c[i])
+    }
+    fmt.Fprint(out, "\n")
+    fmt.Fprint(out, t)
+}
+
+func div(a []int, b int) ([]int, int) {
+    c := []int{}
+    
+    t := 0
+    for i := 0; i < len(a); i ++ {
+        t = t * 10 + a[i]
+        c = append(c, t / b)
+        t %= b
+    }
+
+    for zIdx := 0; zIdx < len(c) - 1; zIdx ++ {
+        if c[zIdx] != 0 {
+            return c[zIdx:], t
+        }
+    }
+    return c[len(c) - 1:], t
 }
 ```
 
