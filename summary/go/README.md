@@ -7,6 +7,8 @@
 - [杂记](#杂记)
   - [嵌套的 map](#嵌套的-map)
   - [对于字符串别用 range](#对于字符串别用-range)
+- [容器](#容器)
+  - [Slice](#slice)
 
 <!-- /code_chunk_output -->
 
@@ -112,3 +114,9 @@ for _, v := range s {
 	// 用 v := s[i] 来避免这个问题
 }
 ```
+
+### 容器
+
+#### Slice
+
+https://go.dev/wiki/SliceTricks

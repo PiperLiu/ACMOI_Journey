@@ -516,6 +516,53 @@ int main()
 
 此外，也可以在代码中加入 `ios::sync_with_stdio(false)` 来提高 `cin` 速度，但是可能不能使用 `scanf` 了。比赛中可能会干扰文件操作。
 
+```go
+package main
+
+import (
+    "os"
+    "bufio"
+    "fmt"
+    "strconv"
+)
+
+func main() {
+    var n, m int
+    var l, r int
+    
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    sc.Scan()
+    n, _ = strconv.Atoi(sc.Text())
+    sc.Scan()
+    m, _ = strconv.Atoi(sc.Text())
+    
+    a := make([]int, n)
+    s := make([]int, n + 1)
+    
+    for i := 0; i < n; i ++ {
+        sc.Scan()
+        a[i], _ = strconv.Atoi(sc.Text())
+    }
+    
+    for i := 0; i < n; i ++ {
+        s[i + 1] = s[i] + a[i];
+    }
+    
+    out := bufio.NewWriter(os.Stdout)
+    defer out.Flush()
+    for i := 0; i < m; i ++ {
+        sc.Scan()
+        l, _ = strconv.Atoi(sc.Text())
+        sc.Scan()
+        r, _ = strconv.Atoi(sc.Text())
+        
+        fmt.Fprint(out, s[r] - s[l - 1])
+        fmt.Fprint(out, "\n")
+    }
+}
+```
+
 #### 子矩阵的和（二维求s[i][j]）
 - 输入一个 n 行 m 列的整数矩阵，再输入 q 个询问，每个询问包含四个整数 x1,y1,x2,y2，表示一个子矩阵的左上角坐标和右下角坐标。
  -对于每个询问输出子矩阵中所有数的和。
@@ -577,6 +624,64 @@ for (int i = 0; i < n; i ++)
 ```
 
 都一个意思，因为对于`s,a`我们的下标意义不同，一个是数学上的（从1计数），一个是程序上的（从0计数）。
+
+```go
+package main
+
+import (
+    "fmt"
+    "bufio"
+    "os"
+    "strconv"
+)
+
+func main() {
+    var n, m, q, x1, y1, x2, y2 int
+    
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    
+    sc.Scan()
+    n, _ = strconv.Atoi(sc.Text())
+    sc.Scan()
+    m, _ = strconv.Atoi(sc.Text())
+    sc.Scan()
+    q, _ = strconv.Atoi(sc.Text())
+    
+    a := make([][]int, n)
+    s := make([][]int, n + 1)
+    for i := 0; i < n; i ++ {
+        a[i] = make([]int, m)
+        for j := 0; j < m; j ++ {
+            sc.Scan()
+            a[i][j], _ = strconv.Atoi(sc.Text())
+        }
+    }
+    s[0] = make([]int, m + 1)
+    for i := 0; i < n; i ++ {
+        s[i + 1] = make([]int, m + 1)
+        for j := 0; j < m; j ++ {
+            s[i + 1][j + 1] = s[i][j + 1] + s[i + 1][j] + a[i][j] - s[i][j]
+        }
+    }
+    
+    out := bufio.NewWriter(os.Stdout)
+    defer out.Flush()
+    for i := 0; i < q; i ++ {
+        sc.Scan()
+        x1, _ = strconv.Atoi(sc.Text())
+        sc.Scan()
+        y1, _ = strconv.Atoi(sc.Text())
+        sc.Scan()
+        x2, _ = strconv.Atoi(sc.Text())
+        sc.Scan()
+        y2, _ = strconv.Atoi(sc.Text())
+        
+        fmt.Fprint(out, s[x2][y2] - s[x2][y1 - 1] - s[x1 - 1][y2] + s[x1 - 1][y1 - 1])
+        fmt.Fprint(out, "\n")
+    }
+}
+```
 
 ### 差分（与前缀和互为逆运算）
 
@@ -652,6 +757,65 @@ int main()
 
 > 上面用 insert 初始化差分序列还有一个思路：差分从一开始就被构造好了，即a是全零序列，b是全零序列，因此b是a的差分；a的每个i被加了个值c，那么执行insert(i,i,c)就可以把a的变化反应在b上。
 
+```go
+package main
+
+import (
+    "bufio"
+    "os"
+    "fmt"
+    "strconv"
+)
+
+func main() {
+    var n, m int
+    var l, r, c int
+    var a, b []int
+
+    insert := func (i, j, v int) {
+        b[i] += v
+        b[j + 1] -= v
+    }
+
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    
+    sc.Scan()
+    n, _ = strconv.Atoi(sc.Text())
+    sc.Scan()
+    m, _ = strconv.Atoi(sc.Text())
+    
+    a = make([]int, n + 1)
+    b = make([]int, n + 2)
+    for i := 1; i <= n; i ++ {
+        sc.Scan()
+        a[i], _ = strconv.Atoi(sc.Text())
+        insert(i, i, a[i])
+    }
+    
+    for i := 0; i < m; i ++ {
+        sc.Scan()
+        l, _ = strconv.Atoi(sc.Text())
+        sc.Scan()
+        r, _ = strconv.Atoi(sc.Text())
+        sc.Scan()
+        c, _ = strconv.Atoi(sc.Text())
+        insert(l, r, c)
+    }
+    
+    for i := 0; i < n; i ++ {
+        b[i + 1] = b[i + 1] + b[i]
+    }
+    
+    out := bufio.NewWriter(os.Stdout)
+    defer out.Flush()
+    for i := 0; i < n; i ++ {
+        fmt.Fprint(out, b[i + 1])
+        fmt.Fprint(out, " ")
+    }
+}
+```
+
 #### 差分矩阵（二维的）
 ![](./images/20210511差分矩阵.png)
 
@@ -722,3 +886,71 @@ int main()
 - 用 `puts("")` 换行
 - 这里 `差分矩阵转换为原矩阵` ，主要从空间（图像）上思考：`a[i][j] = b[0][0] + ... + b[i][j]`
 
+```go
+package main
+
+import (
+    "bufio"
+    "os"
+    "fmt"
+    "strconv"
+)
+
+func main() {
+    var n, m, q int
+    var b [][]int
+    
+    insert := func(x1, y1, x2, y2, c int) {
+        b[x1][y1] += c
+        b[x1][y2 + 1] -= c
+        b[x2 + 1][y1] -= c
+        b[x2 + 1][y2 + 1] += c
+    }
+    
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    
+    readInt := func(x *int) {
+        sc.Scan()
+        *x, _ = strconv.Atoi(sc.Text())
+    }
+    
+    readInt(&n)
+    readInt(&m)
+    readInt(&q)
+    
+    // fmt.Println(n, m, q)
+    b = make([][]int, n + 2)
+    b[0] = make([]int, m + 2)
+    b[1] = make([]int, m + 2)
+    for i := 1; i <= n; i ++ {
+        b[i + 1] = make([]int, m + 2)  // or out-of-range error in `insert`
+        for j := 1; j <= m; j ++ {
+            var x int
+            readInt(&x)
+            insert(i, j, i, j, x)
+        }
+    }
+    
+    for i := 1; i <= q; i ++ {
+        var x1, y1, x2, y2, c int
+        readInt(&x1)
+        readInt(&y1)
+        readInt(&x2)
+        readInt(&y2)
+        readInt(&c)
+        insert(x1, y1, x2, y2, c)
+    }
+    
+    out := bufio.NewWriter(os.Stdout)
+    defer out.Flush()
+    for i := 1; i <= n; i ++ {
+        for j := 1; j <= m; j ++ {
+            b[i][j] = b[i][j] + b[i][j - 1] + b[i - 1][j] - b[i - 1][j - 1]
+            fmt.Fprint(out, b[i][j])
+            fmt.Fprint(out, " ")
+        }
+        fmt.Fprint(out, "\n")
+    }
+}
+```
