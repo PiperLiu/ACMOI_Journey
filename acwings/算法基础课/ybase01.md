@@ -451,7 +451,7 @@ func merge_sort(l, r int) {
     
     i, j, k := l, mid + 1, l
     for (i <= mid && j <= r) {
-        if (a[i] < a[j]) {
+        if (a[i] <= a[j]) {
             b[k] = a[i]
             k ++
             i ++
