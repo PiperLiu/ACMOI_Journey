@@ -659,80 +659,6 @@ int bsearch_2(int l, int r)
 }
 ```
 
-```go
-package main
-
-import (
-    "fmt"
-    "os"
-    "bufio"
-    "strconv"
-)
-
-var (
-    n int
-    q int
-    a []int
-)
-
-func main() {
-    sc := bufio.NewScanner(os.Stdin)
-    sc.Split(bufio.ScanWords)
-    
-    sc.Scan()
-    n, _ = strconv.Atoi(sc.Text())
-    sc.Scan()
-    q, _ = strconv.Atoi(sc.Text())
-    
-    a = make([]int, n)
-    for i := 0; i < n; i ++ {
-        sc.Scan()
-        a[i], _ = strconv.Atoi(sc.Text())
-    }
-    for i := 0; i < q; i ++ {
-        sc.Scan()
-        qes, _ := strconv.Atoi(sc.Text())
-        bin_left(qes)
-        bin_right(qes)
-    }
-}
-
-func bin_left(qes int) {
-    l, r, mid := 0, n - 1, 0
-    for l < r {
-        mid = (l + r) / 2
-        if a[mid] < qes {
-            l = mid + 1
-        } else {
-            r = mid
-        }
-    }
-    if a[l] != qes {
-        fmt.Print("-1 ")
-        return
-    }
-    fmt.Print(l)
-    fmt.Print(" ")
-}
-
-func bin_right(qes int) {
-    l, r, mid := 0, n - 1, 0
-    for l < r {
-        mid = (l + r + 1) / 2
-        if a[mid] <= qes {
-            l = mid
-        } else {
-            r = mid - 1
-        }
-    }
-    if a[l] != qes {
-        fmt.Println("-1")
-        return
-    }
-    fmt.Println(l)
-}
-```
-
 ##### 二分的本质
 二分的本质并不是单调性。
 
@@ -857,6 +783,80 @@ int main() {
 - 第二个二分，实际上定义的性质是`左区间<=k，右区间不是`
 
 注意二分一定能给出一个解，但可能不是可行解，因此我们这里做了异常判断。
+
+```go
+package main
+
+import (
+    "fmt"
+    "os"
+    "bufio"
+    "strconv"
+)
+
+var (
+    n int
+    q int
+    a []int
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    
+    sc.Scan()
+    n, _ = strconv.Atoi(sc.Text())
+    sc.Scan()
+    q, _ = strconv.Atoi(sc.Text())
+    
+    a = make([]int, n)
+    for i := 0; i < n; i ++ {
+        sc.Scan()
+        a[i], _ = strconv.Atoi(sc.Text())
+    }
+    for i := 0; i < q; i ++ {
+        sc.Scan()
+        qes, _ := strconv.Atoi(sc.Text())
+        bin_left(qes)
+        bin_right(qes)
+    }
+}
+
+func bin_left(qes int) {
+    l, r, mid := 0, n - 1, 0
+    for l < r {
+        mid = (l + r) / 2
+        if a[mid] < qes {
+            l = mid + 1
+        } else {
+            r = mid
+        }
+    }
+    if a[l] != qes {
+        fmt.Print("-1 ")
+        return
+    }
+    fmt.Print(l)
+    fmt.Print(" ")
+}
+
+func bin_right(qes int) {
+    l, r, mid := 0, n - 1, 0
+    for l < r {
+        mid = (l + r + 1) / 2
+        if a[mid] <= qes {
+            l = mid
+        } else {
+            r = mid - 1
+        }
+    }
+    if a[l] != qes {
+        fmt.Println("-1")
+        return
+    }
+    fmt.Println(l)
+}
+```
 
 ##### 个人总结一下二分
 - 首先明确二分的效果：最终，l将等于r（在你mid取的合理的情况下）
