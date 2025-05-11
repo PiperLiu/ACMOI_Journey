@@ -81,6 +81,49 @@ int main()
 - 对于序列 `1 2 3 3 3 4`，当`i`指到第二个`3`时，`j`不跑到第一个`3`，`i`是不会向后走的。这（`while (s[a[i]] > 1)`）从根本上杜绝了双指针中重复序列的产生
 - 再多说一嘴，因为 `a[i]` 要经过从 `0` 到 `i` 的所有数，因此`while (s[a[i]] > 1)`从根本上杜绝了双指针中（`j到i`）重复序列的产生
 
+```go
+package main
+
+import (
+    "bufio"
+    "os"
+    "fmt"
+    "strconv"
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    
+    out := bufio.NewWriter(os.Stdout)
+    defer out.Flush()
+
+    sc.Scan()
+    n, _ := strconv.Atoi(sc.Text())
+    
+    a := make([]int, n)
+    for i := 0; i < n; i ++ {
+        sc.Scan()
+        a[i], _ = strconv.Atoi(sc.Text())
+    }
+    
+    res := 0
+    s := make(map[int]int)
+    for i, j := 0, 0; i < n; i ++ {
+        s[a[i]] += 1
+        for s[a[i]] > 1 {
+            s[a[j]] --
+            j ++
+        }
+        if res < i - j + 1 {
+            res = i - j + 1
+        }
+    }
+    
+    fmt.Fprint(out, res)
+}
+```
+
 #### 数组元素的目标和
 - 给定两个升序排序的有序数组 A 和 B，以及一个目标值 x。
 - 数组下标从 0 开始。
@@ -136,6 +179,55 @@ int main()
 - 对于 i ，我们寻找的是使 `A[i] + B[j] <= x` 成立的最小 j ；而对于 j ，我们实际上也实现了寻找使 `A[i] + B[j] <= x` 成立的最大 i
 - 因此无论是 i++ 还是 j-- 都是可以放心的
 
+```go
+package main
+
+import (
+    "bufio"
+    "os"
+    "fmt"
+    "strconv"
+)
+
+func main() {
+    var n, m, x int
+    var a, b []int
+    
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    
+    sc.Scan()
+    n, _ = strconv.Atoi(sc.Text())
+    sc.Scan()
+    m, _ = strconv.Atoi(sc.Text())
+    sc.Scan()
+    x, _ = strconv.Atoi(sc.Text())
+    
+    a = make([]int, n)
+    for i := 0; i < n; i ++ {
+        sc.Scan()
+        a[i], _ = strconv.Atoi(sc.Text())
+    }
+    
+    b = make([]int, m)
+    for i := 0; i < m; i ++ {
+        sc.Scan()
+        b[i], _ = strconv.Atoi(sc.Text())
+    }
+    
+    for i, j := 0, m - 1; ; {
+        if a[i] + b[j] > x {
+            j --
+        } else if a[i] + b[j] < x {
+            i ++
+        } else {
+            fmt.Printf("%d %d\n", i, j)
+            return
+        }
+    }
+}
+```
+
 #### 判断子序列
 - 给定一个长度为 n 的整数序列 a1,a2,…,an 以及一个长度为 m 的整数序列 b1,b2,…,bm。
 - 请你判断 a 序列是否为 b 序列的子序列。
@@ -187,6 +279,55 @@ int main()
 **证明：**
 - 如果存在匹配，则双指针算法一定能找到其中一组
 - 因此，双指针可以用于判断是否是子序列
+
+```go
+package main
+
+import (
+    "bufio"
+    "os"
+    "strconv"
+    "fmt"
+)
+
+func main() {
+    var n, m int
+    var a, b []int
+    
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    
+    sc.Scan()
+    n, _ = strconv.Atoi(sc.Text())
+    sc.Scan()
+    m, _ = strconv.Atoi(sc.Text())
+    
+    a = make([]int, n)
+    for i := 0; i < n; i ++ {
+        sc.Scan()
+        a[i], _ = strconv.Atoi(sc.Text())
+    }
+    
+    b = make([]int, m)
+    for i := 0; i < m; i ++ {
+        sc.Scan()
+        b[i], _ = strconv.Atoi(sc.Text())
+    }
+    
+    i, j := 0, 0
+    for ; i < n && j < m; j ++ {
+        if a[i] == b[j] {
+            i ++
+        }
+    }
+    
+    if i == n {
+        fmt.Println("Yes")
+    } else {
+        fmt.Println("No")
+    }
+}
+```
 
 ### 位运算
 #### n的二进制中第k位是几（k从0计）
@@ -240,6 +381,47 @@ int main()
     }
     
     return 0;
+}
+```
+
+```go
+package main
+
+import (
+    "os"
+    "bufio"
+    "fmt"
+    "strconv"
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    
+    writer := bufio.NewWriter(os.Stdout)
+    defer writer.Flush()
+    
+    var n int
+    sc.Scan()
+    n, _ = strconv.Atoi(sc.Text())
+    for i := 0; i < n; i ++ {
+        var x int
+        res := 0
+        sc.Scan()
+        x, _ = strconv.Atoi(sc.Text())
+        for x > 0 {
+            x -= lowbit(x)
+            res += 1
+        }
+        fmt.Fprint(writer, res)
+        fmt.Fprint(writer, " ")
+    }
+    
+    fmt.Fprint(writer, "\n")
+}
+
+func lowbit(x int) int {
+    return x & -x
 }
 ```
 
@@ -376,6 +558,84 @@ int main()
 - 比如别忘了转为离散化坐标
 - 这题还有很多 `unique, pair, vector.erase` 的知识点，很好
 
+这里用 Go 处理没有直接申请大数组。
+
+```go
+package main
+
+import (
+    "fmt"
+    "bufio"
+    "strconv"
+    "os"
+    "sort"
+)
+
+func getReadIntHook() func() int {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    
+    return func () int {
+        sc.Scan()
+        x, _ := strconv.Atoi(sc.Text())
+        return x
+    }
+}
+
+func main(){
+    readInt := getReadIntHook()
+    out := bufio.NewWriter(os.Stdout)
+    defer out.Flush()
+
+    numSet := make(map[int]struct{})
+    addOpMap := []struct{ x,c int }{}
+    qryOpSlice := []struct{ l,r int }{}
+    
+    n := readInt()
+    m := readInt()
+    
+    for i := 0; i < n; i ++ {
+        x := readInt()
+        c := readInt()
+        addOpMap = append(addOpMap, struct { x,c int }{ x, c })
+        numSet[x] = struct{}{}
+    }
+    for i := 0; i < m; i ++ {
+        l := readInt()
+        r := readInt()
+        qryOpSlice = append(qryOpSlice, struct { l, r int }{ l, r })
+        numSet[l] = struct{}{}
+        numSet[r] = struct{}{}
+    }
+
+    fMap := make(map[int]int)  // real -> virtual
+    numSlice := make([]int, 0, len(numSet))
+    for k, _ := range numSet {
+        numSlice = append(numSlice, k)
+    }
+    sort.Ints(numSlice)
+    for v, r := range numSlice {
+        fMap[r] = v
+    }
+
+    // prefix sum
+    virPreSum := make([]int, len(numSet) + 10)
+    for _, xc := range addOpMap {
+        x := fMap[xc.x]
+        virPreSum[x + 1] += xc.c
+    }
+    for i := 0; i < len(numSet); i ++ {
+        virPreSum[i + 1] += virPreSum[i]
+    }
+    
+    for _, lr := range qryOpSlice {
+        l, r := fMap[lr.l], fMap[lr. r]
+        fmt.Fprint(out, virPreSum[r + 1] - virPreSum[l])
+        fmt.Fprint(out, "\n")
+    }
+}
+```
+
 #### unique的自己实现
 前提：数组已经排好序。我们用双指针来做。
 
@@ -459,5 +719,68 @@ int main()
     
     printf("%d", res);
     return 0;
+}
+```
+
+```go
+package main
+
+import (
+    "fmt"
+    "sort"
+    "bufio"
+    "os"
+    "strconv"
+)
+
+func getReadIntHook() func() int {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    
+    return func() int {
+        sc.Scan()
+        x, _ := strconv.Atoi(sc.Text())
+        return x
+    }
+}
+
+type seg struct {
+    l, r int
+}
+
+type segByL []seg
+func (a segByL) Len() int { return len(a) }
+func (a segByL) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
+func (a segByL) Less(i, j int) bool { return a[i].l < a[j].l }
+
+func main() {
+    readInt := getReadIntHook()
+    
+    n := readInt()
+    segs := make([]seg, n)
+    for i := 0; i < n; i ++ {  // for go > 1.23 use i := range n
+        l := readInt()
+        r := readInt()
+        segs[i] = seg{ l, r }
+    }
+    
+    sort.Sort(segByL(segs))
+    
+    res := make([]seg, 0)
+    cl, cr := segs[0].l, segs[0].r
+    for i := 1; i < n; i ++ {
+        if cr < segs[i].l {
+            res = append(res, seg{ cl, cr })
+            cl, cr = segs[i].l, segs[i].r
+        } else {
+            if cr < segs[i].r {
+                cr = segs[i].r
+            }
+        }
+    }
+    
+    res = append(res, seg{ cl, cr })
+    
+    fmt.Printf("%d\n", len(res))
 }
 ```
