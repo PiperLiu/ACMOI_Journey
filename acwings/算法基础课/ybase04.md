@@ -118,7 +118,7 @@ int main()
         {
             cin >> k;
             if (!k) head = ne[head];  // k=0代表删除头节点
-            remove(k - 1);  // 注意题目中 k 从 1 开始计数
+            else remove(k - 1);  // 注意题目中 k 从 1 开始计数
         }
         else
         {
@@ -135,6 +135,102 @@ int main()
 **经验：**
 - **静态链表的 head 、idx、-1实际上都是“地址”，要被指针指的**
 - 静态链表不好的地方是内存不安全，我们删除了某个点，实际上只是改变指针，被删除的点还会躺在数组里
+
+```go
+package main
+
+import (
+    "fmt"
+    "bufio"
+    "strconv"
+    "os"
+)
+
+var N int = 1e5 + 10
+
+var sc *bufio.Scanner
+var head, idx int
+var e, ne []int
+
+func init() {
+    sc = bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    
+    head, idx = -1, 0
+    e, ne = make([]int, N), make([]int, N)
+}
+
+func addToHead(x int) {
+    // malloc (create new node)
+    e[idx] = x
+    ne[idx] = head
+    // 整理纠正之前已存在 nodes
+    head = idx
+    // 下一个可申请空间
+    idx ++
+}
+
+func remove(k int) {
+    ne[k] = ne[ne[k]]  // 所有操作合法，所以不考虑 k 后无数
+}
+
+func insert(k, x int) {
+    // malloc (create new node)
+    e[idx] = x
+    ne[idx] = ne[k]
+    // 整理纠正之前已存在 nodes
+    ne[k] = idx
+    // 下一个可申请空间
+    idx ++
+}
+
+func getReadIntHook () func() int {
+    return func() int {
+        sc.Scan()
+        x, _ := strconv.Atoi(sc.Text())
+        return x
+    }
+}
+
+func getReadStrHook () func() string {
+    return func() string {
+        sc.Scan()
+        return sc.Text()
+    }
+}
+
+func main() {
+    readInt := getReadIntHook()
+    readStr := getReadStrHook()
+    
+    m := readInt()
+    for i := 0; i < m; i ++ {
+        _ = i
+        op := readStr()
+        if op == "H" {
+            x := readInt()
+            addToHead(x)
+        } else if op == "D" {
+            k := readInt()
+            if k == 0 {
+                head = ne[head];
+            } else {
+                remove(k - 1)
+            }
+        } else {
+            k, x := readInt(), readInt()
+            insert(k - 1, x)
+        }
+    }
+    
+    out := bufio.NewWriter(os.Stdout)
+    defer out.Flush()
+    
+    for p := head; p != -1; p = ne[p] {
+        fmt.Fprint(out, e[p], " ")
+    }
+}
+```
 
 #### 数组模拟双链表
 常用于优化某些问题。
@@ -259,6 +355,99 @@ int main()
 经验：
 - `r[i]` 表示 i 节点的右侧节点
 
+```go
+package main
+
+import (
+    "fmt"
+    "bufio"
+    "strconv"
+    "os"
+)
+
+var N int = 1e5 + 10
+
+var sc *bufio.Scanner
+var idx int
+var e, l, r []int
+
+func init() {
+    sc = bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+
+    e, l, r = make([]int, N), make([]int, N), make([]int, N)
+    r[0] = 1
+    l[1] = 0
+    idx = 2
+}
+
+func insert(k, x int) {
+    // malloc (create new node)
+    e[idx] = x
+    l[idx] = k
+    r[idx] = r[k]
+    // 整理纠正之前已存在 nodes
+    l[r[k]] = idx
+    r[k] = idx
+    // 下一个可申请空间
+    idx ++
+}
+
+func remove(k int) {
+    r[l[k]] = r[k]
+    l[r[k]] = l[k]
+}
+
+func getReadIntHook () func() int {
+    return func() int {
+        sc.Scan()
+        x, _ := strconv.Atoi(sc.Text())
+        return x
+    }
+}
+
+func getReadStrHook () func() string {
+    return func() string {
+        sc.Scan()
+        return sc.Text()
+    }
+}
+
+func main() {
+    readInt := getReadIntHook()
+    readStr := getReadStrHook()
+    
+    m := readInt()
+    for i := 0; i < m; i ++ {
+        _ = i
+        op := readStr()
+        if op == "L" {
+            x := readInt()
+            insert(0, x)
+        } else if op == "R" {
+            x := readInt()
+            insert(l[1], x)
+        } else if op == "D" {
+            k := readInt()
+            remove(k + 1)
+        } else if op == "IL" {
+            k, x := readInt(), readInt()
+            insert(l[k + 1], x)
+        } else {
+            k, x := readInt(), readInt()
+            insert(k + 1, x)
+        }
+    }
+    
+    out := bufio.NewWriter(os.Stdout)
+    defer out.Flush()
+
+    for p := r[0]; p != 1; p = r[p] {
+        fmt.Fprint(out, e[p], " ")
+    }
+}
+```
+
 ##### 简单提一下邻接表
 邻接表是多个单链表。
 
@@ -323,6 +512,67 @@ int main()
     }
 
     return 0;
+}
+```
+
+```go
+package main
+
+import (
+    "fmt"
+    "bufio"
+    "os"
+    "strconv"
+)
+
+var sc *bufio.Scanner
+
+var tt int
+var stk [1e5 + 10]int
+
+func init() {
+    sc = bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    
+    tt = 0
+}
+
+func main() {
+    var m int
+    
+    readInt := func () int {
+        sc.Scan()
+        x, _ := strconv.Atoi(sc.Text())
+        return x
+    }
+    
+    readStr := func () string {
+        sc.Scan()
+        return sc.Text()
+    }
+    
+    out := bufio.NewWriter(os.Stdout)
+    defer out.Flush()
+    
+    m = readInt()
+    for i := 0; i < m; i ++ {
+        op := readStr()
+        if op == "push" {
+            x := readInt()
+            tt ++
+            stk[tt] = x
+        } else if op == "query" {
+            fmt.Fprint(out, stk[tt], "\n")
+        } else if op == "pop" {
+            tt --
+        } else {
+            if tt > 0 {
+                fmt.Fprint(out, "NO\n")
+            } else {
+                fmt.Fprint(out, "YES\n")
+            }
+        }
+    }
 }
 ```
 
@@ -412,6 +662,92 @@ int main()
 }
 ```
 
+```go
+package main
+
+import (
+    "fmt"
+    "bufio"
+    "os"
+)
+
+var (
+    num []int = []int{}
+    op []rune = []rune{}
+    pr map[rune]int = map[rune]int{
+        '+': 1, '-': 1, '*': 2, '/': 2,
+    }
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Buffer(nil, 1e9)  // 这里很重要，默认 buf 只有 65536
+    sc.Scan()
+    s := sc.Text()
+
+    out := bufio.NewWriter(os.Stdout)
+    defer out.Flush()
+
+    eval := func() {
+        b := num[len(num) - 1]
+        num = num[:len(num) - 1]
+        a := num[len(num) - 1]
+        num = num[:len(num) - 1]
+        p := op[len(op) - 1]
+        op = op[:len(op) - 1]
+        if p == '+' {
+            num = append(num, a + b)
+        } else if p == '-' {
+            num = append(num, a - b)
+        } else if p == '*' {
+            num = append(num, a * b)
+        } else {
+            num = append(num, a / b)
+        }
+    }
+
+    x := 0
+    constructingNum := false
+    for _, c := range s {
+        if c >= '0' && c <= '9' {
+            x = x * 10 + int(c - '0')
+            constructingNum = true
+        } else {
+            if constructingNum {
+                num = append(num, x)
+                x = 0
+                constructingNum = false
+            }
+            if c == '(' {
+                op = append(op, c)
+            } else if c == ')' {
+                for op[len(op) - 1] != '(' {
+                    eval()
+                }
+                op = op[:len(op) - 1]
+            } else {
+                for len(op) > 0 && pr[op[len(op) - 1]] >= pr[c] {
+                    eval()
+                }
+                op = append(op, c)
+            }
+        }
+    }
+    
+    if constructingNum {
+        num = append(num, x)
+        x = 0
+        constructingNum = false
+    }
+    
+    for len(op) > 0 {
+        eval()
+    }
+    
+    fmt.Println(num[0])
+}
+```
+
 ### 队列
 先进先出。
 
@@ -477,6 +813,62 @@ int main()
 
 注意队尾 tt 从 -1 开始。
 
+```go
+package main
+
+import (
+    "fmt"
+    "bufio"
+    "os"
+    "strconv"
+)
+
+var (
+    q [1e5 + 10]int
+    hh int = 0
+    tt int = -1
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    
+    out := bufio.NewWriter(os.Stdout)
+    defer out.Flush()
+    
+    readInt := func () int {
+        sc.Scan()
+        x, _ := strconv.Atoi(sc.Text())
+        return x
+    }
+    
+    readStr := func () string {
+        sc.Scan()
+        return sc.Text()
+    }
+    
+    m := readInt()
+    for i := 0; i < m; i ++ {
+        op := readStr()
+        if op == "push" {
+            x := readInt()
+            tt ++
+            q[tt] = x
+        } else if op == "pop" {
+            hh ++
+        } else if op == "empty" {
+            if tt >= hh {
+                fmt.Fprint(out, "NO\n")
+            } else {
+                fmt.Fprint(out, "YES\n")
+            }
+        } else {
+            fmt.Fprint(out, q[hh], "\n")
+        }
+    }
+}
+```
+
 ### 单调栈
 一般就这一个题型：寻找左边最近的比自己小的数。
 
@@ -530,6 +922,47 @@ int main()
 经验：
 - `while (tt && stk[tt] >= x)` 与 `while (tt & stk[tt] >= x)` 结果有区别，后者在不是 Boolean 类型时，会自动转换为位运算
 - 此题不考虑返回索引，因此可以边读边输出，且肆意删除元素。
+
+```go
+package main
+
+import (
+    "fmt"
+    "bufio"
+    "os"
+    "strconv"
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    
+    out := bufio.NewWriter(os.Stdout)
+    defer out.Flush()
+    
+    readInt := func() int {
+        sc.Scan()
+        x, _ := strconv.Atoi(sc.Text())
+        return x
+    }
+    
+    stk := make([]int, 0)
+    
+    n := readInt()
+    for i := 0; i < n; i ++ {
+        x := readInt()
+        for len(stk) > 0 && stk[len(stk) - 1] >= x {
+            stk = stk[:len(stk) - 1]
+        }
+        if len(stk) == 0 {
+            fmt.Fprint(out, "-1 ")
+        } else {
+            fmt.Fprint(out, stk[len(stk) - 1], " ")
+        }
+        stk = append(stk, x)
+    }
+}
+```
 
 ### 单调队列
 
@@ -652,6 +1085,76 @@ int main()
 }
 ```
 
+```go
+package main
+
+import (
+    "fmt"
+    "bufio"
+    "os"
+    "strconv"
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    
+    out := bufio.NewWriter(os.Stdout)
+    defer out.Flush()
+    
+    readInt := func() int {
+        sc.Scan()
+        x, _ := strconv.Atoi(sc.Text())
+        return x
+    }
+
+    // qmax, qmin 中应记录 index 而非 value
+    // 否则无法确认值是否还在窗口之内
+    qmax, qmin := make([]int, 0), make([]int, 0)
+    res0, res1 := make([]int, 0), make([]int, 0)
+    
+    n := readInt()
+    k := readInt()
+    vals := make([]int, n)
+    for i := 0; i < n; i ++ {
+
+        x := readInt()
+        vals[i] = x
+
+        for len(qmax) > 0 && i - qmax[0] >= k {
+            qmax = qmax[1:]
+        }
+        if len(qmin) > 0 && i - qmin[0] >= k {
+            qmin = qmin[1:]
+        }
+        for len(qmax) > 0 && vals[qmax[len(qmax) - 1]] <= x {
+            qmax = qmax[:len(qmax) - 1]
+        }
+        for len(qmin) > 0 && vals[qmin[len(qmin) - 1]] >= x {
+            qmin = qmin[:len(qmin) - 1]
+        }
+        
+        qmax = append(qmax, i)
+        qmin = append(qmin, i)
+        
+        if i >= k - 1 {
+            res0 = append(res0, vals[qmin[0]])
+            res1 = append(res1, vals[qmax[0]])
+        }
+    }
+    
+    for i := range res0 {
+        fmt.Fprint(out, res0[i], " ")
+    }
+    fmt.Fprint(out, "\n")
+    
+    for i := range res1 {
+        fmt.Fprint(out, res1[i], " ")
+    }
+    fmt.Fprint(out, "\n")
+}
+```
+
 ### KMP：字符串匹配
 
 - 给定一个模式串 S，以及一个模板串 P，所有字符串中只包含大小写英文字母以及阿拉伯数字。
@@ -702,6 +1205,57 @@ int main()
     }
     
     return 0;
+}
+```
+
+```go
+package main
+
+import (
+    "fmt"
+    "bufio"
+    "os"
+)
+
+func main() {
+    var n, m int
+    var p, s string
+    
+    fmt.Scanf("%d", &n)
+    fmt.Scanf("%s", &p)
+    fmt.Scanf("%d", &m)
+    fmt.Scanf("%s", &s)
+    
+    // 从 1 计数好操作
+    p = " " + p
+    s = " " + s
+    
+    ne := make([]int, n + 1)
+    for i, j := 2, 0; i <= n; i ++ {
+        for j > 0 && p[i] != p[j + 1] {
+            j = ne[j]
+        }
+        if (p[i] == p[j + 1]) {
+            j ++
+        }
+        ne[i] = j
+    }
+    
+    out := bufio.NewWriter(os.Stdout)
+    defer out.Flush()
+    
+    for i, j := 1, 0; i <= m; i ++ {
+        for j > 0 && s[i] != p[j + 1] {
+            j = ne[j]
+        }
+        if (s[i] == p[j + 1]) {
+            j ++
+        }
+        if j == n {
+            fmt.Fprint(out, i - n, " ")
+            j = ne[j]
+        }
+    }
 }
 ```
 
