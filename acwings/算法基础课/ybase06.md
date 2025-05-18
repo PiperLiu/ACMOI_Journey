@@ -140,6 +140,78 @@ int main()
 - `memset` 在 `cstring` 中
 - `% N` 可以取到负值，因此要 `(x % N + N) % N`
 
+```go
+package main
+
+import (
+    "fmt"
+    "bufio"
+    "os"
+    "strconv"
+)
+
+var (
+    N int = 1e5 + 3
+    h, e, ne [1e5 + 3]int
+    idx int = 0
+)
+
+func insert(x int) {
+    k := (x % N + N) % N
+    e[idx] = x
+    ne[idx] = h[k]
+    h[k] = idx
+    idx ++
+}
+
+func find(x int) bool {
+    k := (x % N + N) % N
+    for p := h[k]; p != -1; p = ne[p] {
+        if e[p] == x {
+            return true
+        }
+    }
+    return false
+}
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    out := bufio.NewWriter(os.Stdout)
+    defer out.Flush()
+    
+    readInt := func() int {
+        sc.Scan()
+        x, _ := strconv.Atoi(sc.Text())
+        return x
+    }
+    
+    readStr := func() string {
+        sc.Scan()
+        return sc.Text()
+    }
+    
+    for i := 0; i < N; i ++ {
+        h[i] = -1
+    }
+    
+    n := readInt()
+    for ; n > 0; n -- {
+        op := readStr()
+        x := readInt()
+        if op == "I" {
+            insert(x)
+        } else {
+            if find(x) {
+                fmt.Fprint(out, "Yes\n")
+            } else {
+                fmt.Fprint(out, "No\n")
+            }
+        }
+    }
+}
+```
+
 #### 开放寻址法
 
 ![](./images/20210519哈希表开放寻址法.png)
@@ -199,6 +271,73 @@ int main()
 - memset按照字节赋值，而 0x3f3f3f3f 正好每个字节都是 0x3f
 - 我们开始忘了修改 `bool find(int x)` 为 `int find(int x)` 导致其只返回 1
 - 这里还用 `*op` 获取了 `char op[]` 的第一个值
+
+```go
+package main
+
+import (
+    "fmt"
+    "bufio"
+    "os"
+    "strconv"
+)
+
+var (
+    N int = 2e5 + 3
+    h [2e5 + 3]int
+    null int = 0x3f3f3f3f
+)
+
+func find(x int) int {
+    t := (x % N + N) % N
+    for h[t] != null && h[t] != x {
+        t ++
+        if t == N {
+            t = 0
+        }
+    }
+    return t
+}
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    out := bufio.NewWriter(os.Stdout)
+    defer out.Flush()
+    
+    readInt := func() int {
+        sc.Scan()
+        x, _ := strconv.Atoi(sc.Text())
+        return x
+    }
+    
+    readStr := func() string {
+        sc.Scan()
+        return sc.Text()
+    }
+    
+    for i := 0; i < N; i ++ {
+        h[i] = null
+    }
+    
+    n := readInt()
+    for ; n > 0; n -- {
+        op := readStr()
+        x := readInt()
+        k := find(x)
+        if op == "I" {
+            h[k] = x
+        } else {
+            if h[k] != null {
+                fmt.Fprint(out, "Yes\n")
+            } else {
+                fmt.Fprint(out, "No\n")
+            }
+        }
+    }
+}
+```
+
 ### 字符串哈希
 #### 字符串前缀哈希法
 
@@ -285,6 +424,69 @@ int main()
 - 我们定义 `unsigned long long` 就相当于模 Q 了，因为溢出（超出 2^64）相当于自动取了模
 
 本来字符串比较需要一个一个字符地比较，而哈希这里只需要 O(1) 。
+
+```go
+package main
+
+import (
+    "fmt"
+    "bufio"
+    "os"
+    "strconv"
+)
+
+var (
+    P uint64 = 131
+    p, h [1e5 + 10]uint64
+)
+
+func get(l, r int) uint64 {
+    return h[r] - h[l - 1] * p[r - l + 1]
+}
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Buffer(nil, 1e9)  // IMPORTANT
+    sc.Split(bufio.ScanWords)
+    out := bufio.NewWriter(os.Stdout)
+    defer out.Flush()
+    
+    readInt := func() int {
+        sc.Scan()
+        x, _ := strconv.Atoi(sc.Text())
+        return x
+    }
+    
+    readStr := func() string {
+        sc.Scan()
+        return sc.Text()
+    }
+
+    n := readInt()
+    m := readInt()
+    
+    s := readStr()
+    s = " " + s
+    
+    // fmt.Fprint(out, s, "\n")
+
+    p[0] = 1
+    for i := 1; i <= n; i ++ {
+        h[i] = h[i - 1] * P + uint64(s[i])
+        p[i] = p[i - 1] * P
+    }
+
+    for ; m > 0; m -- {
+        l1, r1, l2, r2 := readInt(), readInt(), readInt(), readInt()
+        // fmt.Fprint(out, l1, r1, l2, r2, "\n")
+        if get(l1, r1) == get(l2, r2) {
+            fmt.Fprint(out, "Yes\n")
+        } else {
+            fmt.Fprint(out, "No\n")
+        }
+    }
+}
+```
 
 ### Cpp的STL
 #### vector, 变长数组，倍增的思想
