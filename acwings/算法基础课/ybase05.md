@@ -101,6 +101,80 @@ int main()
 - cpp 中字符串最后一个值是 `\0`，因此 for 可以用 `for (int i; str[i]; i++)`
 - `scanf("%s%s", op, str);` 其中 `op` 和 `str` 是字符串首值指针
 
+```go
+package main
+
+import (
+    "bufio"
+    "fmt"
+    "os"
+    "strconv"
+)
+
+var sc *bufio.Scanner
+var out *bufio.Writer
+var son [1e5 + 10][26]int
+var cnt [1e5 + 10]int
+var idx int
+
+func init() {
+    sc = bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    out = bufio.NewWriter(os.Stdout)
+}
+
+func readStr() string {
+    sc.Scan()
+    return sc.Text()
+}
+
+func readInt() int {
+    sc.Scan()
+    x, _ := strconv.Atoi(sc.Text())
+    return x
+}
+
+func insert(str string) {
+    p := 0
+    for i := range str {
+        nx := int(str[i] - 'a')
+        if son[p][nx] == 0 {
+            idx ++
+            son[p][nx] = idx
+        }
+        p = son[p][nx]
+    }
+    cnt[p] ++
+}
+
+func query(str string) int {
+    p := 0
+    for i := range str {
+        nx := int(str[i] - 'a')
+        if son[p][nx] == 0 {
+            return 0
+        }
+        p = son[p][nx]
+    }
+    return cnt[p]
+}
+
+func main() {
+    defer out.Flush()
+    
+    n := readInt()
+    for i := 0; i < n; i ++ {
+        op := readStr()
+        val := readStr()
+        if op == "Q" {
+            fmt.Fprint(out, query(val), "\n")
+        } else {
+            insert(val)
+        }
+    }
+}
+```
+
 #### 模板：最大异或对
 - 在给定的 $N$ 个整数 $A_1，A_2 …… A_N$ 中选出两个进行 xor（异或）运算，得到的结果最大是多少？
 
@@ -174,6 +248,85 @@ int main()
     cout << res;
     
     return 0;
+}
+```
+
+```go
+package main
+
+import (
+    "os"
+    "bufio"
+    "strconv"
+    "fmt"
+)
+
+var (
+    sc *bufio.Scanner
+    out *bufio.Writer
+    n int
+    son [3e6 + 1e5 + 10][2]int
+    idx = 0
+)
+
+func init() {
+    sc = bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    out = bufio.NewWriter(os.Stdout)
+}
+
+func readInt() int {
+    sc.Scan()
+    x, _ := strconv.Atoi(sc.Text())
+    return x
+}
+
+func insert(x int) {
+    p := 0
+    for i := 30; i >= 0; i -- {
+        c := x >> i & 1
+        if son[p][c] == 0 {
+            idx ++
+            son[p][c] = idx
+        }
+        p = son[p][c]
+    }
+}
+
+func query(x int) int {
+    res, p := 0, 0
+    for i := 30; i >= 0; i -- {
+        c := x >> i & 1
+        if son[p][c] != 0 {
+            res += 1 << i
+            p = son[p][c]
+        } else {
+            p = son[p][1 - c]
+        }
+    }
+    return res
+}
+
+func main() {
+    defer out.Flush()
+    
+    n = readInt()
+    lis := []int{}
+    for i := 0; i < n; i ++ {
+        x := readInt()
+        insert(x)
+        lis = append(lis, x)
+    }
+    
+    ans := 0
+    for i := range lis {
+        x := query(^lis[i])
+        if x > ans {
+            ans = x
+        }
+    }
+
+    fmt.Println(ans)
 }
 ```
 
@@ -260,6 +413,73 @@ int main()
 - 因为`char op; scanf("%c", op);`会读入空格、回车
 - 如果`char op[2]; scanf("%s", op);`则不会读入空格、回车
 
+```go
+package main
+
+import (
+    "fmt"
+    "os"
+    "bufio"
+    "strconv"
+)
+
+var (
+    p [1e5 + 10]int
+    sc *bufio.Scanner
+    out *bufio.Writer
+)
+
+func init() {
+    sc = bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    out = bufio.NewWriter(os.Stdout)
+}
+
+func readInt() int {
+    sc.Scan()
+    x, _ := strconv.Atoi(sc.Text())
+    return x
+}
+
+func readStr() string {
+    sc.Scan()
+    return sc.Text()
+}
+
+func find(x int) int {
+    if x != p[x] {
+        p[x] = find(p[x])
+    }
+    return p[x]
+}
+
+func main() {
+    defer out.Flush()
+    
+    n := readInt()
+    m := readInt()
+    
+    for i := 1; i <= n; i ++ {
+        p[i] = i
+    }
+    
+    for i := 0; i < m; i ++ {
+        op := readStr()
+        x := readInt()
+        y := readInt()
+        if op == "M" {
+            p[find(x)] = p[find(y)]
+        } else {
+            if find(x) == find(y) {
+                fmt.Fprint(out, "Yes", "\n")
+            } else {
+                fmt.Fprint(out, "No", "\n")
+            }
+        }
+    }
+}
+```
+
 #### 动态维护集合大小信息：连通块中点的数量
 
 - 给定一个包含 n 个点（编号为 1∼n）的无向图，初始时图中没有边。
@@ -334,6 +554,84 @@ int main()
     }
 
     return 0;
+}
+```
+
+```go
+package main
+
+import (
+    "fmt"
+    "os"
+    "bufio"
+    "strconv"
+)
+
+var (
+    p [1e5 + 10]int
+    cnt [1e5 + 10]int
+    sc *bufio.Scanner
+    out *bufio.Writer
+)
+
+func init() {
+    sc = bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    out = bufio.NewWriter(os.Stdout)
+}
+
+func readInt() int {
+    sc.Scan()
+    x, _ := strconv.Atoi(sc.Text())
+    return x
+}
+
+func readStr() string {
+    sc.Scan()
+    return sc.Text()
+}
+
+func find(x int) int {
+    if x != p[x] {
+        p[x] = find(p[x])
+    }
+    return p[x]
+}
+
+func main() {
+    defer out.Flush()
+    
+    n := readInt()
+    m := readInt()
+    
+    for i := 1; i <= n; i ++ {
+        p[i] = i
+        cnt[i] = 1
+    }
+    
+    for i := 0; i < m; i ++ {
+        op := readStr()
+        if op == "C" {
+            x := readInt()
+            y := readInt()
+            if find(x) != find(y) {
+                toAdd := cnt[find(y)]
+                p[find(y)] = find(x)
+                cnt[find(x)] += toAdd
+            }
+        } else if op == "Q1" {
+            x := readInt()
+            y := readInt()
+            if find(x) == find(y) {
+                fmt.Fprint(out, "Yes", "\n")
+            } else {
+                fmt.Fprint(out, "No", "\n")
+            }
+        } else {
+            x := readInt()
+            fmt.Fprint(out, cnt[find(x)], "\n")
+        }
+    }
 }
 ```
 
@@ -426,6 +724,84 @@ int main()
     }
     printf("%d", res);
     return 0;
+}
+```
+
+```go
+package main
+
+import (
+    "fmt"
+    "os"
+    "bufio"
+    "strconv"
+)
+
+var (
+    p [5e4 + 10]int
+    d [5e4 + 10]int
+    sc *bufio.Scanner
+    out *bufio.Writer
+)
+
+func init() {
+    sc = bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    out = bufio.NewWriter(os.Stdout)
+}
+
+func readInt() int {
+    sc.Scan()
+    x, _ := strconv.Atoi(sc.Text())
+    return x
+}
+
+func find(x int) int {
+    if x != p[x] {
+        t := find(p[x])
+        d[x] += d[p[x]]
+        p[x] = t
+    }
+    return p[x]
+}
+
+func main() {
+    defer out.Flush()
+    
+    n := readInt()
+    m := readInt()
+    
+    for i := 1; i <= n; i ++ {
+        p[i] = i
+    }
+
+    res := 0
+    for i := 0; i < m; i ++ {
+        op := readInt()
+        x := readInt()
+        y := readInt()
+        if x > n || y > n {
+            res ++
+            continue
+        }
+        px, py := find(x), find(y)
+        if op == 1 {
+            if px == py && (d[x] - d[y]) % 3 != 0 {
+                res ++
+            } else if px != py {
+                p[px] = py
+                d[px] = d[y] - d[x]  // make (d[x] + d[px]) % 3 == d[y] % 3
+            }
+        } else {
+            if px == py && (d[x] - d[y] - 1) % 3 != 0 {
+                res ++
+            } else if px != py {
+                p[px] = py
+                d[px] = d[y] + 1 - d[x]  // make (d[x] + d[px]) % 3 == (d[y] + 1) % 3
+            }
+        }
+    }
+    fmt.Fprint(out, res, "\n")
 }
 ```
 
@@ -531,6 +907,66 @@ int main()
 }
 ```
 
+```go
+package main
+
+import (
+    "fmt"
+    "bufio"
+    "os"
+    "strconv"
+)
+
+var (
+    h [1e5 + 10]int
+    cnt int
+)
+
+func down(u int) {
+    t := u
+    if u * 2 <= cnt && h[u * 2] < h[t] {
+        t = u * 2
+    }
+    if u * 2 + 1 <= cnt && h[u * 2 + 1] < h[t] {
+        t = u * 2 + 1
+    }
+    if t != u {
+        h[t], h[u] = h[u], h[t]
+        down(t)
+    }
+}
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    out := bufio.NewWriter(os.Stdout)
+    defer out.Flush()
+    
+    readInt := func() int {
+        sc.Scan()
+        x, _ := strconv.Atoi(sc.Text())
+        return x
+    }
+    
+    n, m := readInt(), readInt()
+    for i := 1; i <= n; i ++ {
+        h[i] = readInt()
+    }
+    cnt = n
+    
+    for i := n / 2; i >= 0; i -- {
+        down(i)
+    }
+    
+    for i := 0; i < m; i ++ {
+        fmt.Fprint(out, h[1], " ")
+        h[1] = h[cnt]
+        cnt --
+        down(1)
+    }
+}
+```
+
 #### 模拟堆模板
 
 <p>维护一个集合，初始时集合为空，支持如下几种操作：</p>
@@ -590,6 +1026,10 @@ using namespace std;
 
 const int N = 1e5 + 10;
 
+// ph[m] = cnt
+// 第 m 个插入的数在坐标 cnt 上
+// hp[cnt] = m
+// 坐标 cnt 上的数是第 m 个插入的数
 int h[N], hp[N], ph[N];
 int cnt;
 
@@ -677,3 +1117,98 @@ int main()
 
 **经验：**
 - 对于 `char op[5]`；我们用`!strcmp(op, "DM")`判断是否 `op` 是 `"DM"`；`strcmp`是`string`中的方法，如果两个字符串相等，则返回0。
+
+```go
+package main
+
+import (
+    "fmt"
+    "bufio"
+    "os"
+    "strconv"
+)
+
+var (
+    h, hp, ph [1e5 + 10]int
+    cnt int
+)
+
+func swap_heap(a, b int) {
+    ph[hp[a]], ph[hp[b]] = ph[hp[b]], ph[hp[a]]
+    hp[a], hp[b] = hp[b], hp[a]
+    h[a], h[b] = h[b], h[a]
+}
+
+func down(u int) {
+    t := u
+    if u * 2 <= cnt && h[u * 2] < h[t] {
+        t = u * 2
+    }
+    if u * 2 + 1 <= cnt && h[u * 2 + 1] < h[t] {
+        t = u * 2 + 1
+    }
+    if t != u {
+        swap_heap(t, u)
+        down(t)
+    }
+}
+
+func up(u int) {
+    if u / 2 > 0 && h[u / 2] > h[u] {
+        swap_heap(u / 2, u)
+        up(u / 2)
+    }
+}
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    out := bufio.NewWriter(os.Stdout)
+    defer out.Flush()
+    
+    readInt := func() int {
+        sc.Scan()
+        x, _ := strconv.Atoi(sc.Text())
+        return x
+    }
+    
+    readStr := func() string {
+        sc.Scan()
+        return sc.Text()
+    }
+    
+    n := readInt()
+    m := 0
+    for ; n > 0; n -- {
+        op := readStr()
+        if op == "I" {
+            x := readInt()
+            m ++
+            cnt ++
+            h[cnt] = x
+            ph[m] = cnt
+            hp[cnt] = m
+            up(cnt)
+        } else if op == "PM" {
+            fmt.Fprint(out, h[1], "\n")
+        } else if op == "DM" {
+            swap_heap(1, cnt)
+            cnt --
+            down(1)
+        } else if op == "D" {
+            k := readInt()
+            k = ph[k]
+            swap_heap(k, cnt)
+            cnt --
+            down(k)
+            up(k)
+        } else {
+            k, x := readInt(), readInt()
+            k = ph[k]
+            h[k] = x
+            down(k)
+            up(k)
+        }
+    }
+}
+```
