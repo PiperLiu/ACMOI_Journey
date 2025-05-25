@@ -136,6 +136,53 @@ int main()
 }
 ```
 
+```go
+package main
+
+import (
+    "fmt"
+    "bufio"
+    "os"
+    "strconv"
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    
+    sc.Scan()
+    n, _ := strconv.Atoi(sc.Text())
+    
+    out := bufio.NewWriter(os.Stdout)
+    defer out.Flush()
+    
+    seen := map[int]bool{}
+    slot := make([]int, n)
+    var dfs func(depth int)
+    dfs = func(depth int) {
+        if depth == n {
+            for _, x := range slot {
+                fmt.Fprint(out, x, " ")
+            }
+            fmt.Fprint(out, "\n")
+            return
+        }
+        
+        for i := 1; i <= n; i ++ {
+            if seen[i] {
+                continue
+            }
+            seen[i] = true
+            slot[depth] = i
+            dfs(depth + 1)
+            seen[i] = false
+        }
+    }
+    
+    dfs(0)
+}
+```
+
 #### n皇后问题两种做法
 - n−皇后问题是指将 n 个皇后放在 n×n 的国际象棋棋盘上，使得皇后不能相互攻击到，即任意两个皇后都不能处于同一行、同一列或同一斜线上。
 
@@ -221,6 +268,70 @@ int main()
 
 时间复杂度（最坏）为 $O(n \cdot n!)$ 。
 
+```go
+package main
+
+import (
+    "fmt"
+    "bufio"
+    "os"
+    "strconv"
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    
+    sc.Scan()
+    n, _ := strconv.Atoi(sc.Text())
+    
+    out := bufio.NewWriter(os.Stdout)
+    defer out.Flush()
+    
+    col := map[int]bool{}
+    dg := map[int]bool{}
+    udg := map[int]bool{}
+    slot := make([][]int, n)
+    for i := range slot {
+        slot[i] = make([]int, n)
+    }
+    var dfs func(row int)
+    dfs = func(row int) {
+        if row == n {
+            for _, x := range slot {
+                for _, y := range x {
+                    if y > 0 {
+                        fmt.Fprint(out, "Q")
+                    } else {
+                        fmt.Fprint(out, ".")
+                    }
+                }
+                fmt.Fprint(out, "\n")
+            }
+            fmt.Fprint(out, "\n")
+            return
+        }
+
+        for i := 0; i < n; i ++ {  // col index
+            if col[i] || dg[i + row] || udg[i - row] {
+                continue
+            }
+            col[i] = true
+            dg[i + row] = true
+            udg[i - row] = true
+            slot[row][i] = 1
+            dfs(row + 1)
+            slot[row][i] = 0
+            col[i] = false
+            dg[i + row] = false
+            udg[i - row] = false
+        }
+    }
+    
+    dfs(0)
+}
+```
+
 ##### n皇后问题做法2
 ![](./images/20210521dfsNqueen4.png)
 
@@ -283,6 +394,79 @@ int main()
 ```
 
 时间复杂度为 $O(2^{n^2})$ 。
+
+```go
+package main
+
+import (
+    "fmt"
+    "bufio"
+    "os"
+    "strconv"
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    
+    sc.Scan()
+    n, _ := strconv.Atoi(sc.Text())
+    
+    out := bufio.NewWriter(os.Stdout)
+    defer out.Flush()
+    
+    row := map[int]bool{}
+    col := map[int]bool{}
+    dg := map[int]bool{}
+    udg := map[int]bool{}
+    slot := make([][]int, n)
+    for i := range slot {
+        slot[i] = make([]int, n)
+    }
+    var dfs func(x, y, cnt int)
+    dfs = func(x, y, cnt int) {
+        if x == n {
+            x, y = 0, y + 1
+        }
+
+        if y == n {  // 枚举到了 n * n 最后一格
+            if cnt == n {
+                for _, xx := range slot {
+                    for _, yy := range xx {
+                        if yy > 0 {
+                            fmt.Fprint(out, "Q")
+                        } else {
+                            fmt.Fprint(out, ".")
+                        }
+                    }
+                    fmt.Fprint(out, "\n")
+                }
+                fmt.Fprint(out, "\n")
+            }
+            return
+        }
+
+        dfs(x + 1, y, cnt)  // 不放
+
+        if row[x] || col[y] || dg[x + y] || udg[x - y] {
+            return
+        }
+        row[x] = true
+        col[y] = true
+        dg[x + y] = true
+        udg[x - y] = true
+        slot[x][y] = 1
+        dfs(x + 1, y, cnt + 1)
+        slot[x][y] = 0
+        row[x] = false
+        col[y] = false
+        dg[x + y] = false
+        udg[x - y] = false
+    }
+    
+    dfs(0, 0, 0)
+}
+```
 
 ### BFS
 基本框架：维护一个队列。
@@ -358,6 +542,59 @@ int main()
     cout << bfs();
 
     return 0;
+}
+```
+
+```go
+package main
+
+import (
+    "bufio"
+    "fmt"
+    "os"
+    "strconv"
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    
+    readInt := func() int {
+        sc.Scan()
+        x, _ := strconv.Atoi(sc.Text())
+        return x
+    }
+    
+    n, m := readInt(), readInt()
+    g := make([][]int, n)
+    d := make([][]int, n)
+    for i := range g {
+        g[i] = make([]int, m)
+        d[i] = make([]int, m)
+        for j := range g[i] {
+            g[i][j] = readInt()
+            d[i][j] = -1
+        }
+    }
+    
+    dx, dy := []int{0, 1, 0, -1}, []int{1, 0, -1, 0}
+    q := [][]int{[]int{0, 0}}
+    d[0][0] = 0
+    for len(q) > 0 {
+        x, y := q[0][0], q[0][1]
+        q = q[1:]
+
+        for i := range dx {
+            xt, yt := x + dx[i], y + dy[i]
+            if xt < 0 || xt >= n || yt < 0 || yt >= m || g[xt][yt] == 1 || d[xt][yt] != -1 {
+                continue
+            }
+            d[xt][yt] = 1 + d[x][y]
+            q = append(q, []int{xt, yt})
+        }
+    }
+    
+    fmt.Println(d[n - 1][m - 1])
 }
 ```
 
@@ -484,6 +721,63 @@ for (int i = 0; i < 9; i ++)
 {
     cin >> s;
     state += *s;
+}
+```
+
+```go
+package main
+
+import (
+    "fmt"
+    "os"
+    "bufio"
+    "strings"
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+
+    state := ""
+    for i := 0; i < 9; i ++ {
+        sc.Scan()
+        state += sc.Text()
+    }
+    
+    dx := []int{0, 1, 0, -1}
+    dy := []int{1, 0, -1, 0}
+    
+    d := map[string]int{}
+    d[state] = 0
+    q := []string{state}
+    for len(q) > 0 {
+        s := q[0]
+        q = q[1:]
+        dist := d[s]
+        loc := strings.Index(s, "x")
+        x, y := loc / 3, loc % 3
+        for i := range dx {
+            a, b := x + dx[i], y + dy[i]
+            if a < 0 || a >= 3 || b < 0 || b >= 3 {
+                continue
+            }
+            tmp := []byte(s)
+            tmp[a * 3 + b], tmp[loc] = tmp[loc], tmp[a * 3 + b]
+            // fmt.Println(string(tmp), s)
+            _, ok := d[string(tmp)]
+            if !ok {
+                d[string(tmp)] = dist + 1
+                q = append(q, string(tmp))
+            }
+        }
+    }
+    
+    ans, ok := d["12345678x"]
+    if ok {
+        fmt.Println(ans)
+    } else {
+        fmt.Println("-1")
+    }
 }
 ```
 
@@ -667,6 +961,113 @@ int main()
 **经验：**
 - 务必仔细读题！这道题要求从基本状态到目标状态！这个逻辑没搞正确的话， `while(){pre}` 里面会死循环！
 
+```golang
+package main
+
+import (
+    "fmt"
+    "os"
+    "bufio"
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+
+    state := ""
+    for i := 0; i < 8; i ++ {
+        sc.Scan()
+        state += sc.Text()
+    }
+    
+    A := func(s string) string {
+        tmp := []byte(s)
+        for i := 0; i < 4; i ++ {
+            tmp[i], tmp[7 - i] = tmp[7 - i], tmp[i]
+        }
+        return string(tmp)
+    }
+    
+    B := func(s string) string {
+        tmp := []byte(s)
+        for i := 0; i < 3; i ++ {
+            tmp[i], tmp[3] = tmp[3], tmp[i]
+        }
+        for i := 4; i < 7; i ++ {
+            tmp[i], tmp[i + 1] = tmp[i + 1], tmp[i]
+        }
+        return string(tmp)
+    }
+    
+    C := func(s string) string {
+        tmp := []byte(s)
+        tmp[1], tmp[2] = tmp[2], tmp[1]
+        tmp[5], tmp[6] = tmp[6], tmp[5]
+        tmp[5], tmp[1] = tmp[1], tmp[5]
+        return string(tmp)
+    }
+
+    pre := map[string]struct{
+        State string
+        op string
+    }{}
+    ininState := "12345678"
+    q := []string{ininState}
+    for len(q) > 0 {
+        s := q[0]
+        q = q[1:]
+        
+        if s == state {
+            break
+        }
+
+        var ne string
+        ops := []string{"A", "B", "C"}
+        for i := 0; i < 3; i ++ {
+            if i == 0 {
+                ne = A(s)
+            } else if i == 1 {
+                ne = B(s)
+            } else {
+                ne = C(s)
+            }
+            _, ok := pre[ne]
+            // fmt.Println(s, ne)
+            if !ok {
+                pre[ne] = struct{
+                    State string
+                    op string
+                }{
+                    State: s,
+                    op: ops[i],
+                }
+                q = append(q, ne)
+            }
+        }
+    }
+    
+    ans := 0
+    res := ""
+    // fmt.Println(pre)
+    for t := state; t != ininState; {
+        ans ++
+        res += pre[t].op
+        t = pre[t].State
+        // fmt.Println(t)
+    }
+
+    tmp := []byte(res)
+    for i := 0; i < len(tmp) / 2; i ++ {
+        tmp[i], tmp[len(tmp) - i - 1] = tmp[len(tmp) - i - 1], tmp[i]
+    }
+
+    fmt.Println(ans)
+    if ans > 0 {
+        fmt.Println(string(tmp))
+    }
+}
+```
+
 ### 树与图的表示方法（有向图）
 树是一种特殊的图：无环连通图。所以我们只讲图就可以了。
 
@@ -733,7 +1134,7 @@ bool st[M];  // 是否检查过这个点了
 
 void add(int a, int b)
 {
-    // 把 b 插到 a 链表di'y
+    // 把 b 插到 a 链表头
     e[idx] = b, ne[idx] = h[a], h[a] = idx ++ ;
 }
 
@@ -782,6 +1183,80 @@ int main()
     
     printf("%d", ans);
     return 0;
+}
+```
+
+```go
+package main
+
+import (
+    "fmt"
+    "bufio"
+    "strconv"
+    "os"
+)
+
+type Node struct {
+    Childs []*Node
+}
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    
+    sc.Scan()
+    n, _ := strconv.Atoi(sc.Text())
+    
+    idx2Node := map[string]*Node{}
+    for i := 0; i < n; i ++ {
+        sc.Scan()
+        a := sc.Text()
+        sc.Scan()
+        b := sc.Text()
+        node1 := idx2Node[a]
+        node2 := idx2Node[b]
+        if node1 == nil {
+            node1 = &Node{}
+            idx2Node[a] = node1
+        }
+        if node2 == nil {
+            node2 = &Node{}
+            idx2Node[b] = node2
+        }
+        node1.Childs = append(node1.Childs, node2)
+        node2.Childs = append(node2.Childs, node1)
+    }
+
+    ans := len(idx2Node)
+    viewed := map[*Node]bool{}
+
+    var dfs func(u *Node) int
+    dfs = func(u *Node) int {
+        viewed[u] = true
+        
+        maxv := 0
+        sum := 1
+        for _, child := range u.Childs {
+            if viewed[child] {
+                continue
+            }
+            s := dfs(child)
+            if s > maxv {
+                maxv = s
+            }
+            sum += s
+        }
+        if n - sum > maxv {
+            maxv = n - sum
+        }
+        if maxv < ans {
+            ans = maxv
+        }
+        return sum
+    }
+
+    dfs(idx2Node["1"])
+    fmt.Println(ans)
 }
 ```
 
@@ -856,6 +1331,69 @@ int main()
     
     cout << bfs();
     return 0;
+}
+```
+
+```go
+package main
+
+import (
+    "fmt"
+    "bufio"
+    "strconv"
+    "os"
+)
+
+type Node struct {
+    Childs []*Node
+}
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    
+    sc.Scan()
+    n, _ := strconv.Atoi(sc.Text())
+    sc.Scan()
+    m, _ := strconv.Atoi(sc.Text())
+
+    idx2Node := map[string]*Node{}
+    for i := 1; i <= n; i ++ {
+        idx2Node[strconv.Itoa(i)] = &Node{}
+    }
+    for i := 0; i < m; i ++ {
+        sc.Scan()
+        a := sc.Text()
+        sc.Scan()
+        b := sc.Text()
+        node1 := idx2Node[a]
+        node2 := idx2Node[b]
+        node1.Childs = append(node1.Childs, node2)
+    }
+    
+    d := map[*Node]int{}
+    d[idx2Node["1"]] = 0
+
+    q := []*Node{idx2Node["1"]}
+    for len(q) > 0 {
+        s := q[0]
+        q = q[1:]
+        for _, c := range s.Childs {
+            _, ok := d[c]
+            if ok {
+                continue
+            }
+            d[c] = d[s] + 1
+            q = append(q, c)
+        }
+    }
+
+    dis, ok := d[idx2Node[strconv.Itoa(n)]]
+    if ok {
+        fmt.Println(dis)
+    } else {
+        fmt.Println(-1)
+    }
 }
 ```
 
@@ -956,5 +1494,75 @@ int main()
     else puts("-1");
     
     return 0;
+}
+```
+
+```go
+package main
+
+import (
+    "fmt"
+    "bufio"
+    "strconv"
+    "os"
+)
+
+type Node struct {
+    Val int
+    Childs []*Node
+}
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    
+    sc.Scan()
+    n, _ := strconv.Atoi(sc.Text())
+    sc.Scan()
+    m, _ := strconv.Atoi(sc.Text())
+
+    idx2Node := map[string]*Node{}
+    d := map[*Node]int{}
+    for i := 1; i <= n; i ++ {
+        idx2Node[strconv.Itoa(i)] = &Node{ Val: i }
+    }
+    for i := 0; i < m; i ++ {
+        sc.Scan()
+        a := sc.Text()
+        sc.Scan()
+        b := sc.Text()
+        node1 := idx2Node[a]
+        node2 := idx2Node[b]
+        node1.Childs = append(node1.Childs, node2)
+        d[node2] ++
+    }
+
+    q := []*Node{}
+    for _, node := range idx2Node {
+        if d[node] == 0 {
+            q = append(q, node)
+            
+        }
+    }
+    ans := []*Node{}
+    for len(q) > 0 {
+        s := q[0]
+        q = q[1:]
+        ans = append(ans, s)
+        for _, c := range s.Childs {
+            d[c] --
+            if d[c] == 0 {
+                q = append(q, c)
+            }
+        }
+    }
+
+    if len(ans) != n {
+        fmt.Println(-1)
+    } else {
+        for i := range ans {
+            fmt.Print(ans[i].Val, " ")
+        }
+    }
 }
 ```
