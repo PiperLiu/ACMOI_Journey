@@ -128,6 +128,84 @@ int main()
 }
 ```
 
+```go
+package main
+
+import (
+    "fmt"
+    "strconv"
+    "bufio"
+    "os"
+    // "math"
+)
+
+func main() {
+    n, g, seen := getInput()
+    d := dijkstra(n, g, seen)
+    if d[n - 1] == 2147483647 / 2 {
+        fmt.Println("-1")
+    } else {
+        fmt.Println(d[n - 1])
+    }
+}
+
+func dijkstra(n int, g [][]int, seen []bool) (d []int) {
+    d = make([]int, n)
+    for i := 0; i < n; i ++ {
+        d[i] = 2147483647 / 2
+    }
+    d[0] = 0
+    for i := 1; i < n; i ++ {
+        t := -1
+        for j := 0; j < n; j ++ {  // 选出一个点
+            if (!seen[j] && (t == -1 || d[j] < d[t])) {
+                t = j
+            }
+        }
+
+        for j := 0; j < n; j ++ {
+            newD := d[t] + g[t][j]
+            if newD < d[j] {
+                d[j] = newD
+            }
+        }
+        seen[t] = true
+    }
+    return
+}
+
+func getInput() (n int, g [][]int, seen []bool) {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    
+    readInt := func() int {
+        sc.Scan()
+        r, _ := strconv.Atoi(sc.Text())
+        return r
+    }
+    
+    n = readInt()
+    g = make([][]int, n)
+    seen = make([]bool, n)
+    for i := range g {
+        g[i] = make([]int, n)
+        for j := range g[i] {
+            g[i][j] = 2147483647 / 2
+        }
+    }
+    
+    m := readInt()
+    for m > 0 {
+        x, y, z := readInt(), readInt(), readInt()
+        if z < g[x - 1][y - 1] {
+            g[x - 1][y - 1] = z
+        }
+        m --
+    }
+    return
+}
+```
+
 ### 堆优化版的 Dijkstra 算法
 如果有 `n=1e5` ，则 `n**2 = 1e10` 会超时。
 
@@ -225,6 +303,92 @@ int main()
     printf("%d", d[n]);
 
     return 0;
+}
+```
+
+```go
+// acwing 上的 golang 版本太低
+package main
+
+import (
+    "fmt"
+    "strconv"
+    "bufio"
+    "os"
+    // "math"
+    "container/heap"
+)
+
+type hp []struct { c, d int }
+func (h hp) Len() int { return len(h) }
+func (h hp) Less(i, j int) bool { return h[i].d < h[j].d }
+func (h hp) Swap(i, j int) { h[i], h[j] = h[j], h[i] }
+func (h *hp) Push(v interface{}) { *h = append(*h, v.(struct { c, d int })) }
+func (h *hp) Pop() interface{} {
+    r := (*h)[len(*h) - 1]
+    *h = (*h)[:len(*h) - 1]
+    return r
+}
+
+var _ heap.Interface = &hp{}
+
+func main() {
+    n, g, seen := getInput()
+    d := dijkstra(n, g, seen)
+    if d[n - 1] == 2147483647 / 2 {
+        fmt.Println("-1")
+    } else {
+        fmt.Println(d[n - 1])
+    }
+}
+
+func dijkstra(n int, g map[int][][2]int, seen []bool) (d []int) {
+    d = make([]int, n)
+    for i := 0; i < n; i ++ {
+        d[i] = 2147483647 / 2
+    }
+    d[0] = 0
+    h := &hp{struct { c, d int }{ 0, 0 }}
+    heap.Init(h)
+    for h.Len() > 0 {
+        t := heap.Pop(h).(struct { c, d int })
+        if seen[t.c] {
+            continue
+        }
+        for j := range g[t.c] {
+            child := g[t.c][j]
+            newD := d[t.c] + child[1]
+            if newD < d[child[0]] {
+                d[child[0]] = newD
+            }
+            heap.Push(h, struct { c, d int }{ child[0], d[child[0]] })
+        }
+        seen[t.c] = true
+    }
+    return
+}
+
+func getInput() (n int, g map[int][][2]int, seen []bool) {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    
+    readInt := func() int {
+        sc.Scan()
+        r, _ := strconv.Atoi(sc.Text())
+        return r
+    }
+    
+    n = readInt()
+    g = make(map[int][][2]int, 0)
+    seen = make([]bool, n)
+
+    m := readInt()
+    for m > 0 {
+        x, y, z := readInt() - 1, readInt() - 1, readInt()
+        g[x] = append(g[x], [2]int{y, z})
+        m --
+    }
+    return
 }
 ```
 
