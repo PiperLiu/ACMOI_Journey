@@ -115,6 +115,53 @@ int main()
 - `f[0][0~m]` 都应该是 0 ，这里不用初始化，因为初始值就是 0
 - 所以背包问题从 1 开始计算
 
+```go
+package main
+
+import (
+    "os"
+    "bufio"
+    "fmt"
+    "strconv"
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    readInt := func () int {
+        sc.Scan()
+        r, _ := strconv.Atoi(sc.Text())
+        return r
+    }
+    n, m := readInt(), readInt()
+    v := make([]int, n + 1)
+    w := make([]int, n + 1)
+    for i := 1; i <= n; i ++ {
+        v[i], w[i] = readInt(), readInt()
+    }
+    f := make([][]int, n + 1)  // f[i][j] 选前 i 个且最大占用 j 空间的最大价值
+    for i := range f {
+        f[i] = make([]int, m + 1)
+    }
+    for i := 1; i <= n; i ++ {
+        for j := 0; j <= m; j ++ {
+            f[i][j] = f[i - 1][j]
+            if j >= v[i] {
+                f[i][j] = max(f[i][j], f[i - 1][j - v[i]] + w[i])
+            }
+        }
+    }
+    fmt.Println(f[n][m])
+}
+
+func max(a, b int) int {
+    if a > b {
+        return a
+    }
+    return b
+}
+```
+
 #### 一维版本
 
 ```cpp
@@ -145,6 +192,47 @@ int main()
     printf("%d", f[m]);
     
     return 0;
+}
+```
+
+```go
+package main
+
+import (
+    "os"
+    "bufio"
+    "fmt"
+    "strconv"
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    readInt := func () int {
+        sc.Scan()
+        r, _ := strconv.Atoi(sc.Text())
+        return r
+    }
+    n, m := readInt(), readInt()
+    v := make([]int, n + 1)
+    w := make([]int, n + 1)
+    for i := 1; i <= n; i ++ {
+        v[i], w[i] = readInt(), readInt()
+    }
+    f := make([]int, m + 1)
+    for i := 1; i <= n; i ++ {
+        for j := m; j >= v[i]; j -- {  // 倒序，这样 f[j - v[i]] 还是 i - 1 状态的
+            f[j] = max(f[j], f[j - v[i]] + w[i])
+        }
+    }
+    fmt.Println(f[m])
+}
+
+func max(a, b int) int {
+    if a > b {
+        return a
+    }
+    return b
 }
 ```
 
@@ -314,6 +402,53 @@ int main()
 }
 ```
 
+```go
+package main
+
+import (
+    "os"
+    "bufio"
+    "fmt"
+    "strconv"
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    readInt := func () int {
+        sc.Scan()
+        r, _ := strconv.Atoi(sc.Text())
+        return r
+    }
+    n, m := readInt(), readInt()
+    v := make([]int, n + 1)
+    w := make([]int, n + 1)
+    for i := 1; i <= n; i ++ {
+        v[i], w[i] = readInt(), readInt()
+    }
+    f := make([][]int, n + 1)  // f[i][j] 选前 i 个且最大占用 j 空间的最大价值
+    for i := range f {
+        f[i] = make([]int, m + 1)
+    }
+    for i := 1; i <= n; i ++ {
+        for j := 0; j <= m; j ++ {
+            f[i][j] = f[i - 1][j]
+            if j >= v[i] {
+                f[i][j] = max(f[i][j], f[i][j - v[i]] + w[i])  // 这里 f[i] 因为可重复选
+            }
+        }
+    }
+    fmt.Println(f[n][m])
+}
+
+func max(a, b int) int {
+    if a > b {
+        return a
+    }
+    return b
+}
+```
+
 参考[Aniway](https://www.acwing.com/solution/content/5345/)：
 
 我们列举一下更新次序的内部关系：
@@ -392,6 +527,47 @@ int main()
 }
 ```
 
+```go
+package main
+
+import (
+    "os"
+    "bufio"
+    "fmt"
+    "strconv"
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    readInt := func () int {
+        sc.Scan()
+        r, _ := strconv.Atoi(sc.Text())
+        return r
+    }
+    n, m := readInt(), readInt()
+    v := make([]int, n + 1)
+    w := make([]int, n + 1)
+    for i := 1; i <= n; i ++ {
+        v[i], w[i] = readInt(), readInt()
+    }
+    f := make([]int, m + 1)
+    for i := 1; i <= n; i ++ {
+        for j := v[i]; j <= m; j ++ {  // 正序，这样 f[j - v[i]] 是 i 状态的
+            f[j] = max(f[j], f[j - v[i]] + w[i])
+        }
+    }
+    fmt.Println(f[m])
+}
+
+func max(a, b int) int {
+    if a > b {
+        return a
+    }
+    return b
+}
+```
+
 ### 多重背包
 
 每个物品的数量上限不同，$s_i$。
@@ -453,6 +629,54 @@ int main()
     printf("%d", f[n][m]);
 
     return 0;
+}
+```
+
+```go
+package main
+
+import (
+    "os"
+    "bufio"
+    "fmt"
+    "strconv"
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    readInt := func () int {
+        sc.Scan()
+        r, _ := strconv.Atoi(sc.Text())
+        return r
+    }
+    n, m := readInt(), readInt()
+    v := make([]int, n + 1)
+    w := make([]int, n + 1)
+    s := make([]int, n + 1)
+    for i := 1; i <= n; i ++ {
+        v[i], w[i], s[i] = readInt(), readInt(), readInt()
+    }
+    f := make([][]int, n + 1)  // f[i][j] 选前 i 个且最大占用 j 空间的最大价值
+    for i := range f {
+        f[i] = make([]int, m + 1)
+    }
+    for i := 1; i <= n; i ++ {
+        for j := 0; j <= m; j ++ {
+            f[i][j] = f[i - 1][j]
+            for k := 0; k <= s[i] && k * v[i] <= j; k ++ {
+                f[i][j] = max(f[i][j], f[i - 1][j - v[i] * k] + w[i] * k)
+            }
+        }
+    }
+    fmt.Println(f[n][m])
+}
+
+func max(a, b int) int {
+    if a > b {
+        return a
+    }
+    return b
 }
 ```
 
@@ -550,6 +774,61 @@ int main()
 }
 ```
 
+```go
+package main
+
+import (
+    "os"
+    "bufio"
+    "fmt"
+    "strconv"
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    readInt := func () int {
+        sc.Scan()
+        r, _ := strconv.Atoi(sc.Text())
+        return r
+    }
+    n, m := readInt(), readInt()
+    v := make([]int, 11 * n)  // 11 = log2(2048) > log2(2000)
+    w := make([]int, 11 * n)
+    cnt := 0
+    for i := 1; i <= n; i ++ {
+        a, b, s := readInt(), readInt(), readInt()
+        k := 1
+        for k <= s {
+            cnt ++
+            v[cnt] = a * k
+            w[cnt] = b * k
+            s -= k
+            k *= 2
+        }
+        if s > 0 {
+            cnt ++
+            v[cnt] = a * s
+            w[cnt] = b * s
+        }
+    }
+    f := make([]int, m + 1)  //  0-1 背包
+    for i := 1; i <= cnt; i ++ {
+        for j := m; j >= v[i]; j -- {
+            f[j] = max(f[j], f[j - v[i]] + w[i])
+        }
+    }
+    fmt.Println(f[m])
+}
+
+func max(a, b int) int {
+    if a > b {
+        return a
+    }
+    return b
+}
+```
+
 ### 分组背包
 
 每一组里面最多选一个物品。
@@ -621,3 +900,53 @@ int main()
 }
 ```
 
+```go
+package main
+
+import (
+    "os"
+    "bufio"
+    "fmt"
+    "strconv"
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    readInt := func () int {
+        sc.Scan()
+        r, _ := strconv.Atoi(sc.Text())
+        return r
+    }
+    n, m := readInt(), readInt()
+    v := make([][]int, n + 1)
+    w := make([][]int, n + 1)
+    s := make([]int, n + 1)
+    for i := 1; i <= n; i ++ {
+        s[i] = readInt()
+        v[i] = make([]int, s[i] + 1)
+        w[i] = make([]int, s[i] + 1)
+        for j := 1; j <= s[i]; j ++ {
+            v[i][j], w[i][j] = readInt(), readInt()
+        }
+    }
+    f := make([]int, m + 1)  //  0-1 背包
+    for i := 1; i <= n; i ++ {
+        for j := m; j >= 0; j -- {
+            for k := 1; k <= s[i]; k ++ {
+                if v[i][k] <= j {
+                    f[j] = max(f[j], f[j - v[i][k]] + w[i][k])
+                }
+            }
+        }
+    }
+    fmt.Println(f[m])
+}
+
+func max(a, b int) int {
+    if a > b {
+        return a
+    }
+    return b
+}
+```
