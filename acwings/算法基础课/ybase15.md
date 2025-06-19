@@ -87,6 +87,58 @@ int main()
 }
 ```
 
+```go
+package main
+
+import (
+    "os"
+    "fmt"
+    "bufio"
+    "strconv"
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+
+    readInt := func() int {
+        sc.Scan()
+        x, _ := strconv.Atoi(sc.Text())
+        return x
+    }
+    
+    n := readInt()
+    f := make([]int, n + 1)
+    s := make([]int, n + 1)
+    for i := 1; i <= n; i ++ {
+        for j := 1; j <= i; j ++ {
+            s[j] = readInt()
+        }
+        for j := i; j > 0; j -- {
+            if j == 1 {
+                f[j] = f[j] + s[j]
+            } else if j == i {
+                f[j] = f[j - 1] + s[j]
+            } else {
+                f[j] = max(f[j], f[j - 1]) + s[j]
+            }
+        }
+    }
+    var ans int = -10000 * 500
+    for i := 1; i <= n; i ++ {
+        ans = max(ans, f[i])
+    }
+    fmt.Println(ans)
+}
+
+func max(x, y int) int {
+    if x > y {
+        return x
+    }
+    return y
+}
+```
+
 #### 例题：最长上升子序列
 
 - 给定一个长度为 N 的数列，求数值严格单调递增的子序列的长度最长是多少。
@@ -141,6 +193,53 @@ int main()
     
     printf("%d", res);
     return 0;
+}
+```
+
+```go
+package main
+
+import (
+    "os"
+    "fmt"
+    "bufio"
+    "strconv"
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+
+    readInt := func() int {
+        sc.Scan()
+        x, _ := strconv.Atoi(sc.Text())
+        return x
+    }
+    
+    n := readInt()
+    f := make([]int, n)
+    s := make([]int, n)
+    for i := 0; i < n; i ++ {
+        s[i] = readInt()
+        f[i] = 1
+        for j := 0; j < i; j ++ {
+            if s[j] < s[i] {
+                f[i] = max(f[i], f[j] + 1)
+            }
+        }
+    }
+    var ans int = 1
+    for i := 0; i < n; i ++ {
+        ans = max(ans, f[i])
+    }
+    fmt.Println(ans)
+}
+
+func max(x, y int) int {
+    if x > y {
+        return x
+    }
+    return y
 }
 ```
 
@@ -208,6 +307,64 @@ int main()
 }
 ```
 
+上面代码中给 `q[0]` 赋了一个 0 有哑节点的含义，方便写判断，下面的代码则没有用哑节点，所以略显繁琐。
+
+```go
+package main
+
+import (
+    "os"
+    "fmt"
+    "bufio"
+    "strconv"
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+
+    readInt := func() int {
+        sc.Scan()
+        x, _ := strconv.Atoi(sc.Text())
+        return x
+    }
+    
+    n := readInt()
+    q := make([]int, 0)
+    for i := 0; i < n; i ++ {
+        a := readInt()
+        if i == 0 {
+            q = append(q, a)
+            continue
+        }
+        l, r := 0, len(q) - 1
+        for l < r {
+            mid := (l + r + 1) / 2
+            if q[mid] < a {
+                l = mid  // 小于 a 中的最大的
+            } else {
+                r = mid - 1
+            }
+        }
+        if l == len(q) - 1 && q[l] < a {  // l 已经落在了 q 最右侧
+            q = append(q, a)
+        } else if q[l] < a && q[l + 1] > a {  // 找到了满足要求的坐标，用更小的值替代（是更优的解）
+            q[l + 1] = a
+        } else if q[0] > a {  // 找不到满足要求的，a 比第一个值还小
+            q[0] = a
+        }
+    }
+    fmt.Println(len(q))
+}
+
+func max(x, y int) int {
+    if x > y {
+        return x
+    }
+    return y
+}
+```
+
 #### 例题：最长公共子序列
 
 给定两个长度分别为 N 和 M 的字符串 A 和 B，求既是 A 的子序列又是 B 的子序列的字符串长度最长是多少。
@@ -261,6 +418,61 @@ int main()
 
     printf("%d", f[n][m]);
     return 0;
+}
+```
+
+```go
+package main
+
+import (
+    "fmt"
+    "bufio"
+    "os"
+    "strconv"
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    
+    readInt := func() int {
+        sc.Scan()
+        x, _ := strconv.Atoi(sc.Text())
+        return x
+    }
+    
+    n, m := readInt(), readInt()
+    
+    sc.Scan()
+    s1 := sc.Text()
+    s1 = " " + s1
+    
+    sc.Scan()
+    s2 := sc.Text()
+    s2 = " " + s2
+    
+    f := make([][]int, n + 1)
+    for i := range f {
+        f[i] = make([]int, m + 1)
+    }
+    
+    for i := 1; i <= n; i ++ {
+        for j := 1; j <= m; j ++ {
+            f[i][j] = max(f[i - 1][j], f[i][j - 1])
+            if s1[i] == s2[j] {
+                f[i][j] = max(f[i][j], f[i - 1][j - 1] + 1)
+            }
+        }
+    }
+    
+    fmt.Println(f[n][m])
+}
+
+func max(a, b int) int {
+    if a < b {
+        return b
+    }
+    return a
 }
 ```
 
@@ -365,6 +577,73 @@ int main()
 }
 ```
 
+这里十分钟的视频讲得更好：https://www.bilibili.com/video/BV1TM4y1o7ug/
+
+```go
+package main
+
+import (
+    "fmt"
+    "bufio"
+    "os"
+    "strconv"
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    
+    readInt := func() int {
+        sc.Scan()
+        x, _ := strconv.Atoi(sc.Text())
+        return x
+    }
+    
+    n := readInt()
+    
+    sc.Scan()
+    s1 := sc.Text()
+    s1 = " " + s1
+    
+    m := readInt()
+    
+    sc.Scan()
+    s2 := sc.Text()
+    s2 = " " + s2
+    
+    f := make([][]int, n + 1)
+    for i := range f {
+        f[i] = make([]int, m + 1)
+    }
+
+    // 初始状态很关键
+    for i := 1; i <= n; i ++ {
+        f[i][0] = i
+    }
+    for i := 1; i <= m; i ++ {
+        f[0][i] = i
+    }
+
+    for i := 1; i <= n; i ++ {
+        for j := 1; j <= m; j ++ {
+            f[i][j] = min(f[i - 1][j], min(f[i][j - 1], f[i - 1][j - 1])) + 1
+            if s1[i] == s2[j] {
+                f[i][j] = min(f[i][j], f[i - 1][j - 1])
+            }
+        }
+    }
+    
+    fmt.Println(f[n][m])
+}
+
+func min(a, b int) int {
+    if a > b {
+        return b
+    }
+    return a
+}
+```
+
 #### 例题：编辑距离
 
 - 给定 n 个长度不超过 10 的字符串以及 m 次询问，每次询问给出一个字符串和一个操作次数上限。
@@ -445,6 +724,90 @@ int main()
 - `char[]` 长度用 `<string>` 的 `strlen(a)` 来求，其中 `a` 是首地址指针
 - 上面强制转换了 `(a[i] != b[j])` 可还行
 
+```go
+package main
+
+import (
+    "fmt"
+    "bufio"
+    "os"
+    "strconv"
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    
+    out := bufio.NewWriter(os.Stdout)
+    defer out.Flush()
+    
+    readInt := func() int {
+        sc.Scan()
+        x, _ := strconv.Atoi(sc.Text())
+        return x
+    }
+    
+    readStr := func() string {
+        sc.Scan()
+        return sc.Text()
+    }
+    
+    n, m := readInt(), readInt()
+    ss := make([]string, n)
+    for i := range ss {
+        ss[i] = readStr()
+    }
+    for i := 0; i < m; i ++ {
+        src := readStr()
+        limit := readInt()
+        cnt := 0
+        for j := range ss {
+            if editDist(ss[j], src) <= limit {
+                cnt ++
+            }
+        }
+        fmt.Fprint(out, cnt, "\n")
+    }
+}
+
+func editDist(s1, s2 string) int {
+    n, m := len(s1), len(s2)
+    s1 = " " + s1
+    s2 = " " + s2
+    
+    f := make([][]int, n + 1)
+    for i := range f {
+        f[i] = make([]int, m + 1)
+    }
+
+    // 初始状态很关键
+    for i := 1; i <= n; i ++ {
+        f[i][0] = i
+    }
+    for i := 1; i <= m; i ++ {
+        f[0][i] = i
+    }
+
+    for i := 1; i <= n; i ++ {
+        for j := 1; j <= m; j ++ {
+            f[i][j] = min(f[i - 1][j], min(f[i][j - 1], f[i - 1][j - 1])) + 1
+            if s1[i] == s2[j] {
+                f[i][j] = min(f[i][j], f[i - 1][j - 1])
+            }
+        }
+    }
+    
+    return f[n][m]
+}
+
+func min(a, b int) int {
+    if a > b {
+        return b
+    }
+    return a
+}
+```
+
 ### 区间动态规划
 
 `f[i, j]` 表示区间 `[i, j]` 。
@@ -516,7 +879,60 @@ int main()
 }
 ```
 
-这道题有讲究，其转移从区间长度从小到大开始，`len = 2` ，而非从 `i` 开始。
+这道题有讲究，其转移从区间长度从小到大开始，`len = 2` ，而非从 `i` 开始。这是因为状态转移一定发生在 `len` 小的到 `len` 大的方向上。
+
+```go
+package main
+
+import (
+    "fmt"
+    "bufio"
+    "os"
+    "strconv"
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    
+    readInt := func() int {
+        sc.Scan()
+        x, _ := strconv.Atoi(sc.Text())
+        return x
+    }
+    
+    n := readInt()
+    s := make([]int, n + 1)
+    for i := 1; i <= n; i ++ {
+        s[i] = readInt()
+        s[i] += s[i - 1]
+    }
+    
+    f := make([][]int, n + 1)
+    for i := range f {
+        f[i] = make([]int, n + 1)
+    }
+    
+    for sz := 2; sz <= n; sz ++ {
+        for st := 1; st + sz - 1 <= n; st ++ {
+            l, r := st, st + sz - 1
+            f[l][r] = int(2e9)
+            for k := l + 1; k <= r; k ++ {
+                f[l][r] = min(f[l][r], f[l][k - 1] + f[k][r] + s[r] - s[l - 1])
+            }
+        }
+    }
+    
+    fmt.Println(f[1][n])
+}
+
+func min(a, b int) int {
+    if a > b {
+        return b
+    }
+    return a
+}
+```
 
 ### 计数类动态规划
 
@@ -541,8 +957,8 @@ int main()
 思路：把$1,2,3, … n$分别看做 n 个物体的体积，这 n 个物体均无使用次数限制，问恰好能装满总体积为 n 的背包的总方案数（完全背包问题变形）
 
 初值问题：
-- 求最大值时，当都不选时，价值显然是 0
-- 而求方案数时，当都不选时，方案数是 1（即前 i 个物品都不选的情况也是一种方案），所以需要初始化为 1
+- 当 `f` 表示最大价值时，当都不选时，价值显然是 `f[i][0] = 0`
+- 而 `f` 表示方案数时，当都不选时，方案数是 1（即前 i 个物品都不选的情况也是一种方案），所以需要初始化为 1
 - 即：`for (int i = 0; i <= n; i ++) f[i][0] = 1;`
 - 等价变形后： `f[0] = 1`
 
@@ -552,6 +968,7 @@ int main()
 - `f[i][j] = f[i - 1][j] + f[i - 1][j - i] + f[i - 1][j - 2 * i] + ...;`
 - `f[i][j - i] = f[i - 1][j - i] + f[i - 1][j - 2 * i] + ...;`
 - 因此 `f[i][j]=f[i−1][j]+f[i][j−i];` (这一步类似完全背包的推导）
+- `f[i][j]=f[i−1][j]+f[i][j−i];` 也可以理解为从`一个 i 不选`加`至少选了 1 个 i`转移过来的方案数
 
 朴素做法如下。
 
@@ -580,6 +997,51 @@ int main()
 
     printf("%d", f[n][n]);
     return 0;
+}
+```
+
+```go
+package main
+
+import (
+    "fmt"
+    "bufio"
+    "os"
+    "strconv"
+)
+
+var MOD int = int(1e9 + 7)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    
+    readInt := func() int {
+        sc.Scan()
+        x, _ := strconv.Atoi(sc.Text())
+        return x
+    }
+    
+    n := readInt()
+
+    f := make([][]int, n + 1)
+    for i := range f {
+        f[i] = make([]int, n + 1)
+    }
+    for i := 0; i <= n; i ++ {
+        f[i][0] = 1
+    }
+
+    for i := 1; i <= n; i ++ {
+        for j := 0; j <= n; j ++ {
+            f[i][j] = f[i - 1][j] % MOD
+            if j >= i {
+                f[i][j] = (f[i][j] + f[i][j - i]) % MOD
+            }
+        }
+    }
+    
+    fmt.Println(f[n][n])
 }
 ```
 
