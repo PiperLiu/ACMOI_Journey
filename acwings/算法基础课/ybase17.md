@@ -91,6 +91,54 @@ int main()
 }
 ```
 
+```go
+package main
+
+import (
+    "fmt"
+    "os"
+    "bufio"
+    "strconv"
+    "sort"
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+
+    readInt := func () int {
+        sc.Scan()
+        x, _ := strconv.Atoi(sc.Text())
+        return x
+    }
+    
+    n := readInt()
+    segs := [][2]int{}
+    for i := 0; i < n; i ++ {
+        segs = append(segs, [2]int{ readInt(), readInt() })
+    }
+
+    sort.Sort(ByLR(segs))
+    
+    res, cur := 0, int(-2e9)
+    for i := range segs {
+        if cur < segs[i][0] {
+            cur = segs[i][1]
+            res ++
+        }
+    }
+    
+    fmt.Println(res)
+}
+
+type ByLR [][2]int
+func (b ByLR) Len() int { return len(b) }
+func (b ByLR) Swap(i, j int) { b[i], b[j] = b[j], b[i] }
+func (b ByLR) Less(i, j int) bool {
+    return b[i][1] < b[j][1]
+}
+```
+
 #### 例题：最大不相交区间数量
 
 - 给定 N 个闭区间 $[a_i,b_i]$，请你在数轴上选择若干区间，使得选中的区间之间互不相交（包括端点）。
@@ -149,6 +197,54 @@ int main()
     
     printf("%d", res);
     return 0;
+}
+```
+
+```go
+package main
+
+import (
+    "fmt"
+    "os"
+    "bufio"
+    "strconv"
+    "sort"
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+
+    readInt := func () int {
+        sc.Scan()
+        x, _ := strconv.Atoi(sc.Text())
+        return x
+    }
+    
+    n := readInt()
+    segs := [][2]int{}
+    for i := 0; i < n; i ++ {
+        segs = append(segs, [2]int{ readInt(), readInt() })
+    }
+
+    sort.Sort(ByLR(segs))
+    
+    res, cur := 0, int(-2e9)
+    for i := range segs {
+        if cur < segs[i][0] {
+            cur = segs[i][1]
+            res ++
+        }
+    }
+    
+    fmt.Println(res)
+}
+
+type ByLR [][2]int
+func (b ByLR) Len() int { return len(b) }
+func (b ByLR) Swap(i, j int) { b[i], b[j] = b[j], b[i] }
+func (b ByLR) Less(i, j int) bool {
+    return b[i][1] < b[j][1]
 }
 ```
 
@@ -240,6 +336,68 @@ int main()
 **经验：**
 - `range[i] = {l, r};` 来声明结构体实例的成员变量时，顺序要和结构体定义的成员变量顺序相对应
 
+```go
+package main
+
+import (
+    "fmt"
+    "os"
+    "bufio"
+    "strconv"
+    "sort"
+    "container/heap"
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+
+    readInt := func () int {
+        sc.Scan()
+        x, _ := strconv.Atoi(sc.Text())
+        return x
+    }
+    
+    n := readInt()
+    segs := [][2]int{}
+    for i := 0; i < n; i ++ {
+        segs = append(segs, [2]int{ readInt(), readInt() })
+    }
+
+    sort.Sort(ByLR(segs))
+
+    hp := &MinHeap{}
+    for i := range segs {
+        seg := segs[i]
+        if hp.Len() == 0 || hp.IntSlice[0] >= seg[0] {
+            heap.Push(hp, seg[1])
+        } else {
+            heap.Pop(hp)
+            heap.Push(hp, seg[1])
+        }
+    }
+    
+    fmt.Println(hp.Len())
+}
+
+type ByLR [][2]int
+func (b ByLR) Len() int { return len(b) }
+func (b ByLR) Swap(i, j int) { b[i], b[j] = b[j], b[i] }
+func (b ByLR) Less(i, j int) bool {
+    return b[i][0] < b[j][0]
+}
+
+type MinHeap struct { sort.IntSlice }
+func (m *MinHeap) Push(x interface{}) {
+    m.IntSlice = append(m.IntSlice, x.(int))
+}
+func (m *MinHeap) Pop() interface{} {
+    v := m.IntSlice[len(m.IntSlice) - 1]
+    m.IntSlice = m.IntSlice[:len(m.IntSlice) - 1]
+    return v
+}
+```
+
 ##### 更妙的方式：活动安排教室
 
 参考[未来](https://www.acwing.com/solution/content/8902/)：
@@ -321,7 +479,7 @@ int main()
 证明：
 - 我们的算法得出 `cnt` 个，一定是可行解，而一定有最优解 `ans <= cnt`
 - 证明 `ans >= cnt` 反证法：假设 `ans < cnt` ，你会发现通过区间端点的大于等于关系，二者子区间一定能互换，导致有 `ans >= cnt` （这题 y总证明比较略）
-- 所以有 `ans == cnt
+- 所以有 `ans == cnt`
 
 ```cpp
 #include <iostream>
@@ -389,6 +547,80 @@ int main()
     if (!success) res = -1;
     printf("%d", res);
     return 0;
+}
+```
+
+```go
+package main
+
+import (
+    "fmt"
+    "os"
+    "bufio"
+    "strconv"
+    "sort"
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+
+    readInt := func () int {
+        sc.Scan()
+        x, _ := strconv.Atoi(sc.Text())
+        return x
+    }
+    
+    st, ed := readInt(), readInt()
+    n := readInt()
+    segs := [][2]int{}
+    for i := 0; i < n; i ++ {
+        segs = append(segs, [2]int{ readInt(), readInt() })
+    }
+
+    sort.Sort(ByLR(segs))
+
+    res := 0
+    succ := false
+    for i := 0; i < n; i ++ {
+        j, r := i, int(-2e9)
+        for j < n && segs[j][0] <= st {
+            r = max(r, segs[j][1])
+            j ++
+        }
+        if r < st {
+            succ = false
+            break
+        }
+        
+        res ++
+        if r >= ed {
+            succ = true
+            break
+        }
+        st = r
+        i = j - 1
+    }
+
+    if succ {
+        fmt.Println(res)
+    } else {
+        fmt.Println(-1)
+    }
+}
+
+type ByLR [][2]int
+func (b ByLR) Len() int { return len(b) }
+func (b ByLR) Swap(i, j int) { b[i], b[j] = b[j], b[i] }
+func (b ByLR) Less(i, j int) bool {
+    return b[i][0] < b[j][0]
+}
+
+func max(x, y int) int {
+    if x > y {
+        return x
+    }
+    return y
 }
 ```
 
@@ -462,5 +694,55 @@ int main()
     
     printf("%d", res);
     return 0;
+}
+```
+
+```go
+package main
+
+import (
+    "fmt"
+    "os"
+    "bufio"
+    "strconv"
+    "sort"
+    "container/heap"
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+
+    readInt := func () int {
+        sc.Scan()
+        x, _ := strconv.Atoi(sc.Text())
+        return x
+    }
+    
+    n := readInt()
+    hp := &MinHeap{}
+    for i := 0; i < n; i ++ {
+        heap.Push(hp, readInt())
+    }
+    
+    res := 0
+    for hp.Len() > 1 {
+        a := heap.Pop(hp).(int)
+        b := heap.Pop(hp).(int)
+        res += a + b;
+        heap.Push(hp, a + b)
+    }
+    
+    fmt.Println(res)
+}
+
+type MinHeap struct { sort.IntSlice }
+func (m *MinHeap) Push(x interface{}) {
+    m.IntSlice = append(m.IntSlice, x.(int))
+}
+func (m *MinHeap) Pop() interface{} {
+    v := m.IntSlice[len(m.IntSlice) - 1]
+    m.IntSlice = m.IntSlice[:len(m.IntSlice) - 1]
+    return v
 }
 ```
