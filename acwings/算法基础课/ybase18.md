@@ -59,11 +59,58 @@ int main()
     
     return 0;
 }
-
 ```
 
 **经验：**
 - 比如累加这种情况需要用到 `long long` ，思维要严谨，把计算的全流程想一遍
+
+```go
+package main
+
+import (
+    "fmt"
+    "os"
+    "bufio"
+    "strconv"
+    "sort"
+    "container/heap"
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+
+    readInt := func () int {
+        sc.Scan()
+        x, _ := strconv.Atoi(sc.Text())
+        return x
+    }
+    
+    n := readInt()
+    hp := &MinHeap{}
+    for i := 0; i < n; i ++ {
+        heap.Push(hp, readInt())
+    }
+    
+    res := 0
+    for hp.Len() > 0 {
+        a := heap.Pop(hp).(int)
+        res += a * hp.Len()
+    }
+    
+    fmt.Println(res)
+}
+
+type MinHeap struct { sort.IntSlice }
+func (m *MinHeap) Push(x interface{}) {
+    m.IntSlice = append(m.IntSlice, x.(int))
+}
+func (m *MinHeap) Pop() interface{} {
+    v := m.IntSlice[len(m.IntSlice) - 1]
+    m.IntSlice = m.IntSlice[:len(m.IntSlice) - 1]
+    return v
+}
+```
 
 ### 绝对值不等式
 
@@ -112,6 +159,51 @@ int main()
     printf("%d", res);
     
     return 0;
+}
+```
+
+```go
+package main
+
+import (
+    "fmt"
+    "os"
+    "bufio"
+    "strconv"
+    "sort"
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+
+    readInt := func () int {
+        sc.Scan()
+        x, _ := strconv.Atoi(sc.Text())
+        return x
+    }
+    
+    n := readInt()
+    a := []int{}
+    for i := 0; i < n; i ++ {
+        a = append(a, readInt())
+    }
+
+    sort.Sort(sort.IntSlice(a))
+
+    res := 0
+    for i := 0; i < n; i ++ {
+        res += abs(a[i] - a[n / 2])
+    }
+    
+    fmt.Println(res)
+}
+
+func abs(x int) int {
+    if x < 0 {
+        return - x
+    }
+    return x
 }
 ```
 
@@ -184,5 +276,63 @@ int main()
     
     printf("%d", res);
     return 0 ;
+}
+```
+
+```go
+package main
+
+import (
+    "fmt"
+    "os"
+    "bufio"
+    "strconv"
+    "sort"
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+
+    readInt := func () int {
+        sc.Scan()
+        x, _ := strconv.Atoi(sc.Text())
+        return x
+    }
+    
+    n := readInt()
+    cow := [][2]int{}  // w, s
+    for i := 0; i < n; i ++ {
+        cow = append(cow, [2]int{ readInt(), readInt() })
+    }
+
+    // sort.SortFunc(cow, func(a, b [2]int) bool {
+    //     return a[0] + a[1] < b[0] + b[1]
+    // })
+    
+    sort.Sort(ByLR(cow))
+
+    res := int(-2e9)
+    wSum := 0
+    for i := 0; i < n; i ++ {
+        res = max(res, wSum - cow[i][1])
+        wSum += cow[i][0]
+    }
+
+    fmt.Println(res)
+}
+
+func max(x, y int) int {
+    if x > y {
+        return x
+    }
+    return y
+}
+
+type ByLR [][2]int
+func (b ByLR) Len() int { return len(b) }
+func (b ByLR) Swap(i, j int) { b[i], b[j] = b[j], b[i] }
+func (b ByLR) Less(i, j int) bool {
+    return b[i][0] + b[i][1] < b[j][0] + b[j][1]
 }
 ```
