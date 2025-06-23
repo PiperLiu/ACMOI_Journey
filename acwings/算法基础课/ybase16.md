@@ -37,7 +37,7 @@
 
 参考：[aleihentai](https://www.acwing.com/solution/content/4934/)：
 
-（说只在的这位朋友写的有点乱，不如直接看我代码）
+（说实在的这位朋友写的有点乱，不如直接看我代码）
 
 ![](./images/20210608dp1.jpg)
 ![](./images/20210608dp2.jpg)
@@ -141,6 +141,99 @@ int main()
 - `while (cin >> a >> b , a)` 可以应对`输入包含多组测试数据`且`a`不会是`0`这种情况，最后放`a`还是别的变量来判断是否还有数据输入，视情况而定
 - 强类型转换`i = n - 1 - !x;`省去了繁杂的判断`if (x) i = n - 1; else i = n - 2`
 
+```go
+package main
+
+import (
+    "fmt"
+    "strconv"
+    "bufio"
+    "os"
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    
+    out := bufio.NewWriter(os.Stdout)
+    defer out.Flush()
+    
+    readInt := func () int {
+        sc.Scan()
+        x, _ := strconv.Atoi(sc.Text())
+        return x
+    }
+    
+    for {
+        x, y := readInt(), readInt()
+        if x == 0 {
+            break
+        }
+        if x < y {
+            x, y = y, x
+        }
+        for i := 0; i < 10; i ++ {
+            fmt.Fprint(out, count(x, i) - count(y - 1, i))
+            if i == 9 {
+                fmt.Fprint(out, "\n")
+            } else {
+                fmt.Fprint(out, " ")
+            }
+        }
+    }
+}
+
+func count(n, x int) int {  // x 数字在 [1, 2, ..., n] 中出现了多少次
+    if n == 0 {
+        return 0
+    }
+    nums := []int{}
+    for tmp := n; tmp > 0; tmp /= 10 {
+        nums = append(nums, tmp % 10)
+    }
+    
+    le := len(nums)
+    i := le - 1
+    if x == 0 {
+        i --
+    }
+    res := 0
+    for ; i >= 0; i -- {
+        if i < le - 1 {
+            prefix := get(nums, le - 1, i + 1)
+            subfix := power10(i)
+            res += prefix * subfix
+            if x == 0 {
+                res -= power10(i)
+            }
+        }
+        if nums[i] == x {
+            res += get(nums, i - 1, 0) + 1
+        } else if nums[i] > x {
+            res += power10(i)
+        }
+    }
+    return res
+}
+
+func get(nums []int, r, l int) int {
+    res := 0
+    for i := r; i >= l; i -- {
+        res *= 10
+        res += nums[i]
+    }
+    return res
+}
+
+func power10(x int) int {
+    res := 1
+    for i := 0; i < x; i ++ {
+        res *= 10
+    }
+    return res
+}
+```
+
 ### 状态压缩动态规划
 
 #### 例题：蒙德里安的梦想
@@ -229,7 +322,7 @@ int main()
         }
         
         memset(f, 0, sizeof f);
-        f[0][0] = 1;  // 对于第 1 列，只有 1 种情况00...000，方案也只有 1 种
+        f[0][0] = 1;  // 对于第 0 列，只有 1 种情况00...000，方案也只有 1 种
         for (int i = 1; i <= m; i ++)
             for (int j = 0; j < 1 << n; j ++)
                 for (int k = 0; k < 1 << n; k ++)
@@ -239,6 +332,78 @@ int main()
         cout << f[m][0] << endl;
     }
     return 0;
+}
+```
+
+```go
+package main
+
+import (
+    "fmt"
+    "strconv"
+    "bufio"
+    "os"
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    
+    out := bufio.NewWriter(os.Stdout)
+    defer out.Flush()
+    
+    readInt := func () int {
+        sc.Scan()
+        x, _ := strconv.Atoi(sc.Text())
+        return x
+    }
+    
+    for {
+        x, y := readInt(), readInt()
+        if x == 0 {
+            break
+        }
+        fmt.Fprint(out, foo(x, y), "\n")
+    }
+}
+
+func foo(n, m int) int {
+    f := make([][]int, m + 1)
+    for i := range f {
+        f[i] = make([]int, 1 << n)
+    }
+
+    st := make([]bool, 1 << n)  // 各个状态是否合法
+    for i := 0; i < 1 << n; i ++ {
+        st[i] = true
+        cnt := 0
+        for j := 0; j < n; j ++ {
+            if i >> j & 1 > 0 {
+                if cnt % 2 == 1 {
+                    st[i] = false
+                    break
+                }
+            } else {
+                cnt ++
+            }
+        }
+        if cnt % 2 == 1 {
+            st[i] = false
+        }
+    }
+
+    f[0][0] = 1  // 第一列所有有意义状态 f[1][*] 都将来自 f[0][0]
+    for i := 1; i <= m; i ++ {
+        for j := 0; j < 1 << n; j ++ {
+            for k := 0; k < 1 << n; k ++ {  // 上一列的状态
+                if (j & k) == 0 && st[j | k] {
+                    f[i][j] += f[i - 1][k]
+                }
+            }
+        }
+    }
+    
+    return f[m][0]
 }
 ```
 
@@ -375,6 +540,70 @@ int main()
 **经验：**
 - 想得到 `n` 个 `1111` 可以 `(1 << n) - 1`
 
+```go
+package main
+
+import (
+    "fmt"
+    "strconv"
+    "bufio"
+    "os"
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    
+    readInt := func () int {
+        sc.Scan()
+        x, _ := strconv.Atoi(sc.Text())
+        return x
+    }
+    
+    n := readInt()
+    w := make([][]int, n)
+    for i := range w {
+        w[i] = make([]int, n)
+        for j := range w[i] {
+            w[i][j] = readInt()
+        }
+    }
+
+    f := make([][]int, 1 << n)
+    for i := range f {
+        f[i] = make([]int, n)
+        for j := range f[i] {
+            f[i][j] = int(2e9)
+        }
+    }
+    
+    f[1][0] = 0  // 路径为 0...01 ，且目前在 0 节点
+
+    for i := 0; i < 1 << n; i ++ {
+        for dst := 0; dst < n; dst ++ {
+            if i >> dst & 1 == 0 {
+                continue
+            }
+            for src := 0; src < n; src ++ {
+                if i >> src & 1 == 0 || dst == src {
+                    continue
+                }
+                f[i][dst] = min(f[i][dst], f[i - (1 << dst)][src] + w[src][dst])
+            }
+        }
+    }
+    
+    fmt.Println(f[(1 << n) - 1][n - 1])
+}
+
+func min(x, y int) int {
+    if x < y {
+        return x
+    }
+    return y
+}
+```
+
 ### 树形动态规划
 
 #### 例题：没有上司的舞会
@@ -461,6 +690,78 @@ int main()
     
     printf("%d", max(f[root][0], f[root][1]));
     return 0;
+}
+```
+
+```go
+package main
+
+import (
+    "fmt"
+    "os"
+    "bufio"
+    "strconv"
+)
+
+type Node struct {
+    Idx int
+    Val int
+    Children []*Node
+}
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+    
+    readInt := func () int {
+        sc.Scan()
+        x, _ := strconv.Atoi(sc.Text())
+        return x
+    }
+    
+    n := readInt()
+    idx2Node := map[int]*Node{}
+    HasFa := map[int]bool{}
+    for i := 1; i <= n; i ++ {
+        val := readInt()
+        idx2Node[i] = &Node {
+            Idx: i,
+            Val: val,
+        }
+    }
+    for i := 0; i < n - 1; i ++ {
+        x, y := readInt(), readInt()
+        idx2Node[y].Children = append(idx2Node[y].Children, idx2Node[x])
+        HasFa[x] = true
+    }
+    
+    var root *Node
+    for i := range idx2Node {
+        if !HasFa[i] {
+            root = idx2Node[i]
+            break
+        }
+    }
+
+    f := make([][2]int, n + 1)
+    dfs(root, f)
+    fmt.Println(max(f[root.Idx][0], f[root.Idx][1]))
+}
+
+func dfs(u *Node, f [][2]int){
+    f[u.Idx][1] = u.Val
+    for _, child := range u.Children {
+        dfs(child, f)
+        f[u.Idx][1] += f[child.Idx][0]
+        f[u.Idx][0] += max(f[child.Idx][0], f[child.Idx][1])
+    }
+}
+
+func max(x, y int) int {
+    if x > y {
+        return x
+    }
+    return y
 }
 ```
 
@@ -566,3 +867,71 @@ int main()
 
 **经验：**
 - 用 `&v = f[i][j]` 表示 `f[i][j]` 的值，我的理解是，`&v = f[i][j]` 表示 `v` 的地址也是 `f[i][j]` 的地址
+
+```go
+package main
+
+import (
+    "fmt"
+    "os"
+    "bufio"
+    "strconv"
+)
+
+func main() {
+    sc := bufio.NewScanner(os.Stdin)
+    sc.Split(bufio.ScanWords)
+
+    readInt := func () int {
+        sc.Scan()
+        x, _ := strconv.Atoi(sc.Text())
+        return x
+    }
+
+    n, m := readInt(), readInt()
+    f := make([][]int, n)
+    g := make([][]int, n)
+    for i := range f {
+        f[i] = make([]int, m)
+        g[i] = make([]int, m)
+        for j := range g[i] {
+            g[i][j] = readInt()
+        }
+    }
+
+    ans := -1
+    for i := range f {
+        for j := range f[i] {
+            ans = max(dfs(i, j, n, m, f, g), ans)
+        }
+    }
+    
+    fmt.Println(ans)
+}
+
+func dfs(x, y, n, m int, f, g [][]int) int {
+    if f[x][y] != 0 {
+        return f[x][y]
+    }
+
+    f[x][y] = 1
+    dx := [4]int{0, 1, 0, -1}
+    dy := [4]int{1, 0, -1, 0}
+    for i := range dx {
+        xx, yy := x + dx[i], y + dy[i]
+        if xx < 0 || xx >= n || yy < 0 || yy >= m || g[xx][yy] >= g[x][y] {
+            continue
+        }
+        f[x][y] = max(f[x][y], dfs(xx, yy, n, m, f, g) + 1)
+    }
+    
+    return f[x][y]
+}
+
+func max(x, y int) int {
+    if x < y {
+        return y
+    }
+    return x
+}
+```
